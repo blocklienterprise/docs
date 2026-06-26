@@ -1,0 +1,186 @@
+---
+title: "BlokkliField: Defining Droppable Regions for Blocks"
+sidebarTitle: "Field Component"
+description: "Use the BlokkliField component to define droppable block regions in your Nuxt templates. Pass a list of block data and a field name to the adapter."
+---
+
+`<BlokkliField>` is the Vue component that marks a region in your template as a block area. In edit mode it becomes a droppable target where content editors can add, reorder, and remove blocks. At runtime it iterates over the block list and renders each block using its corresponding component.
+
+Every block-enabled region on a page must have exactly one `<BlokkliField>`. It must be a descendant of a [`<BlokkliProvider>`](/blocks/provider-component).
+
+## Basic Usage
+
+Pass your block data array and a unique field name:
+
+```vue
+<template>
+  <main>
+    <BlokkliField :list="page.blocks" name="blocks" />
+  </main>
+</template>
+```
+
+blökkli iterates `list`, looks up the component registered for each block's `bundle`, and renders it with the block's fields as props.
+
+## Props
+
+<ParamField path="list" type="array" required>
+  Array of block data objects from your backend. blökkli expects each object to include at minimum:
+
+  - `uuid` — a unique identifier for the block instance
+  - `bundle` — the block type identifier, used to look up the correct component
+
+  Any additional fields on each object are passed directly as props to the block component.
+
+  ```vue
+  <!-- page.blocks might look like: -->
+  <!-- [{ uuid: 'abc', bundle: 'text', text: 'Hello world' }, ...] -->
+  <BlokkliField :list="page.blocks" name="blocks" />
+  ```
+</ParamField>
+
+<ParamField path="name" type="string" required>
+  The field name identifier for this block region. This value must match the `name` you return for this field in `getFieldConfig()` inside your adapter. blökkli uses it to associate editor actions (adding, reordering blocks) with the correct field.
+</ParamField>
+
+<ParamField path="tag" type="string">
+  The HTML element to use as the wrapper container for this field. Defaults to `'div'`. Set this to match the semantic element your layout requires — for example `'ul'` when each block renders as an `<li>`, or `'section'` for landmark regions.
+
+  ```vue
+  <BlokkliField :list="page.blocks" name="blocks" tag="section" />
+  ```
+</ParamField>
+
+<ParamField path="class" type="string">
+  A CSS class string applied to the wrapper element. Useful for layout utilities or spacing classes when you don't have a parent wrapper to style.
+
+  ```vue
+  <BlokkliField
+    :list="page.blocks"
+    name="blocks"
+    class="content-blocks stack gap-8"
+  />
+  ```
+</ParamField>
+
+## Multiple Fields on One Page
+
+You can define multiple independent block regions within a single `<BlokkliProvider>`. Give each field a unique `name`:
+
+```vue
+<template>
+  <BlokkliProvider :entity="entity" :can-edit="canEdit">
+    <div class="page-layout">
+      <aside class="sidebar">
+        <BlokkliField
+          :list="page.sidebarBlocks"
+          name="sidebar"
+          class="sidebar__blocks"
+        />
+      </aside>
+
+      <main class="main-content">
+        <BlokkliField
+          :list="page.mainBlocks"
+          name="main"
+          class="main-content__blocks"
+        />
+      </main>
+
+      <footer class="page-footer">
+        <BlokkliField
+          :list="page.footerBlocks"
+          name="footer"
+          tag="section"
+        />
+      </footer>
+    </div>
+  </BlokkliProvider>
+</template>
+```
+
+<Note>
+  Each `name` must be unique within a single provider. Using the same name for two fields in the same provider leads to unpredictable editor behaviour.
+</Note>
+
+## Field Configuration in the Adapter
+
+For every `<BlokkliField>` you use in your templates, return a corresponding configuration entry from `getFieldConfig()` in your blökkli adapter. This is where you declare which block bundles are allowed in each field:
+
+```typescript
+async getFieldConfig() {
+  return [
+    {
+      name: 'main',
+      label: 'Main Content',
+      allowedBundles: ['text', 'image', 'hero', 'video', 'quote'],
+      entityType: 'node',
+      entityBundle: 'page',
+    },
+    {
+      name: 'sidebar',
+      label: 'Sidebar',
+      allowedBundles: ['text', 'links', 'cta'],
+      entityType: 'node',
+      entityBundle: 'page',
+    },
+    {
+      name: 'footer',
+      label: 'Footer',
+      allowedBundles: ['text', 'links'],
+      entityType: 'node',
+      entityBundle: 'page',
+    },
+  ]
+},
+```
+
+The `allowedBundles` array controls which block types content editors can drop into that field. A block bundle not listed here will not appear in the editor's add-block palette for that field.
+
+<Tip>
+  Keep `allowedBundles` as specific as possible for each field. Restricting the palette to relevant block types reduces noise for content editors and prevents structural mistakes — for example, stopping editors from accidentally adding a full-width hero block into a narrow sidebar.
+</Tip>
+
+## Rendering Nested Block Regions
+
+Some block components may themselves contain editable sub-regions — for example, a two-column layout block with a left and right column. Use `<BlokkliField>` inside the block component and pass the nested block arrays from the block's props:
+
+```vue
+<!-- components/Blokkli/TwoColumn.vue -->
+<template>
+  <div class="two-col">
+    <div class="two-col__left">
+      <BlokkliField :list="leftBlocks" name="left" />
+    </div>
+    <div class="two-col__right">
+      <BlokkliField :list="rightBlocks" name="right" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+defineProps<{
+  leftBlocks: BlockItem[]
+  rightBlocks: BlockItem[]
+}>()
+
+defineBlokkli({
+  bundle: 'two_column',
+})
+</script>
+```
+
+<Note>
+  When using nested `<BlokkliField>` inside a block component, the field names (`'left'`, `'right'`) must be declared in `getFieldConfig()` just like top-level fields — scoped to the entity type and bundle of the parent entity.
+</Note>
+
+## Behaviour in Edit Mode vs. Runtime
+
+<CardGroup cols={2}>
+  <Card title="Runtime (no editor)" icon="eye">
+    `<BlokkliField>` renders a plain wrapper element and iterates the `list` to render block components. No extra DOM, no performance overhead.
+  </Card>
+  <Card title="Edit mode" icon="pencil">
+    The wrapper becomes a droppable target. blökkli adds the editor overlay, drag handles, selection state, and the add-block palette scoped to `allowedBundles`.
+  </Card>
+</CardGroup>

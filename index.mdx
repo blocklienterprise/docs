@@ -1,0 +1,78 @@
+---
+title: "blökkli – WYSIWYG Block Editor Module for Nuxt 3"
+sidebarTitle: "Home"
+description: "blökkli is a drag-and-drop WYSIWYG block editor for Nuxt 3. Build rich, in-context page editing with a flexible adapter and Vue components."
+---
+
+blökkli is a Nuxt 3 module that brings a fully interactive, drag-and-drop WYSIWYG block editor to your application. Whether you're building a headless CMS frontend, a marketing page builder, or a content-rich web app, blökkli gives your editors a live editing experience while you stay in full control of markup and styling through standard Vue components.
+
+<CardGroup cols={2}>
+  <Card
+    title="Introduction"
+    icon="book-open"
+    href="/introduction"
+  >
+    Learn what blökkli is, how it's architected, and whether it fits your project.
+  </Card>
+  <Card
+    title="Quickstart"
+    icon="bolt"
+    href="/quickstart"
+  >
+    Install blökkli, wire up your first adapter, and render your first block in under 10 minutes.
+  </Card>
+  <Card
+    title="Core Concepts"
+    icon="layer-group"
+    href="/concepts"
+  >
+    Understand blocks, entities, fields, bundles, and the adapter pattern.
+  </Card>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api/define-blokkli"
+  >
+    Explore the full `defineBlokkli` composable API and all available options.
+  </Card>
+</CardGroup>
+
+## How It Works
+
+<Steps>
+  <Step title="Install the module">
+    Add `@blokkli/editor` to your Nuxt 3 project and register it in `nuxt.config.ts`. The module auto-imports everything you need — no manual plugin setup required.
+  </Step>
+  <Step title="Configure your adapter">
+    Create `app/blokkli.editAdapter.ts` and implement the adapter interface. The adapter is the bridge between blökkli's editor UI and your backend — you decide how blocks are loaded, saved, and mutated.
+  </Step>
+  <Step title="Add a provider and field to your page">
+    Wrap your page content with `<BlokkliProvider>` to set the editing context, then place `<BlokkliField>` wherever you want a list of editable blocks to appear.
+  </Step>
+  <Step title="Define your block components">
+    Create Vue SFCs inside `components/Blokkli/` and call `defineBlokkli({ bundle: 'my-bundle' })` in the `<script setup>` block. blökkli automatically maps each block in your data to the matching component.
+  </Step>
+</Steps>
+
+## Key Features
+
+<CardGroup cols={3}>
+  <Card
+    title="Drag-and-Drop Editing"
+    icon="hand-pointer"
+  >
+    Editors reorder, add, and remove blocks directly on the page with a fluid drag-and-drop interface — no separate admin UI needed.
+  </Card>
+  <Card
+    title="Built-in Editor Features"
+    icon="wand-magic-sparkles"
+  >
+    History (undo/redo), multi-select, clipboard, block options panel, and a publish workflow come out of the box with zero configuration.
+  </Card>
+  <Card
+    title="Flexible Adapter System"
+    icon="plug"
+  >
+    The adapter pattern keeps blökkli fully backend-agnostic. Connect it to Drupal, a REST API, GraphQL, or even `localStorage` — your backend, your rules.
+  </Card>
+</CardGroup>

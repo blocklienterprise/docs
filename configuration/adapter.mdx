@@ -1,0 +1,155 @@
+---
+title: "Set Up the blökkli Edit Adapter in Your Nuxt Project"
+sidebarTitle: "Adapter Setup"
+description: "Create app/blokkli.editAdapter.ts to bridge blökkli and your backend. Implement seven required methods to load state, resolve bundles, and persist edits."
+---
+
+The adapter is the bridge between blökkli's editor and your backend. It tells blökkli how to
+load existing block state, which block types are available, what fields allow which bundles, and
+how to persist every user action — adding, moving, deleting, and configuring blocks — back to
+your data source.
+
+You define the adapter **once** in `app/blokkli.editAdapter.ts` and blökkli picks it up
+automatically. No additional registration or import is required.
+
+---
+
+## Creating the Adapter File
+
+Create the file at the path `app/blokkli.editAdapter.ts` in the root of your Nuxt project:
+
+```typescript
+// app/blokkli.editAdapter.ts
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+export default defineBlokkliEditAdapter((ctx) => {
+  return {
+    // your adapter methods here
+  }
+})
+```
+
+The factory function receives a **`ctx`** object that gives your adapter access to editor
+internals at runtime:
+
+- **`ctx.eventBus`** — emit or listen to editor lifecycle events (e.g. `'editor:save'`, `'block:added'`)
+- **`ctx.state`** — a reactive reference to the current editor state, including the active entity
+  type, entity UUID, and language
+
+Use these helpers inside your method implementations whenever you need to react to editor events
+or read the current editing context without relying on external state management.
+
+---
+
+## Required Methods
+
+The seven methods below form the **minimum viable adapter**. blökkli will not fully initialise
+the editor unless all seven are present and return the expected shapes.
+
+<ParamField path="loadState()" type="async method" required>
+  Fetches the initial block state for the entity currently being edited. blökkli calls this once
+  when the editor mounts. Return a raw state object — the shape is up to you because
+  `mapState()` will transform it in the next step.
+</ParamField>
+
+<ParamField path="mapState(state)" type="async method" required>
+  Transforms the raw value returned by `loadState()` into the normalised format blökkli expects
+  internally. Use this method to flatten nested API responses, rename fields, or compute derived
+  values before the editor renders anything.
+</ParamField>
+
+<ParamField path="getAllBundles()" type="async method" required>
+  Returns an array of block bundle definitions that are registered in your system. Each entry
+  declares at minimum an `id` (the machine name) and a `label` (the human-readable display name)
+  shown in the editor's block picker.
+</ParamField>
+
+<ParamField path="getFieldConfig()" type="async method" required>
+  Returns the field configuration for the entity being edited. Each entry describes one
+  `<BlokkliField>` — its name, label, the entity it belongs to, and the `allowedBundles` array
+  that constrains which block types an editor can place into that field.
+</ParamField>
+
+<ParamField path="addNewBlock(options)" type="async method" required>
+  Called every time the editor places a new block. Persist the new block to your backend inside
+  this method. The `options` argument contains the `bundle`, the target `hostField`, and the
+  `preceedingUuid` of the block it should appear after (or `null` for the first position).
+</ParamField>
+
+<ParamField path="moveBlock(options)" type="async method" required>
+  Called when a single block is dragged to a new position within the same field or into a
+  different field. Reorder your backend data accordingly. The `options` argument provides the
+  block `uuid`, the destination `hostField`, and the updated `preceedingUuid`.
+</ParamField>
+
+<ParamField path="moveMultipleBlocks(options)" type="async method" required>
+  The multi-selection equivalent of `moveBlock()`. Called when the editor moves two or more
+  selected blocks at once. The `options` argument provides a `uuids` array, the destination
+  `hostField`, and the `preceedingUuid` for the group.
+</ParamField>
+
+---
+
+## Minimal Working Example
+
+The adapter below keeps blocks in local memory and logs operations to the console. It is useful
+for prototyping or exploring blökkli before wiring up a real backend:
+
+```typescript
+// app/blokkli.editAdapter.ts
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+export default defineBlokkliEditAdapter((ctx) => {
+  const blocks: any[] = []
+
+  return {
+    async loadState() {
+      return { blocks }
+    },
+
+    async mapState(state) {
+      return state
+    },
+
+    async getAllBundles() {
+      return [
+        { id: 'text', label: 'Text Block' },
+        { id: 'image', label: 'Image Block' },
+      ]
+    },
+
+    async getFieldConfig() {
+      return [
+        {
+          name: 'blocks',
+          label: 'Content Blocks',
+          allowedBundles: ['text', 'image'],
+          entityType: 'node',
+          entityBundle: 'page',
+        },
+      ]
+    },
+
+    async addNewBlock({ bundle, hostField, preceedingUuid }) {
+      const newBlock = { uuid: crypto.randomUUID(), bundle, options: {} }
+      blocks.push(newBlock)
+    },
+
+    async moveBlock({ uuid, hostField, preceedingUuid }) {
+      // Reorder blocks array based on new position
+    },
+
+    async moveMultipleBlocks({ uuids, hostField, preceedingUuid }) {
+      // Reorder multiple blocks based on new position
+    },
+  }
+})
+```
+
+<Note>
+  The seven methods above cover only the **core editing surface**. blökkli supports 50+ additional
+  optional adapter methods that unlock features such as clipboard operations, undo/redo history,
+  block duplication, translation support, media library integration, and content validation.
+  See the [Adapter Methods API reference](/api/adapter-required) for the complete list
+  and their expected signatures.
+</Note>

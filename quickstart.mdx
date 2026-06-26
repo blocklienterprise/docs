@@ -1,0 +1,181 @@
+---
+title: "Install and Set Up blökkli in Your Nuxt 3 Application"
+sidebarTitle: "Quickstart"
+description: "Install blökkli, configure the Nuxt module, create your first adapter and block component, and open the editor — all in under 10 minutes."
+---
+
+This guide walks you through a complete blökkli integration from scratch. By the end, you'll have the module installed, an adapter wired up, a page with an editable field, and a working block component you can open in the editor.
+
+<Steps>
+  <Step title="Install the package">
+    Add `@blokkli/editor` to your project using your preferred package manager.
+
+    <CodeGroup>
+      ```bash npm
+      npm install --save @blokkli/editor
+      ```
+      ```bash yarn
+      yarn add @blokkli/editor
+      ```
+      ```bash pnpm
+      pnpm add @blokkli/editor
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Configure the Nuxt module">
+    Register `@blokkli/editor` in your `nuxt.config.ts` and set the required `itemEntityType` option.
+
+    ```typescript nuxt.config.ts
+    export default defineNuxtConfig({
+      modules: ['@blokkli/editor'],
+      blokkli: {
+        itemEntityType: 'block',
+      },
+    })
+    ```
+
+    `itemEntityType` is the entity type string blökkli uses to identify individual block items in your backend. Set it to whatever string your data layer uses — `'block'`, `'paragraph'`, `'content_block'`, etc.
+  </Step>
+
+  <Step title="Create the edit adapter">
+    Create the file `app/blokkli.editAdapter.ts`. This is where you connect blökkli to your backend by implementing the adapter interface.
+
+    ```typescript app/blokkli.editAdapter.ts
+    import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+    export default defineBlokkliEditAdapter((ctx) => {
+      return {
+        async loadState() {
+          // Return initial block state from your backend.
+          // ctx gives you access to the current entity context.
+          return { /* ... */ }
+        },
+
+        async mapState(state) {
+          // Transform raw backend state into blökkli's internal format.
+          return state
+        },
+
+        async getAllBundles() {
+          // Return the list of block type definitions available to editors.
+          // Each entry describes a bundle: its name, label, and field config.
+          return []
+        },
+
+        async getFieldConfig() {
+          // Return field-level configuration for the current entity.
+          return []
+        },
+
+        async addNewBlock(options) {
+          // Persist a newly added block to your backend.
+          // options includes the bundle, field name, and insertion index.
+        },
+
+        async moveBlock(options) {
+          // Update your backend when an editor moves a single block.
+        },
+
+        async moveMultipleBlocks(options) {
+          // Update your backend when an editor moves several blocks at once.
+        },
+      }
+    })
+    ```
+
+    <Note>
+      This is the **minimum required adapter**. blökkli's adapter interface includes many more optional callbacks — `updateOptions`, `publish`, `deleteBlocks`, `duplicateBlocks`, and others. See the [adapter reference](/api/adapter-required) for the full list.
+    </Note>
+  </Step>
+
+  <Step title="Add BlokkliProvider to your page">
+    Wrap your page template with `<BlokkliProvider>` to declare the editing context, then place `<BlokkliField>` wherever you want a list of editable blocks.
+
+    ```vue pages/[slug].vue
+    <template>
+      <BlokkliProvider
+        :entity="{
+          entity_type: 'node',
+          entity_bundle: 'page',
+          entity_uuid: page.uuid,
+        }"
+        :can-edit="true"
+      >
+        <BlokkliField :list="page.blocks" name="blocks" />
+      </BlokkliProvider>
+    </template>
+    ```
+
+    - `:entity` identifies the content item being edited. blökkli passes this context to your adapter callbacks.
+    - `:can-edit="true"` tells the provider to honor the `?blokkliEditing` URL parameter. In a real app, drive this from a session check — e.g., `:can-edit="user.canEdit"`.
+    - `:list` is the array of block objects from your data source. Each item needs at minimum a `bundle` and a `uuid`.
+    - `name` is the field identifier — it matches the field name your adapter receives in `addNewBlock` and `moveBlock` callbacks.
+  </Step>
+
+  <Step title="Create a block component">
+    Create `components/Blokkli/Text.vue`. blökkli automatically maps any block with `bundle: 'text'` to this component.
+
+    ```vue components/Blokkli/Text.vue
+    <template>
+      <div class="text-block">
+        <p>{{ options.text }}</p>
+      </div>
+    </template>
+
+    <script lang="ts" setup>
+    const { options } = defineBlokkli({
+      bundle: 'text',
+      options: {
+        text: {
+          type: 'text',
+          label: 'Text content',
+          default: '',
+        },
+      },
+    })
+    </script>
+    ```
+
+    `defineBlokkli()` registers this SFC as the renderer for the `'text'` bundle and declares one option — `text` — that editors can change in the options panel. The returned `options` object is reactive and always reflects the current value, in both edit mode and production.
+
+    <Tip>
+      Name your component files after the bundle. `components/Blokkli/Text.vue` handles the `text` bundle, `components/Blokkli/Hero.vue` handles `hero`, and so on. blökkli uses this naming convention to auto-discover your block components.
+    </Tip>
+  </Step>
+
+  <Step title="Activate the editor">
+    Start your dev server and navigate to the page you wired up. Append `?blokkliEditing={entity-uuid}` to the URL — substituting the actual UUID of your entity — to enter edit mode:
+
+    ```text
+    http://localhost:3000/my-page?blokkliEditing=550e8400-e29b-41d4-a716-446655440000
+    ```
+
+    The blökkli editor overlay activates, and you can start adding, dragging, and configuring blocks.
+
+    <Note>
+      The editor only activates when **both** conditions are true: the `?blokkliEditing` parameter is present in the URL **and** `:can-edit` is `true` on the `<BlokkliProvider>`. If `can-edit` is `false`, the parameter is ignored and the page renders in read-only mode.
+    </Note>
+  </Step>
+</Steps>
+
+## Next Steps
+
+Now that you have a working editor, explore the full adapter interface to unlock features like option updates, publishing, duplication, and clipboard support.
+
+<CardGroup cols={2}>
+  <Card
+    title="Module Configuration"
+    icon="gear"
+    href="/configuration"
+  >
+    Explore all `blokkli` config options available in `nuxt.config.ts`.
+  </Card>
+  <Card
+    title="Defining Blocks"
+    icon="cube"
+    href="/blocks/define-blocks"
+  >
+    Learn the full `defineBlokkli()` API — options schemas, editor metadata, slots, and more.
+  </Card>
+</CardGroup>

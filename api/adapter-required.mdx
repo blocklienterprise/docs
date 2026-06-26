@@ -1,0 +1,273 @@
+---
+title: "Implementing the Seven Required blökkli Adapter Methods"
+sidebarTitle: "Required Methods"
+description: "All seven required blökkli adapter methods: loadState, mapState, getAllBundles, getFieldConfig, addNewBlock, moveBlock, and moveMultipleBlocks."
+---
+
+Your adapter must implement these seven methods for a minimal working editor. Without them, blökkli cannot load content, display available block types, or handle user actions. All seven must be present and return the expected shapes — blökkli will throw a runtime error if any are missing when the editor activates.
+
+<Note>
+  All methods are `async` and must return a `Promise`. You can use `async/await`
+  or return a `Promise` directly — both are fully supported.
+</Note>
+
+---
+
+## `loadState()`
+
+Fetches the raw initial content for the entity being edited. blökkli calls this method **once**, immediately after the editor overlay activates. The return value is passed directly to `mapState()` as its `state` argument.
+
+You have full control over the return shape — `mapState()` is responsible for the transformation.
+
+**Signature**
+
+```typescript
+async loadState(): Promise<any>
+```
+
+**Example**
+
+```typescript
+async loadState() {
+  return $fetch(`/api/content/${ctx.state.value.currentEntityUuid}`)
+}
+```
+
+<Tip>
+  Return the full API response here rather than pre-processing it. Keep all
+  transformation logic in `mapState()` so both methods stay focused on a single
+  responsibility.
+</Tip>
+
+---
+
+## `mapState(state)`
+
+Transforms the raw value returned by `loadState()` into blökkli's expected internal format. blökkli calls this **immediately after** `loadState()` and whenever it needs to reconcile state (for example, after an undo/redo operation).
+
+Your return value must include at minimum a `blocks` array.
+
+**Signature**
+
+```typescript
+async mapState(state: any): Promise<MappedState>
+```
+
+**Example**
+
+```typescript
+async mapState(state: any): Promise<MappedState> {
+  return {
+    blocks: state.data.paragraphs.map((p: any) => ({
+      uuid: p.id,
+      bundle: p.type,
+      hostField: p.field,
+      ...p.attributes,
+    })),
+  }
+}
+```
+
+<Note>
+  `MappedState` is exported from `@blokkli/editor`. Each block object in the
+  `blocks` array must include `uuid` (string), `bundle` (string), and
+  `hostField` (string) at minimum. Additional properties are passed as props to
+  your block components.
+</Note>
+
+---
+
+## `getAllBundles()`
+
+Returns the list of block types the current user can add. blökkli calls this once on editor activation and uses the result to populate the "Add block" panel. Each bundle object requires at least an `id` and a `label`.
+
+**Signature**
+
+```typescript
+async getAllBundles(): Promise<BundleDefinition[]>
+```
+
+**Example**
+
+```typescript
+async getAllBundles(): Promise<BundleDefinition[]> {
+  return [
+    { id: 'text',  label: 'Text Block'     },
+    { id: 'image', label: 'Image'          },
+    { id: 'hero',  label: 'Hero Banner'    },
+    { id: 'cta',   label: 'Call to Action' },
+  ]
+}
+```
+
+<Tip>
+  You can filter the returned bundles based on the current user's permissions by
+  reading `ctx.state.value` inside the method. Return only the bundles the user
+  is allowed to create.
+</Tip>
+
+---
+
+## `getFieldConfig()`
+
+Returns configuration for each block field (region) in the current entity, including which block types are allowed in each region. blökkli uses this to validate drag-and-drop targets and to enforce allowed block types.
+
+**Signature**
+
+```typescript
+async getFieldConfig(): Promise<FieldConfig[]>
+```
+
+**Example**
+
+```typescript
+async getFieldConfig(): Promise<FieldConfig[]> {
+  return [
+    {
+      name:           'blocks',
+      label:          'Page Content',
+      allowedBundles: ['text', 'image', 'hero', 'cta'],
+      entityType:     'node',
+      entityBundle:   'page',
+    },
+  ]
+}
+```
+
+<Note>
+  The `name` value in each `FieldConfig` entry must match the `name` prop on the
+  corresponding `<BlokkliField>` component in your template. Mismatches cause
+  the field to behave as if it has no allowed bundles.
+</Note>
+
+---
+
+## `addNewBlock(options)`
+
+Persists a newly added block to your backend. blökkli calls this when the user drags a block type from the add-block panel, or clicks a block type to insert it at the current cursor position.
+
+**Signature**
+
+```typescript
+async addNewBlock(options: AddNewBlockOptions): Promise<void>
+```
+
+<ParamField body="bundle" type="string" required>
+  The block type identifier to create (matches an `id` from `getAllBundles()`).
+</ParamField>
+
+<ParamField body="hostField" type="string" required>
+  The field name of the target region (matches a `name` from `getFieldConfig()`).
+</ParamField>
+
+<ParamField body="preceedingUuid" type="string | null" required>
+  UUID of the block that the new block should be placed after. `null` means
+  insert at the beginning of the field.
+</ParamField>
+
+<ParamField body="options" type="Record<string, any>">
+  Initial option values for the new block, if any defaults were configured.
+</ParamField>
+
+**Example**
+
+```typescript
+async addNewBlock({
+  bundle,
+  hostField,
+  preceedingUuid,
+  options,
+}: AddNewBlockOptions): Promise<void> {
+  await $fetch('/api/blocks', {
+    method: 'POST',
+    body: { bundle, hostField, preceedingUuid, options },
+  })
+}
+```
+
+---
+
+## `moveBlock(options)`
+
+Persists the new position of a single block after the user drags it to a different location. blökkli updates its internal state optimistically and calls this method to sync the change to your backend.
+
+**Signature**
+
+```typescript
+async moveBlock(options: MoveBlockOptions): Promise<void>
+```
+
+<ParamField body="uuid" type="string" required>
+  UUID of the block being moved.
+</ParamField>
+
+<ParamField body="hostField" type="string" required>
+  The target field name. May differ from the block's current field if the user
+  moves it across regions.
+</ParamField>
+
+<ParamField body="preceedingUuid" type="string | null" required>
+  UUID of the block that should precede the moved block in its new position.
+  `null` places it at the start of the field.
+</ParamField>
+
+**Example**
+
+```typescript
+async moveBlock({
+  uuid,
+  hostField,
+  preceedingUuid,
+}: MoveBlockOptions): Promise<void> {
+  await $fetch(`/api/blocks/${uuid}/move`, {
+    method: 'PATCH',
+    body: { hostField, preceedingUuid },
+  })
+}
+```
+
+---
+
+## `moveMultipleBlocks(options)`
+
+Persists the new positions of multiple blocks simultaneously. blökkli calls this when the user has selected more than one block and drags the selection to a new position.
+
+**Signature**
+
+```typescript
+async moveMultipleBlocks(options: MoveMultipleBlocksOptions): Promise<void>
+```
+
+<ParamField body="uuids" type="string[]" required>
+  Ordered array of UUIDs for the blocks being moved. The order reflects the
+  blocks' relative sequence after the move.
+</ParamField>
+
+<ParamField body="hostField" type="string" required>
+  The target field name for all moved blocks.
+</ParamField>
+
+<ParamField body="preceedingUuid" type="string | null" required>
+  UUID of the block that the moved group should be placed after. `null` places
+  the group at the start of the field.
+</ParamField>
+
+**Example**
+
+```typescript
+async moveMultipleBlocks({
+  uuids,
+  hostField,
+  preceedingUuid,
+}: MoveMultipleBlocksOptions): Promise<void> {
+  await $fetch('/api/blocks/move-multiple', {
+    method: 'PATCH',
+    body: { uuids, hostField, preceedingUuid },
+  })
+}
+```
+
+<Warning>
+  Your backend must handle the ordering implied by `uuids` correctly. The array
+  is already in the final desired order — persist it in that sequence.
+</Warning>

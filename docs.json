@@ -1,0 +1,96 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "blökkli",
+  "theme": "luma",
+  "colors": {
+    "primary": "#ef7025",
+    "light": "#eec9bc",
+    "dark": "#4fa1ab"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "concepts"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/module",
+              "configuration/adapter",
+              "configuration/global-options"
+            ]
+          },
+          {
+            "group": "Building Blocks",
+            "pages": [
+              "blocks/define-blocks",
+              "blocks/block-options",
+              "blocks/field-component",
+              "blocks/provider-component"
+            ]
+          },
+          {
+            "group": "Editor Features",
+            "pages": [
+              "editor/overview",
+              "editor/editing-workflow",
+              "editor/built-in-features",
+              "editor/keyboard-shortcuts"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/drupal",
+              "integrations/custom-backend"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Composables",
+            "pages": [
+              "api/define-blokkli",
+              "api/define-blokkli-edit-adapter",
+              "api/use-blokkli"
+            ]
+          },
+          {
+            "group": "Adapter Methods",
+            "pages": [
+              "api/adapter-required",
+              "api/adapter-blocks",
+              "api/adapter-state",
+              "api/adapter-advanced"
+            ]
+          },
+          {
+            "group": "Components",
+            "pages": [
+              "api/blokkli-provider",
+              "api/blokkli-field"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/blokkli/editor"
+    }
+  }
+}

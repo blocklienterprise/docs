@@ -1,0 +1,195 @@
+---
+title: "Core Concepts: Blocks, Fields, Adapters, and Bundles"
+sidebarTitle: "Core Concepts"
+description: "Understand blökkli's key abstractions: blocks, entities, fields, the adapter interface, and how the editor activates in your Nuxt app."
+---
+
+blökkli organizes content into **blocks** that live inside **fields**, which belong to **entities**. An **adapter** you write connects the editor to your backend, and **bundle identifiers** tell blökkli which Vue component to render for each piece of content. Once you understand these five abstractions, every part of the API clicks into place.
+
+<Note>
+  **The content hierarchy at a glance:**
+
+  ```text
+  Entity  (e.g., a "Page" with uuid = "abc-123")
+  └── Field  (e.g., "blocks" — the main content region)
+       └── Field  (e.g., "sidebar" — a second region)
+            └── Block  (bundle: "text",  uuid: "def-456")
+            └── Block  (bundle: "image", uuid: "ghi-789")
+                 └── Component  →  components/Blokkli/Image.vue
+  ```
+
+  Each entity can hold multiple fields. Each field holds an ordered list of blocks. Each block renders via the Vue component whose `bundle` matches.
+</Note>
+
+## Blocks
+
+A **block** is the fundamental unit of content in blökkli. Think of it as a typed, self-contained chunk of page content — a paragraph of text, a hero banner, an image gallery, a call-to-action section.
+
+Every block has three essential properties:
+
+| Property | Type | Description |
+|---|---|---|
+| `bundle` | `string` | The block's type identifier — determines which Vue component renders it |
+| `uuid` | `string` | A unique identifier for this specific block instance |
+| `options` | `object` | The block's configurable data, as defined in its `defineBlokkli()` call |
+
+Blocks are rendered by Vue SFCs. You define a block component by calling `defineBlokkli()` inside `<script setup>`:
+
+```vue components/Blokkli/Text.vue
+<script lang="ts" setup>
+const { options } = defineBlokkli({
+  bundle: 'text',
+  options: {
+    text: {
+      type: 'text',
+      label: 'Text content',
+      default: '',
+    },
+  },
+})
+</script>
+```
+
+The `options` object returned by `defineBlokkli()` is fully reactive. It reflects the live values from the editor options panel during editing, and the persisted values during production rendering — you use it the same way in both contexts.
+
+If you need to access editor state or editor-specific utilities from anywhere in a block component (for example, to check whether edit mode is currently active), call `useBlokkli()` in `<script setup>`. It returns a set of reactive refs and helpers scoped to the current editing session.
+
+## Entities
+
+An **entity** is any content item that can contain editable blocks — a page, a blog post, a product listing, a taxonomy term. blökkli doesn't prescribe what an entity is; it just needs three strings to identify one:
+
+| Property | Description |
+|---|---|
+| `entity_type` | The broad type — e.g., `'node'`, `'taxonomy_term'`, `'product'` |
+| `entity_bundle` | The specific subtype — e.g., `'page'`, `'article'`, `'landing_page'` |
+| `entity_uuid` | The unique identifier for this specific content item |
+
+You pass these to `<BlokkliProvider>` as the `:entity` prop:
+
+```vue
+<BlokkliProvider
+  :entity="{
+    entity_type: 'node',
+    entity_bundle: 'page',
+    entity_uuid: page.uuid,
+  }"
+  :can-edit="true"
+>
+  <!-- fields go here -->
+</BlokkliProvider>
+```
+
+blökkli passes this entity context to your adapter callbacks, so your backend always knows which content item is being edited.
+
+## Fields
+
+A **field** is a named region within an entity that holds an ordered list of blocks. You declare a field with `<BlokkliField>`:
+
+```vue
+<BlokkliField :list="page.blocks" name="blocks" />
+```
+
+| Prop | Description |
+|---|---|
+| `:list` | The array of block objects from your data source |
+| `name` | The field identifier — passed to your adapter when blocks are added or moved |
+
+You can place **multiple fields** on a single page. This is how you model complex layouts with distinct editable regions:
+
+```vue
+<BlokkliProvider :entity="entity" :can-edit="true">
+  <main>
+    <BlokkliField :list="page.contentBlocks" name="content" />
+  </main>
+  <aside>
+    <BlokkliField :list="page.sidebarBlocks" name="sidebar" />
+  </aside>
+</BlokkliProvider>
+```
+
+Both fields are independently editable within the same editor session. Editors can even drag blocks between them.
+
+## The Adapter
+
+The **adapter** is the integration layer between blökkli's editor UI and your backend. You create it once, at `app/blokkli.editAdapter.ts`, by calling `defineBlokkliEditAdapter()`:
+
+```typescript app/blokkli.editAdapter.ts
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+export default defineBlokkliEditAdapter((ctx) => {
+  return {
+    loadState:          async () => { /* fetch blocks from your API */ },
+    mapState:           async (state) => state,
+    getAllBundles:       async () => [],
+    getFieldConfig:     async () => [],
+    addNewBlock:        async (options) => { /* create block in backend */ },
+    moveBlock:          async (options) => { /* update position in backend */ },
+    moveMultipleBlocks: async (options) => { /* batch move in backend */ },
+  }
+})
+```
+
+The `ctx` argument gives you access to the current entity context — the same `entity_type`, `entity_bundle`, and `entity_uuid` you passed to `<BlokkliProvider>` — so every callback knows what it's operating on.
+
+<Tip>
+  Because every read and write goes through callbacks you control, blökkli is completely **backend-agnostic**. You can connect it to Drupal's JSON API, a custom REST or GraphQL backend, a database via a Nuxt server route, or even `localStorage` for a fully client-side prototype. The adapter is the only place your backend-specific code lives.
+</Tip>
+
+blökkli calls different callbacks depending on what the editor needs to do:
+
+| Editor action | Adapter callback(s) called |
+|---|---|
+| Editor opens | `loadState`, `mapState`, `getAllBundles`, `getFieldConfig` |
+| Editor adds a block | `addNewBlock` |
+| Editor moves a block | `moveBlock` |
+| Editor moves several blocks | `moveMultipleBlocks` |
+| Editor changes block options | `updateOptions` |
+| Editor deletes one or more blocks | `deleteBlocks` |
+| Editor duplicates a block | `duplicateBlocks` |
+| Editor clicks Publish | `publish` |
+
+## The Editor
+
+The editor is an overlay that activates on top of your normal page view. Your block components render exactly as they do in production — the editor UI sits in a separate layer above them and never modifies your DOM output.
+
+**To activate the editor**, two conditions must be true simultaneously:
+
+1. The URL contains `?blokkliEditing={entity-uuid}`, where the UUID matches the entity passed to `<BlokkliProvider>`.
+2. The `:can-edit` prop on `<BlokkliProvider>` is `true`.
+
+```text
+https://your-site.com/my-page?blokkliEditing=550e8400-e29b-41d4-a716-446655440000
+```
+
+In production, gate `:can-edit` behind a real authorization check so only permitted users can enter edit mode:
+
+```vue
+<BlokkliProvider
+  :entity="entity"
+  :can-edit="currentUser.hasRole('editor')"
+>
+```
+
+Once active, the editor provides:
+
+- A **drag handle** on every block for reordering within and across fields.
+- An **options panel** that surfaces the options schema you defined in `defineBlokkli()`.
+- An **add block** button that opens a panel populated by your `getAllBundles` callback.
+- A **toolbar** with undo/redo, multi-select, clipboard actions, and a publish button.
+
+## Bundles
+
+A **bundle** is the string identifier that ties a block in your data to the Vue component that renders it. You define it with `defineBlokkli({ bundle: 'my-bundle' })`, and blökkli looks for the matching component in `components/Blokkli/`.
+
+| Bundle string | Component file |
+|---|---|
+| `'text'` | `components/Blokkli/Text.vue` |
+| `'image'` | `components/Blokkli/Image.vue` |
+| `'hero'` | `components/Blokkli/Hero.vue` |
+| `'card_grid'` | `components/Blokkli/CardGrid.vue` |
+
+Your `getAllBundles` adapter callback returns the list of bundles available for editors to add. Each entry describes the bundle's label and any field constraints — for example, limiting a `'hero'` block to only appear in the `'content'` field.
+
+<Tip>
+  Choose bundle names that reflect the **content model**, not the visual style. `'testimonial'` is better than `'gray-box-with-quote'` — a testimonial block can be restyled without renaming the bundle or migrating data.
+</Tip>

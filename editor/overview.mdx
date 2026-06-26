@@ -1,0 +1,89 @@
+---
+title: "blökkli Editor: Interface Overview and Feature Set"
+sidebarTitle: "Overview"
+description: "Explore the blökkli editor interface: the toolbar, block selection, options panel, and the 40+ built-in features that power the editing experience."
+---
+
+The blökkli editor is a full WYSIWYG overlay that activates on top of your existing Nuxt page. It provides drag-and-drop block management, a real-time options panel, and 40+ built-in features — all rendered directly on top of your production layout. Your block components continue to render exactly as they do in production; blökkli simply adds interactive handles, drag targets, and panels around them.
+
+## How the Editor Activates
+
+To open the editor, visit any page that uses the blökkli provider and append the editing query parameter to the URL:
+
+```text
+https://your-site.com/your-page?blokkliEditing={entity-uuid}
+```
+
+For the editor to activate, `can-edit` must be `true` on your `<BlokkliProvider>` component. Once the URL is loaded:
+
+1. The editor overlay appears **without a full page reload**.
+2. Your block components continue to render normally.
+3. blökkli adds interactive handles, drag targets, and panels on top of your existing layout.
+
+No separate admin interface, no iframe wrapping your entire page — the editor lives directly on the route.
+
+## Editor Interface
+
+The editor UI is composed of four primary areas:
+
+**Toolbar**
+
+The top bar is your main control strip. It contains:
+- **Add block** (`+`) — opens the block picker panel
+- **Undo / Redo** — step through your change history
+- **Publish** — commit the current draft to production
+- **Exit** — close the editor and return to the normal page view
+
+**Block Handles**
+
+Every block on the page grows an interactive handle when you hover over it. The handle lets you:
+- **Click** to select the block and open its options panel
+- **Drag** to reorder the block within its field or move it to another field
+
+**Options Panel**
+
+When a block is selected, the options panel slides in from the right. It displays all configurable options for that block — colour scheme, layout variant, visibility settings, and any other options you defined in your block's configuration. Changes apply to the live preview immediately.
+
+**Add Block Panel**
+
+Clicking **+** in the toolbar opens the add block panel. It lists every bundle type registered in your adapter. You can:
+- **Click** a bundle to append it to the current field
+- **Drag** a bundle from the panel directly to the position you want on the page
+
+## Feature System
+
+blökkli's editor capabilities are built as independent **feature modules**. Each feature adds a specific capability — history tracking, clipboard support, AI assistance, and so on.
+
+- **40+ features are enabled by default.** You get the full editing suite without any configuration.
+- **Features are independent.** Disabling one feature has no side effects on others.
+- **You can disable features** for a given entity or user role by returning their IDs from `getDisabledFeatures()` in your adapter.
+- **You can build custom features** using `defineBlokkliFeature()` to extend the editor with your own tools and panels.
+
+### Disabling Features via Adapter
+
+Return an array of feature IDs from `getDisabledFeatures()` to remove those features for the current editing session:
+
+```typescript
+async getDisabledFeatures() {
+  return ['assistant', 'comments', 'mediaLibrary']
+}
+```
+
+This is useful for simplifying the editor for non-technical editors, or for disabling features that require adapter methods you haven't implemented yet.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Editing Workflow" icon="pencil" href="/editor/editing-workflow">
+    Walk through a full editing session — adding, moving, configuring, and publishing blocks.
+  </Card>
+  <Card title="Built-in Features" icon="grid-2" href="/editor/built-in-features">
+    Browse all 40+ built-in features and learn how to enable, disable, or configure each one.
+  </Card>
+  <Card title="Keyboard Shortcuts" icon="keyboard" href="/editor/keyboard-shortcuts">
+    Speed up editing with keyboard shortcuts for undo, duplicate, command palette, and more.
+  </Card>
+  <Card title="Custom Features" icon="wrench" href="/api/define-blokkli">
+    Build your own editor features using `defineBlokkliFeature()`.
+  </Card>
+</CardGroup>

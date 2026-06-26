@@ -1,0 +1,134 @@
+---
+title: "defineBlokkliEditAdapter() — Create the Edit Adapter"
+sidebarTitle: "Edit Adapter"
+description: "API reference for defineBlokkliEditAdapter(). Bridges blökkli's editor UI to your backend. Place the adapter at app/blokkli.editAdapter.ts to get started."
+---
+
+`defineBlokkliEditAdapter()` is the factory function that creates your edit adapter — the bridge between blökkli's editor UI and your backend data layer. Create this file at `app/blokkli.editAdapter.ts` and blökkli automatically discovers and uses it.
+
+## Import
+
+```typescript
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+```
+
+<Note>
+  `#blokkli/adapter` is a virtual module auto-configured by the blökkli Nuxt
+  module. You do not need to install or resolve it manually — it is available as
+  soon as the module is registered in your `nuxt.config.ts`.
+</Note>
+
+## Signature
+
+```typescript
+function defineBlokkliEditAdapter(
+  factory: (ctx: AdapterContext) => AdapterMethods
+): AdapterDefinition
+```
+
+## Parameters
+
+<ParamField path="factory" type="(ctx: AdapterContext) => AdapterMethods" required>
+  A factory function called once when blökkli initialises the editor. It receives a `ctx` object with reactive access to editor internals and must return an object containing your adapter method implementations.
+
+  <Expandable title="ctx properties">
+    <ResponseField name="ctx.state" type="Ref<EditorState>">
+      A reactive ref containing the current editor state. Use it to read the
+      `currentEntityUuid`, entity type and bundle information, the list of loaded
+      blocks, and other runtime state values.
+    </ResponseField>
+
+    <ResponseField name="ctx.eventBus" type="EventBus">
+      The editor's event bus. Emit custom events or subscribe to built-in editor
+      events such as block selection changes, drag interactions, and state
+      transitions directly from within your adapter.
+    </ResponseField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+<ResponseField name="AdapterDefinition" type="object">
+  An opaque adapter definition object consumed internally by blökkli. Export it
+  as the default export of `app/blokkli.editAdapter.ts` — blökkli picks it up
+  automatically at build time.
+</ResponseField>
+
+## Minimal Adapter
+
+The following example implements the seven methods required for a working editor. Every method is async — return a resolved value or `Promise` as needed.
+
+```typescript
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+export default defineBlokkliEditAdapter((ctx) => {
+  return {
+    async loadState() {
+      // Fetch raw content from your backend
+    },
+
+    async mapState(state) {
+      // Transform raw content into blökkli's internal format
+      return state
+    },
+
+    async getAllBundles() {
+      // Return the available block types
+      return []
+    },
+
+    async getFieldConfig() {
+      // Return field/region configuration for the current entity
+      return []
+    },
+
+    async addNewBlock(options) {
+      // Persist a newly added block to your backend
+    },
+
+    async moveBlock(options) {
+      // Persist a single block's new position
+    },
+
+    async moveMultipleBlocks(options) {
+      // Persist new positions for multiple blocks at once
+    },
+  }
+})
+```
+
+<Note>
+  The seven methods above are the minimum required to run the editor. blökkli
+  exposes more than 50 additional optional adapter methods that unlock features
+  like undo/redo history, publishing, duplicate, delete, library, media,
+  comments, and AI assistance. See the [Required Adapter
+  Methods](/api/adapter-required), [Block Mutations](/api/adapter-blocks),
+  [State & History](/api/adapter-state), and [Advanced
+  Methods](/api/adapter-advanced) reference pages for the full list.
+</Note>
+
+## How blökkli Discovers Your Adapter
+
+blökkli scans for `app/blokkli.editAdapter.ts` (or `.js`) at build time via its Nuxt module. You do not register the adapter anywhere else — placing the file at the correct path is sufficient.
+
+<Tip>
+  Keep your adapter file focused on data transport. Move business logic, type
+  mapping, and API helpers into separate composables or utilities and import
+  them into the adapter. This keeps `blokkli.editAdapter.ts` readable as your
+  method count grows.
+</Tip>
+
+## TypeScript Types
+
+All parameter and return types for adapter methods are exported from
+`@blokkli/editor`. Import them directly for full type safety:
+
+```typescript
+import type {
+  AdapterContext,
+  AdapterMethods,
+  MappedState,
+  BundleDefinition,
+  FieldConfig,
+} from '@blokkli/editor'
+```

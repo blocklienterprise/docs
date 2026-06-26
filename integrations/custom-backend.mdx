@@ -1,0 +1,250 @@
+---
+title: "Connect blökkli to Any Custom Backend"
+sidebarTitle: "Custom Backend"
+description: "Integrate blökkli with any backend — REST API, GraphQL, or custom storage — by implementing the adapter interface. Learn the patterns and data shapes required."
+---
+
+blökkli's adapter pattern lets you connect it to any backend. Whether you're using a REST API, GraphQL, a headless CMS, or even browser storage, you implement the same interface and blökkli handles the rest — routing user editing actions to your adapter methods and keeping the UI in sync.
+
+## The Adapter Pattern
+
+The adapter is a factory function you pass to `defineBlokkliEditAdapter()`. It receives a context object (`ctx`) and returns a plain object of async methods. blökkli calls those methods in response to user actions:
+
+| User action | Adapter method called |
+|---|---|
+| Editor opens | `loadState`, `mapState` |
+| Block list requested | `getAllBundles`, `getFieldConfig` |
+| Add a block | `addNewBlock` |
+| Move a block | `moveBlock` |
+| Move multiple blocks | `moveMultipleBlocks` |
+| Delete blocks | `deleteBlocks` |
+| Change block options | `updateOptions` |
+| Publish | `publish` |
+
+Your adapter translates each of these calls into whatever API requests or storage operations your backend requires. blökkli doesn't care how your data is stored — only that your adapter returns data in the expected shapes.
+
+## Data Shapes
+
+blökkli expects block data in the following shape. Your `mapState` method is responsible for transforming your backend's response into this format:
+
+```typescript
+interface BlockData {
+  uuid: string       // unique identifier for this block instance
+  bundle: string     // block type — matches the component's bundle
+  hostField: string  // the field name this block lives in
+  options?: Record<string, unknown>  // current resolved option values
+  // any additional props passed through to the component
+  [key: string]: unknown
+}
+```
+
+The `mapState` method receives the raw value returned by `loadState` and must return an object with a `blocks` array of `BlockData` items:
+
+```typescript
+async mapState(state): Promise<{ blocks: BlockData[] }> {
+  return {
+    blocks: state.items.map((item) => ({
+      uuid: item.id,
+      bundle: item.type,
+      hostField: item.field,
+      options: item.options ?? {},
+      // pass any extra fields your block components need
+      title: item.title,
+    })),
+  }
+}
+```
+
+## Example: REST API Adapter
+
+The following adapter connects blökkli to a JSON REST API. It covers all seven required methods plus the three most useful optional ones:
+
+```typescript
+// app/blokkli.editAdapter.ts
+import { computed } from 'vue'
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+export default defineBlokkliEditAdapter((ctx) => {
+  const baseUrl = '/api/blokkli'
+  const entityUuid = computed(() => ctx.state.value.currentEntityUuid)
+
+  return {
+    // --- Required ---
+
+    async loadState() {
+      return $fetch(`${baseUrl}/state/${entityUuid.value}`)
+    },
+
+    async mapState(state) {
+      return {
+        blocks: (state as any).blocks.map((b: any) => ({
+          uuid: b.id,
+          bundle: b.type,
+          hostField: b.field,
+          options: b.options ?? {},
+        })),
+      }
+    },
+
+    async getAllBundles() {
+      return $fetch(`${baseUrl}/bundles`)
+    },
+
+    async getFieldConfig() {
+      return $fetch(`${baseUrl}/fields/${entityUuid.value}`)
+    },
+
+    async addNewBlock({ bundle, hostField, preceedingUuid, options }) {
+      await $fetch(`${baseUrl}/blocks`, {
+        method: 'POST',
+        body: { bundle, hostField, preceedingUuid, options },
+      })
+    },
+
+    async moveBlock({ uuid, hostField, preceedingUuid }) {
+      await $fetch(`${baseUrl}/blocks/${uuid}/move`, {
+        method: 'PATCH',
+        body: { hostField, preceedingUuid },
+      })
+    },
+
+    async moveMultipleBlocks({ uuids, hostField, preceedingUuid }) {
+      await $fetch(`${baseUrl}/blocks/move-multiple`, {
+        method: 'PATCH',
+        body: { uuids, hostField, preceedingUuid },
+      })
+    },
+
+    // --- Optional but recommended ---
+
+    async deleteBlocks({ uuids }) {
+      await $fetch(`${baseUrl}/blocks`, {
+        method: 'DELETE',
+        body: { uuids },
+      })
+    },
+
+    async updateOptions({ uuid, options }) {
+      await $fetch(`${baseUrl}/blocks/${uuid}/options`, {
+        method: 'PATCH',
+        body: { options },
+      })
+    },
+
+    async publish() {
+      await $fetch(`${baseUrl}/publish/${entityUuid.value}`, {
+        method: 'POST',
+      })
+    },
+  }
+})
+```
+
+## Example: localStorage Adapter (Development)
+
+For prototyping without a backend, you can persist block state entirely in `localStorage`. This lets you build and test block components without any server infrastructure:
+
+```typescript
+// app/blokkli.editAdapter.ts
+import { defineBlokkliEditAdapter } from '#blokkli/adapter'
+
+export default defineBlokkliEditAdapter((_ctx) => {
+  const STORAGE_KEY = 'blokkli_dev_state'
+
+  function getBlocks(): any[] {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+  }
+
+  function saveBlocks(blocks: any[]): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(blocks))
+  }
+
+  return {
+    async loadState() {
+      return { blocks: getBlocks() }
+    },
+
+    async mapState(state) {
+      // State is already in the correct shape — pass it through.
+      return state as { blocks: any[] }
+    },
+
+    async getAllBundles() {
+      return [
+        { id: 'text', label: 'Text' },
+        { id: 'image', label: 'Image' },
+      ]
+    },
+
+    async getFieldConfig() {
+      return [
+        {
+          name: 'blocks',
+          label: 'Content',
+          allowedBundles: ['text', 'image'],
+          entityType: 'page',
+          entityBundle: 'default',
+        },
+      ]
+    },
+
+    async addNewBlock({ bundle, hostField, preceedingUuid }) {
+      const blocks = getBlocks()
+      const newBlock = {
+        uuid: crypto.randomUUID(),
+        bundle,
+        hostField,
+        options: {},
+      }
+      const insertAt = preceedingUuid
+        ? blocks.findIndex((b) => b.uuid === preceedingUuid) + 1
+        : blocks.length
+      blocks.splice(insertAt, 0, newBlock)
+      saveBlocks(blocks)
+    },
+
+    async moveBlock({ uuid, hostField, preceedingUuid }) {
+      const blocks = getBlocks()
+      const fromIndex = blocks.findIndex((b) => b.uuid === uuid)
+      if (fromIndex === -1) return
+      const [block] = blocks.splice(fromIndex, 1)
+      block.hostField = hostField
+      const toIndex = preceedingUuid
+        ? blocks.findIndex((b) => b.uuid === preceedingUuid) + 1
+        : blocks.length
+      blocks.splice(toIndex, 0, block)
+      saveBlocks(blocks)
+    },
+
+    async moveMultipleBlocks({ uuids, hostField, preceedingUuid }) {
+      const blocks = getBlocks()
+      // Extract all blocks to move, preserving their relative order.
+      const moving = blocks.filter((b) => uuids.includes(b.uuid))
+      const remaining = blocks.filter((b) => !uuids.includes(b.uuid))
+      moving.forEach((b) => { b.hostField = hostField })
+      const toIndex = preceedingUuid
+        ? remaining.findIndex((b) => b.uuid === preceedingUuid) + 1
+        : remaining.length
+      remaining.splice(toIndex, 0, ...moving)
+      saveBlocks(remaining)
+    },
+
+    async deleteBlocks({ uuids }) {
+      saveBlocks(getBlocks().filter((b) => !uuids.includes(b.uuid)))
+    },
+
+    async updateOptions({ uuid, options }) {
+      const blocks = getBlocks()
+      const block = blocks.find((b) => b.uuid === uuid)
+      if (block) {
+        block.options = { ...block.options, ...options }
+        saveBlocks(blocks)
+      }
+    },
+  }
+})
+```
+
+<Tip>
+  The localStorage adapter is a great way to build and test all your block components — including their options and layouts — before you wire up a real backend. You get the full editing UI without needing any server-side infrastructure in place.
+</Tip>

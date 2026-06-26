@@ -1,0 +1,120 @@
+{
+  "projectType": "sdk-library",
+  "projectName": "blökkli",
+  "projectDescription": "A WYSIWYG block editor and page builder module for Nuxt 3, enabling interactive drag-and-drop content editing powered by a flexible adapter interface.",
+  "theme": "luma",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "concepts"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/module",
+              "configuration/adapter",
+              "configuration/global-options"
+            ]
+          },
+          {
+            "group": "Building Blocks",
+            "pages": [
+              "blocks/define-blocks",
+              "blocks/block-options",
+              "blocks/field-component",
+              "blocks/provider-component"
+            ]
+          },
+          {
+            "group": "Editor Features",
+            "pages": [
+              "editor/overview",
+              "editor/editing-workflow",
+              "editor/built-in-features",
+              "editor/keyboard-shortcuts"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/drupal",
+              "integrations/custom-backend"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Composables",
+            "pages": [
+              "api/define-blokkli",
+              "api/define-blokkli-edit-adapter",
+              "api/use-blokkli"
+            ]
+          },
+          {
+            "group": "Adapter Methods",
+            "pages": [
+              "api/adapter-required",
+              "api/adapter-blocks",
+              "api/adapter-state",
+              "api/adapter-advanced"
+            ]
+          },
+          {
+            "group": "Components",
+            "pages": [
+              "api/blokkli-provider",
+              "api/blokkli-field"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Drag-and-drop WYSIWYG block editor for Nuxt 3",
+    "Flexible adapter interface for any backend",
+    "40+ built-in editor features (comments, history, library, AI assistant, etc.)",
+    "Block options system with multiple widget types",
+    "Reusable block library and fragments",
+    "Undo/redo history management",
+    "Multi-language / translation support",
+    "Responsive preview and publish workflow",
+    "Official Drupal integration via Paragraphs blökkli",
+    "TypeScript-first with Vue 3 composition API"
+  ],
+  "publicApiSurface": [
+    "defineBlokkli(options)",
+    "defineBlokkliEditAdapter(factory)",
+    "defineBlokkliFeature(options)",
+    "useBlokkli()",
+    "<BlokkliProvider>",
+    "<BlokkliField>",
+    "Adapter: loadState()",
+    "Adapter: mapState()",
+    "Adapter: getAllBundles()",
+    "Adapter: getFieldConfig()",
+    "Adapter: addNewBlock()",
+    "Adapter: moveBlock()",
+    "Adapter: moveMultipleBlocks()",
+    "Adapter: deleteBlocks()",
+    "Adapter: updateOptions()",
+    "Adapter: publish()",
+    "Module option: itemEntityType",
+    "Module option: globalOptions"
+  ]
+}

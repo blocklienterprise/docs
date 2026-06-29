@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "blökkli",
+  "name": "Blockli",
   "theme": "luma",
   "colors": {
     "primary": "#ef7025",
@@ -92,5 +92,10 @@
       "type": "github",
       "href": "https://github.com/blokkli/editor"
     }
+  },
+  "logo": {
+    "light": "/images/logo_black.png",
+    "dark": "/images/logo_white.png",
+    "href": "https://blockli.app"
   }
 }

@@ -1,0 +1,68 @@
+---
+title: "Submitting to App Stores"
+sidebarTitle: "Store Submission"
+description: "Submit your Blockli app to the Apple App Store and Google Play Store from Studio."
+---
+
+After a successful build, Studio can submit the binary directly to the App Store and Google Play using your stored credentials.
+
+## iOS — App Store
+
+### Prerequisites
+
+- App Store Connect API key uploaded (see [iOS Credentials](/studio/credentials-ios))
+- App record created in App Store Connect with the matching bundle ID
+- Build completed in Studio with status **Finished**
+
+### Submitting
+
+1. In Studio, go to **Build** and click the completed iOS build.
+2. Click **Submit to App Store**.
+3. Studio uses your App Store Connect API key to upload the binary to App Store Connect via the Transporter protocol.
+4. Once uploaded, the build appears in App Store Connect under **TestFlight** within a few minutes.
+
+### After upload
+
+- **TestFlight**: Add the build to a TestFlight group for internal or external testing before releasing
+- **App Store release**: In App Store Connect, go to your app, click **\+ Version**, select the uploaded build, fill in release notes and screenshots, then submit for review
+
+Apple's review typically takes **1–3 days** for new apps and **hours to 1 day** for updates.
+
+## Android — Google Play
+
+### Prerequisites
+
+- Google Play service account JSON uploaded (see [Android Credentials](/studio/credentials-android))
+- App created in Google Play Console with the matching package name
+- First release must be manually uploaded if this is a new app (Google Play API does not allow creating a new listing programmatically)
+- Build completed in Studio with status **Finished**
+
+### Submitting
+
+1. In Studio, go to **Build** and click the completed Android build.
+2. Click **Submit to Google Play**.
+3. Select the track: **Internal**, **Alpha**, **Beta**, or **Production**.
+4. Studio uploads the `.aab` to the selected track via the Google Play Developer API.
+
+### Tracks
+
+| Track | Who sees it |
+| --- | --- |
+| Internal | Up to 100 testers you specify by email |
+| Alpha | Closed testing group |
+| Beta | Open testing group |
+| Production | All Play Store users |
+
+### After upload
+
+- Internal and Alpha/Beta tracks are available to testers almost immediately
+- Production releases are reviewed by Google (usually **hours to 2 days**)
+- Promote a build from one track to the next in Google Play Console
+
+## Manual submission
+
+If you prefer to submit manually:
+
+1. Download the `.ipa` or `.aab` from the Studio Build page
+2. For iOS: use [Transporter](https://apps.apple.com/app/transporter/id1450874784) or Xcode's Organizer
+3. For Android: upload the `.aab` directly in Google Play Console under **Release → Production** (or the desired track)

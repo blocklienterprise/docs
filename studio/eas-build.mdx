@@ -1,0 +1,66 @@
+---
+title: "Building with EAS"
+sidebarTitle: "EAS Build"
+description: "Trigger iOS and Android builds from Studio using Expo Application Services (EAS Build)."
+---
+
+Studio uses [Expo Application Services (EAS)](https://expo.dev/eas) to build and sign your iOS and Android binaries. You don't need Expo CLI or a local build environment — everything runs in the cloud.
+
+## Before your first build
+
+1. iOS and Android [credentials](/studio/credentials-ios) must be uploaded
+2. Your WordPress site must be [connected](/studio/wordpress-connection)
+3. An EAS project must be linked (Studio handles this automatically on first build)
+
+## Triggering a build
+
+1. In Studio, go to **Build**.
+2. Click **New Build**.
+3. Select platform: **iOS**, **Android**, or **Both**.
+4. Click **Start Build**.
+
+Studio submits the job to EAS Build. The build typically takes **10–20 minutes** depending on queue time and platform.
+
+## Build status
+
+Studio polls EAS and shows live status in the Build tab:
+
+| Status | Meaning |
+| --- | --- |
+| Queued | Waiting for an EAS build worker |
+| Building | Build is in progress |
+| Finished | Build succeeded; binary ready to download or submit |
+| Failed | Build failed; check logs for errors |
+
+Click any build row to see the full EAS build log.
+
+## Development builds
+
+In addition to production builds, Studio can create **development builds** — binaries with `expo-dev-client` included for live preview sessions.
+
+- One active development build is allowed per platform per app
+- Development builds use a special bundle identifier suffix to avoid conflicting with production
+- Once a dev build is installed, Studio can start a **preview session** (a Metro server) so you can test configuration changes live on device
+
+See [Development Previews](/studio/development-previews) for the full workflow.
+
+## Build credits
+
+Builds consume credits from your Studio account. The credit cost varies by platform and build type:
+
+| Build type | Credits |
+| --- | --- |
+| iOS production | 5 credits |
+| Android production | 3 credits |
+| iOS development | 3 credits |
+| Android development | 2 credits |
+
+Credit balance is shown in **Account → Credits**.
+
+## After the build
+
+When a production build finishes:
+
+- Download the `.ipa` (iOS) or `.apk`/`.aab` (Android) directly from Studio
+- Submit to the App Store or Google Play via Studio's submission flow (see [Store Submission](/studio/store-submission))
+- Or distribute internally via TestFlight (iOS) or internal testing track (Android)

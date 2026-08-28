@@ -41,7 +41,9 @@
               "studio/wordpress-connection",
               "studio/app-configuration",
               "studio/credentials-ios",
-              "studio/credentials-android"
+              "studio/credentials-android",
+              "studio/eas-build",
+              "studio/ota-updates"
             ]
           }
         ]

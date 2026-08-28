@@ -1,0 +1,59 @@
+---
+title: "OTA Updates"
+sidebarTitle: "OTA Updates"
+description: "Push configuration and JavaScript updates to your live app without a new App Store release using EAS Update."
+---
+
+Blockli uses two layers of over-the-air (OTA) delivery:
+
+1. **App config OTA** — Studio publishes your configuration (branding, navigation, module flags) to a CDN. The app fetches this on every launch. No EAS Update involved.
+2. **JS bundle OTA** — EAS Update delivers JavaScript bundle changes to the app. Used for app logic/UI changes that don't require a new native build.
+
+## App config OTA (Studio publish)
+
+Every time you click **Publish** in Studio, the current configuration is pushed to the CDN. The app fetches it at startup and caches it locally.
+
+- **No build required** — works on any installed version of the app
+- **Takes effect immediately** — users see the change on next app launch
+- **What can be updated**: navigation structure, colors/theme (non-icon), enabled modules, feature flags, app page content
+- **What requires a new build**: app icon, splash screen, native dependencies
+
+## JS bundle OTA (EAS Update)
+
+For JavaScript/React Native code changes, Studio uses EAS Update to push a new JS bundle to devices.
+
+### How it works
+
+1. Studio builds an updated JS bundle
+2. The bundle is published to an EAS Update channel
+3. The app checks its channel on launch and downloads any pending update
+4. The update is applied on the next app restart
+
+### Channels
+
+The plugin defines two EAS Update channels:
+
+| Channel | Purpose |
+| --- | --- |
+| `production` | Live app users |
+| `preview` | Development and internal testing builds |
+
+Channel names are configurable in **Blockli → Settings → EAS** on your WordPress site.
+
+### OTA compatibility
+
+A JS bundle OTA update is compatible with a build only if the **native fingerprint** matches. The fingerprint captures native dependencies, plugins, and Expo SDK version. If a native change was made, a new full build is required — OTA alone is not sufficient.
+
+<Tip>
+  Studio checks fingerprint compatibility before publishing an OTA update and warns you if a new binary build is required instead.
+</Tip>
+
+## What to use when
+
+| Change | Use |
+| --- | --- |
+| Branding colors, navigation items, module toggles | Studio publish (config OTA) |
+| App page content | Studio publish (config OTA) |
+| Bug fix in app logic | EAS Update (JS OTA) |
+| New native dependency | New EAS Build |
+| App icon or splash screen | New EAS Build |

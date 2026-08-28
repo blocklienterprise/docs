@@ -1,0 +1,56 @@
+---
+title: "Creating Your First App"
+sidebarTitle: "Create an App"
+description: "How to create a new app record in Blockli Studio — naming, bundle identifiers, and initial configuration."
+---
+
+## Before you start
+
+You need:
+
+- A Blockli Studio account
+- Your iOS **bundle ID** (e.g. `com.yourcompany.yourapp`) — set when you create the app in App Store Connect
+- Your Android **package name** (e.g. `com.yourcompany.yourapp`) — set in Google Play Console
+- Your WordPress site URL
+
+<Warning>
+  Choose your bundle ID and package name carefully before creating your first build. These identifiers are permanent — they cannot be changed once submitted to Apple or Google. They should match the identifiers you register in App Store Connect and Google Play Console.
+</Warning>
+
+## Creating the app record
+
+1. Log in to Studio and click **New App** (or **Create App** on an empty account).
+2. Fill in:
+   - **App Name** — the display name (e.g. "My Community")
+   - **Site URL** — your WordPress site URL (e.g. `https://community.example.com`)
+   - **iOS Bundle ID** — the Apple bundle identifier
+   - **Android Package Name** — the Google Play package identifier
+3. Click **Create**.
+
+Studio creates the app record and assigns a unique `appId`. This ID is shared across Studio, the WordPress plugin, and the app binary.
+
+## Next steps after creating the app
+
+<Steps>
+  <Step title="Connect WordPress">
+    Go to **Settings → WordPress Connection** and connect your site. See [WordPress Connection](/studio/wordpress-connection).
+  </Step>
+  <Step title="Configure the app">
+    Set branding, navigation, and enabled modules. See [App Configuration](/studio/app-configuration).
+  </Step>
+  <Step title="Add credentials">
+    Upload iOS and Android signing credentials. See [iOS Credentials](/studio/credentials-ios) and [Android Credentials](/studio/credentials-android).
+  </Step>
+  <Step title="Trigger a build">
+    Go to **Build** and start your first EAS build. See [Building](/studio/eas-build).
+  </Step>
+</Steps>
+
+## Managing multiple apps
+
+You can create multiple app records under one Studio account. Common scenarios:
+
+- **Multiple tenants** — different community sites, each with their own app
+- **Development vs. production** — separate app records with different bundle IDs for testing builds
+
+Each app record has completely independent credentials, build history, and configuration.

@@ -1,0 +1,87 @@
+---
+title: "Plugin Settings"
+sidebarTitle: "Settings"
+description: "Reference for every setting in the Blockli Mobile App plugin admin panel — identity, branding, theme, navigation, modules, and cloud connection."
+---
+
+All settings live under **Blockli → Settings** in your WordPress admin. They are stored in the `bma_settings` option.
+
+## Identity & Branding
+
+| Setting | Description |
+| --- | --- |
+| **App Name** | Display name shown in the app header and onboarding screens. Defaults to your WordPress site name. |
+| **App Slug** | URL-safe identifier (e.g. `my-community`). Used as the deep-link scheme when **App Scheme** is blank. Set once — changing it invalidates existing deep links. |
+| **App Scheme** | Optional override for the deep-link scheme. Leave blank to use the app slug. Useful when you have multiple Blockli apps on the same device and need distinct schemes. |
+| **Support Email** | Shown to users on the in-app Settings screen. Defaults to the WordPress admin email. |
+| **Site URL** | Read-only. Set from `home_url()`. |
+
+## Theme & Colors
+
+These values populate the app's design tokens. Each color has a light-theme and dark-theme variant.
+
+| Token | Default (light / dark) | Purpose |
+| --- | --- | --- |
+| **Primary** | `#1d4ed8` / `#60a5fa` | Buttons, links, active state |
+| **Background** | `#ffffff` / `#020617` | Screen background |
+| **Surface** | `#f8fafc` / `#0f172a` | Cards, bottom sheets |
+| **Text** | `#111827` / `#f8fafc` | Body text |
+| **Muted** | `#64748b` / `#94a3b8` | Secondary text, placeholders |
+
+**Theme Mode** controls the default appearance: `system` (follow device), `light`, or `dark`. Users can override this in the app if the app is configured to allow it.
+
+**Icon URL** — URL to the app icon image. Used in Studio as a fallback reference; the canonical icon is set in Studio's Build configuration.
+
+## Enabled Modules
+
+Modules control which features are surfaced in the app. The plugin detects installed plugins and shows only the modules that are actually available on your site.
+
+| Module | Required plugin |
+| --- | --- |
+| Activity | BuddyBoss Platform |
+| Groups | BuddyBoss Platform |
+| Members | BuddyBoss Platform |
+| Profile | BuddyBoss Platform |
+| Forums | BuddyBoss Platform (bbPress component) |
+| Notifications | BuddyBoss Platform |
+| Courses | LearnDash |
+| Documents | BuddyBoss Platform Pro |
+| Podcasts | Any podcast plugin (e.g. Seriously Simple Podcasting) |
+| Shop | WooCommerce or Easy Digital Downloads |
+| Livestream | Mux \+ BMA Livestream add-on |
+
+Enabled modules appear in the app's navigation and search. Disabled modules are hidden entirely.
+
+## Navigation
+
+The navigation setting controls the tab bar and "More" overflow menu. You can configure:
+
+- **Tab bar items** — up to 5 items shown at the bottom of the screen
+- **More menu items** — everything else, accessible from the "More" tab
+- **Header bar** — optional action buttons in the top navigation bar
+- **Audience** — each menu can be scoped to `default` (all users), `logged_in`, or `logged_out`
+
+Navigation can also be overridden per-app from Studio, which takes precedence over plugin settings.
+
+## Cloud Connection
+
+The **Cloud** section connects the plugin to your Studio app record.
+
+| Setting | Description |
+| --- | --- |
+| **Enabled** | Whether Studio cloud sync is active. Set automatically when you connect via Studio. |
+| **App ID** | The Studio-assigned app identifier. Set by Studio during connection. |
+| **Config URL** | The edge/CDN URL Studio uses to deliver your published app config. |
+| **API Base URL** | The Studio API base used for build/OTA callbacks. |
+
+<Note>
+  Do not edit the Cloud settings manually. Use the **Connect** flow in Studio to populate these fields — Studio sets them via the plugin's admin REST API during the connection handshake.
+</Note>
+
+## EAS
+
+| Setting | Description |
+| --- | --- |
+| **EAS Project ID** | The Expo Application Services project UUID. Set by Studio when you link an EAS project. |
+| **Preview channel** | The EAS Update channel name used for development/preview builds. Defaults to `preview`. |
+| **Production channel** | The EAS Update channel name used for production builds. Defaults to `production`. |

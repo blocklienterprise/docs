@@ -1,0 +1,47 @@
+---
+title: "App Pages"
+sidebarTitle: "App Pages"
+description: "Create and manage custom app pages using WordPress block editor (Gutenberg). App pages let you build rich, custom screens that appear in the mobile app."
+---
+
+App Pages are custom screens you build in WordPress using the block editor. They appear in the app as full-screen content pages, accessible from the tab bar or the More menu.
+
+## Creating an App Page
+
+1. In WordPress admin, go to **Blockli → App Pages**.
+2. Click **Add New**.
+3. Give the page a title (this is the nav label users see).
+4. Use the block editor to compose the page content using Blockli blocks.
+5. Publish the page.
+6. In Studio (or plugin navigation settings), add the page to your app's tab bar or More menu.
+
+## Available blocks
+
+The plugin registers custom Gutenberg blocks (`BMA_Blocks`) designed for the mobile layout. These render as native React Native components in the app — not as web HTML.
+
+| Block | Description |
+| --- | --- |
+| **Card Grid** | A grid of content cards with image, title, and subtitle. Supports tapping to open a URL, group, or course. |
+| **Banner** | Full-width image with overlay text. |
+| **Button Row** | One or more CTA buttons. |
+| **Rich Text** | Styled body text. |
+| **Divider** | Visual separator. |
+| **Spacer** | Vertical whitespace. |
+| **CPT List** | Pulls in a filtered list of custom post type items (see [Custom Post Types](/plugin/custom-post-types)). |
+
+## Cards
+
+App Pages can also include **Cards** — a flexible content unit managed via **Blockli → Cards**. Cards are authored separately from pages and can be reused across multiple pages. The `BMA_Cards` system handles card storage and the REST API that delivers them to the app.
+
+## Parsing & delivery
+
+When the app loads an App Page, it requests the parsed block structure from `/wp-json/blockli-mobile/v1/app-pages/:id`. The plugin (`BMA_Parse_Blocks`) converts the Gutenberg block JSON into a normalized format the app can render natively.
+
+Changes to App Pages go live immediately — no build required. The app fetches the latest page content on each visit.
+
+## Navigation
+
+To add an App Page to your app navigation:
+
+- **Plugin settings**: Go to **Blockli → Settings → Navigation** and add a menu item pointing to the App Page.
+- **Studio**: Go to **App Config → Navigation** and add the page to the tab bar or More menu. Studio-level navigation overrides plugin-level navigation.

@@ -1,0 +1,54 @@
+---
+title: "Push Notifications"
+sidebarTitle: "Push Notifications"
+description: "How to set up push notifications for your Blockli app — Firebase, APNs, notification types, and real-time events."
+---
+
+Blockli delivers push notifications via **Firebase Cloud Messaging (FCM v1)**. FCM handles both Android directly and iOS via APNs relay. Credentials are stored in Studio and injected into builds — you don't configure Firebase keys in the plugin directly.
+
+## Setup overview
+
+1. Create a Firebase project for your app (or use an existing one)
+2. Add your iOS and Android apps to the Firebase project
+3. Upload credentials to Studio (see [iOS credentials](/studio/credentials-ios) and [Android credentials](/studio/credentials-android))
+4. Studio injects the credentials into your builds
+
+The plugin receives a push token from each device when a user logs in. It stores the token against the user's account and uses it when dispatching notifications.
+
+## Notification types
+
+The plugin defines these notification events (`BMA_Push_Types`):
+
+| Type | When it fires |
+| --- | --- |
+| `new_message` | User receives a private message |
+| `group_invite` | User is invited to a group |
+| `connection_request` | User receives a friend/connection request |
+| `connection_accepted` | A connection request is accepted |
+| `activity_mention` | User is @mentioned in an activity post |
+| `activity_comment` | Someone comments on the user's activity |
+| `activity_comment_reply` | Someone replies to the user's comment |
+| `group_activity` | New activity in a group the user belongs to |
+| `new_forum_reply` | New reply in a forum topic the user participates in |
+| `livestream_start` | A livestream the user follows has started |
+
+Each type can be enabled or disabled by users in the app's notification preferences screen.
+
+## Silent / data-only pushes
+
+Blockli uses **data \+ title/body** pushes (not silent-only) so that `addNotificationReceivedListener` fires on both foreground and background. The notification UI is suppressed programmatically when the notification should be handled in-app without showing a banner.
+
+<Warning>
+  Pure data-only (silent) pushes will not trigger `addNotificationReceivedListener` in Expo. Always include `title` and `body` in notification payloads; suppress the UI via the notification handler instead.
+</Warning>
+
+## Real-time events
+
+In addition to push, the plugin includes a real-time channel (`BMA_Realtime`) for in-app events while the user has the app open. This uses a polling or WebSocket connection depending on your server configuration. Real-time events power features like:
+
+- Live activity feed updates
+- Chat message delivery
+- Presence indicators
+- Livestream status changes
+
+See the **Real-time** section for configuration details.

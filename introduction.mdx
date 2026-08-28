@@ -4,116 +4,54 @@ sidebarTitle: "Introduction"
 description: "Learn what blökkli is, how its four-part architecture fits together, and whether it is the right block editor for your Nuxt 3 project."
 ---
 
-blökkli is a Nuxt 3 module (`@blokkli/editor`) that adds a fully interactive, WYSIWYG drag-and-drop block editor to your application. Instead of managing content through a separate admin panel, blökkli overlays an editing interface directly on top of your rendered page — so editors see exactly what visitors will see, in real time, while your Vue components remain the single source of truth for markup and styles.
+Blockli connects three pieces:
 
-<Note>
-  blökkli requires **Nuxt 3** and a backend that can persist block data. You connect your backend through the adapter interface — covered in detail below.
-</Note>
+| Component | What it does |
+| --- | --- |
+| **WordPress Plugin** | Installed on your site. Exposes your community data, handles authentication, push notifications, and connects your site to Studio. |
+| **Studio Cloud** | The web dashboard where you configure, build, and publish your app. Controls branding, navigation, app store credentials, and OTA updates. |
+| **Mobile App** | The white-label React Native app delivered to your users on iOS and Android. Powered by your WordPress site, configured by Studio. |
 
-## What blökkli Does
+An optional **SDK** is available for custom development and theming — documented separately.
 
-When a user enters edit mode, blökkli activates an editor overlay on your existing page. From there, editors can:
+## How it works
 
-- **Add blocks** from a panel of available block types, dropping them into any field on the page.
-- **Drag and reorder** blocks within a field or across fields with smooth, direct-manipulation drag-and-drop.
-- **Configure block options** through a contextual options panel — fields like text, colors, toggles, and selects that you define per block type.
-- **Undo and redo** any action through a full history stack, keeping editors confident as they experiment.
-- **Select multiple blocks** at once to move or delete them together.
-- **Publish changes** by invoking a publish action wired to your backend through the adapter.
-
-Your block components render identically in edit mode and in production. blökkli never wraps your output in extra markup that would affect your styles or layout — the editor UI lives in its own layer.
-
-## Architecture Overview
-
-blökkli is built from four interlocking pieces. Understanding each one makes it straightforward to integrate blökkli with any backend.
-
-### 1. Nuxt Module
-
-Installing `@blokkli/editor` and adding it to the `modules` array in `nuxt.config.ts` bootstraps everything automatically. The module:
-
-- Registers `<BlokkliProvider>` and `<BlokkliField>` as global components.
-- Auto-imports `defineBlokkli()` and `useBlokkli()` so they are available in every SFC without an explicit import.
-- Injects the editor overlay bundle only when the editor is active, keeping your production bundle lean.
-- Exposes a `blokkli` config key in `nuxt.config.ts` for module-level options such as `itemEntityType`.
-
-### 2. Adapter
-
-The adapter is the most important integration point. You create a single file — `app/blokkli.editAdapter.ts` — that exports a set of async callback functions. blökkli calls these functions whenever the editor needs to read or write data:
-
-| Callback | When blökkli calls it |
-|---|---|
-| `loadState` | On editor initialization, to fetch the current block data |
-| `mapState` | To transform raw backend data into blökkli's internal format |
-| `getAllBundles` | To populate the "add block" panel with available block types |
-| `addNewBlock` | When an editor drops a new block onto the page |
-| `moveBlock` | When an editor drags a block to a new position |
-| `updateOptions` | When an editor changes a block's options |
-| `publish` | When an editor triggers the publish action |
-
-Because you implement every callback, blökkli works with any backend — Drupal, Strapi, a custom REST API, GraphQL, or even an in-memory store for prototyping.
-
-### 3. Provider
-
-`<BlokkliProvider>` is a Vue component you add to any page that should be editable. It receives an `entity` prop that identifies _what_ is being edited — the entity type, bundle, and UUID — and a `can-edit` prop that controls whether the edit mode URL trigger is honored.
-
-```vue
-<BlokkliProvider
-  :entity="{ entity_type: 'node', entity_bundle: 'page', entity_uuid: page.uuid }"
-  :can-edit="true"
->
-  <!-- BlokkliField components go here -->
-</BlokkliProvider>
+```text
+WordPress site                    Studio Cloud                 App stores
+─────────────────                 ────────────                 ──────────
+BuddyBoss + Plugin  ──────────►  Configure app  ──────────►  iOS + Android
+(data + auth)        sync         Build binary   publish       (users)
+                                  OTA updates ──────────────► (live)
 ```
 
-The provider sets the editing context for all `<BlokkliField>` components nested inside it.
+1. **Install the plugin** on your WordPress / BuddyBoss site. It creates the REST API endpoints and settings that Studio reads.
+2. **Connect Studio** to your site. Studio syncs your site's capabilities (which community providers are active, what modules are enabled) and uses that to generate the app configuration.
+3. **Configure your app** in Studio: branding, navigation, screens, and feature flags.
+4. **Add credentials** for the iOS App Store and Google Play.
+5. **Trigger a build** via EAS. Studio handles the Expo build pipeline and code-signing.
+6. **Publish** your app to the App Store and Google Play.
+7. **Push OTA updates** any time you change configuration or content — no new App Store release required.
 
-### 4. Block Components
+## Requirements
 
-Each block type in your data corresponds to a Vue SFC in `components/Blokkli/`. You call `defineBlokkli()` in `<script setup>` to register the block with the editor and declare its options schema:
+- WordPress 5.8\+, PHP 7.4\+
+- **BuddyBoss Platform** (free) installed and activated — this is the community layer the app is built on top of
+- A [Blockli Studio](https://blockli-studio-cloud.onrender.com) account
+- Apple Developer account (for iOS builds and App Store distribution)
+- Google Play Developer account (for Android builds and Play Store distribution)
 
-```vue
-<script lang="ts" setup>
-const { options } = defineBlokkli({
-  bundle: 'text',
-  options: {
-    text: {
-      type: 'text',
-      label: 'Text content',
-      default: '',
-    },
-  },
-})
-</script>
-```
-
-blökkli reads the `bundle` string to match incoming block data to this component. The `options` object returned by `defineBlokkli()` is reactive — it always reflects the current values from the options panel, in both edit mode and production.
-
-## When to Use blökkli
-
-blökkli is a strong fit when:
-
-- You're building a **content-heavy Nuxt 3 application** — a marketing site, a CMS frontend, a documentation portal, or a landing page builder — where non-technical editors need to manage page layout.
-- You want editors to work **in-context**, seeing the real page as they edit rather than a form in a back office.
-- You already have (or are building) **a backend that stores block data** and can handle create, update, move, and delete operations via an API.
-- You want **full control of markup** — blökkli never dictates your HTML structure or CSS; your Vue components own the output entirely.
-
-blökkli may not be the right choice if your project has no persistent backend (e.g., a purely static site with no server), or if your content model doesn't map naturally to discrete, reorderable blocks.
-
-## Next Steps
+## What to read next
 
 <CardGroup cols={2}>
-  <Card
-    title="Quickstart"
-    icon="bolt"
-    href="/quickstart"
-  >
-    Follow the step-by-step guide to install blökkli and render your first editable block.
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Install the plugin, connect Studio, and trigger your first build.
   </Card>
-  <Card
-    title="Core Concepts"
-    icon="layer-group"
-    href="/concepts"
-  >
-    Dive deeper into blocks, entities, fields, and the adapter pattern.
+
+  <Card title="WordPress Plugin" icon="plug" href="/plugin/installation">
+    Full reference for every plugin setting and feature.
+  </Card>
+
+  <Card title="Studio Cloud" icon="cloud" href="/studio/overview">
+    Configure, build, and publish your app from Studio.
   </Card>
 </CardGroup>

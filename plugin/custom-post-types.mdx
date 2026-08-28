@@ -1,0 +1,64 @@
+---
+title: "Custom Post Types"
+sidebarTitle: "Custom Post Types"
+description: "Expose WordPress custom post types (CPTs) as data sources in the Blockli app. Surface any CPT as a list or detail screen."
+---
+
+Blockli can expose any registered WordPress custom post type (CPT) to the app as a data source — powering list screens, detail screens, or embedded content blocks.
+
+## Registering a CPT as a source
+
+1. Go to **Blockli → CPT Sources**.
+2. Click **Add Source**.
+3. Select the post type from the dropdown (only publicly queryable CPTs are listed).
+4. Configure the source:
+   - **Label** — display name shown in the app
+   - **Fields** — which post fields and meta to include in the API response
+   - **Filter** — optional taxonomy or meta query to filter which posts appear
+   - **Order** — sort order for the list
+5. Save.
+
+The CPT source is now available via `/wp-json/blockli-mobile/v1/cpt-sources/:source-key`.
+
+## Using CPT data in the app
+
+### In App Pages (no-code)
+
+Use the **CPT List block** in the block editor to embed a filtered CPT list in any App Page. Configure the block to reference your registered source.
+
+### In custom screens (SDK)
+
+With the Blockli SDK, use `useCollection` or `useDetail` to fetch CPT data in a custom theme screen:
+
+```tsx
+import { useCollection } from '@blocklienterprise/runtime';
+
+const { items, loading } = useCollection({
+  source: 'my-cpt-source',
+  perPage: 20,
+});
+```
+
+For CPT detail screens, use `useDetail`:
+
+```tsx
+const { item, loading } = useDetail({
+  source: 'my-cpt-source',
+  id: itemId,
+});
+```
+
+The raw post data (including meta) is available on `item.__raw` for advanced use.
+
+## Two tiers of CPT support
+
+| Tier | Description | Who it's for |
+| --- | --- | --- |
+| **Starter** | CPT list/detail rendered with default card UI, configured in Studio | Non-developers |
+| **Custom** | Full custom screen built with SDK hooks, custom navigation, custom UI | Developers |
+
+Tier 1 requires only plugin \+ Studio configuration. Tier 2 requires building a custom binary with the Blockli SDK.
+
+## Access control
+
+CPT sources respect WordPress post status and visibility. Only `published` posts are returned. If a post requires a capability check (e.g. membership gating), the plugin enforces it before including the post in the response.

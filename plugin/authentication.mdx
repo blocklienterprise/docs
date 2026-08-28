@@ -1,0 +1,54 @@
+---
+title: "Authentication"
+sidebarTitle: "Authentication"
+description: "Token-based and social login authentication in the Blockli plugin — how sessions work, social providers, and access control."
+---
+
+## Token authentication
+
+The app authenticates users with a **JWT-style token** issued by the plugin (`BMA_Token_Auth`). The token:
+
+- Is signed with the `bma_token_secret` option (a 64-character random string generated on activation)
+- Encodes the WordPress user ID and expiry
+- Is sent as a Bearer token in the `Authorization` header on all authenticated app requests
+- Expires after a configurable period; the app refreshes it automatically before expiry
+
+### Token secret rotation
+
+If you need to invalidate all active sessions (e.g. after a security incident), regenerate the token secret:
+
+```bash
+wp option update bma_token_secret "$(openssl rand -base64 48)"
+```
+
+All existing sessions will be invalidated immediately. Users will be prompted to log in again.
+
+## Social login
+
+The plugin (`BMA_Social_Auth`) supports OAuth-based social login. Supported providers depend on the OAuth plugin installed on your site. The app shows social login buttons on the sign-in screen when providers are configured.
+
+Common setups:
+
+- **BuddyBoss** with an OAuth/SSO plugin (e.g. WP OAuth Server, YM OAuth)
+- Any provider that issues WordPress user accounts via standard OAuth 2.0 / OpenID Connect
+
+Configure social providers in your OAuth plugin's settings — not in the Blockli plugin settings. The Blockli plugin detects configured providers and surfaces them in the app automatically.
+
+## Access control
+
+`BMA_Access_Control` enforces which users can access the app and its content. It integrates with WordPress user roles and BuddyBoss membership levels.
+
+### Membership gating
+
+Content can be gated behind membership levels. The app enforces the same access rules as your web site:
+
+- BuddyBoss membership levels are respected automatically
+- Paid Memberships Pro, MemberPress, and Restrict Content Pro levels are surfaced via the app's paywall screen when a user attempts to access gated content
+
+### Role-based access
+
+You can restrict app access to specific WordPress user roles. Users without an allowed role will see a "not authorized" screen after login.
+
+## Biometric auth (Face ID / PIN)
+
+The app supports Face ID and PIN as a re-authentication layer on top of the session token. This is handled entirely in the app — no plugin configuration required. The biometric check gates re-entry into the app after it is backgrounded, without requiring a full server-side login.

@@ -36,6 +36,7 @@
           {
             "group": "Studio Cloud",
             "pages": [
+              "studio/setup-checklist",
               "studio/overview",
               "studio/create-app",
               "studio/wordpress-connection",

@@ -1,0 +1,169 @@
+---
+title: "Creating Your First App"
+sidebarTitle: "Creating Your First App"
+description: "Step-by-step checklist for setting up a tenant app in Blockli Studio — credentials, deep links, store listing, and first build."
+---
+
+Use this checklist when setting up a tenant app in Blockli Studio.
+
+## 1. Create or select the app
+
+1. Open Studio and select the tenant app.
+2. Confirm the app name, site URL, package name, and bundle ID are correct.
+3. Save the app settings before uploading store credentials.
+
+The Android package and iOS bundle ID must match the apps you create in Firebase, Apple Developer, and Google Play.
+
+## 2. Connect iOS
+
+In **Store Setup → Credentials**, fill out **iOS — Apple Developer account**.
+
+### App Store Connect API Key
+
+Use this for iOS build signing and App Store uploads.
+
+Where to get it:
+
+1. Open [App Store Connect](https://appstoreconnect.apple.com/).
+2. Go to **Users and Access → Integrations → App Store Connect API**.
+3. Create or select an API key.
+4. Copy the **Issuer ID**.
+5. Copy the **Key ID**.
+6. Download the `.p8` key file.
+
+Upload or paste those values into:
+
+- **Issuer ID**
+- **Key ID**
+- **API key (.p8)**
+
+### APNs Auth Key
+
+Use this for iOS push notifications.
+
+Where to get it:
+
+1. Open [Apple Developer](https://developer.apple.com/account/).
+2. Go to **Certificates, Identifiers & Profiles → Keys**.
+3. Create a key with **Apple Push Notifications service (APNs)** enabled.
+4. Copy the **Key ID**.
+5. Download the `.p8` key file.
+
+Upload or paste those values into:
+
+- **APNs key ID**
+- **APNs auth key (.p8)**
+
+<Note>
+  One APNs key can be reused across multiple apps in the same Apple Developer account.
+</Note>
+
+## 3. Connect Android and Firebase
+
+In **Store Setup → Credentials**, fill out **Android — Google & Firebase**.
+
+### google-services.json
+
+Use this for the Android app's Firebase client configuration. Studio bundles this file into Android builds.
+
+Where to get it:
+
+1. Open [Firebase Console](https://console.firebase.google.com/).
+2. Select the Firebase project for the tenant.
+3. Go to **Project settings → General → Your apps**.
+4. Add or select the Android app.
+5. Confirm the Android package name matches Studio.
+6. Download `google-services.json`.
+
+Upload it into:
+
+- **google-services.json**
+
+<Tip>
+  If you have both test and release Android apps in the same Firebase project, add both package names first. The downloaded file can contain multiple Android clients.
+</Tip>
+
+### Service Account Admin SDK JSON
+
+Use this so Expo/EAS can relay Firebase Cloud Messaging v1 push notifications.
+
+Where to get it:
+
+1. Open the same Firebase project.
+2. Go to **Project settings → Service accounts**.
+3. Click **Generate new private key**.
+4. Download the JSON file.
+
+Upload it into:
+
+- **Service account (admin SDK) JSON**
+
+This file is not bundled into the app. It is a server-side credential.
+
+### Google Play Service Account
+
+Use this only when Studio should submit builds to Google Play.
+
+Where to get it:
+
+1. Open [Google Play Console](https://play.google.com/console).
+2. Go to **Setup → API access**.
+3. Link or create a Google Cloud service account.
+4. Grant the service account the required Play Console permissions.
+5. Download its JSON key.
+
+Upload it into:
+
+- **Google Play service account**
+
+You can leave this blank for preview builds and device testing.
+
+## 4. Connect WordPress deep links
+
+In **Store Setup → Credentials**, fill out **Deep Links**.
+
+Use this so Studio can publish App Links and Universal Links files back to the tenant WordPress site.
+
+Where to get it:
+
+1. Log in to the tenant WordPress admin.
+2. Go to **Users → Profile** for the admin user.
+3. Create an **Application Password**.
+4. Copy the generated password immediately.
+
+Fill in:
+
+- **WP username**
+- **Application password**
+
+## 5. Add store listing copy
+
+In **Store Setup → Listing**, enter the copy used for App Store and Google Play submissions.
+
+Typical fields include:
+
+- **App Store subtitle**
+- **App Store description**
+- **Play short description**
+- **Play full description**
+
+This is only required when preparing store submissions.
+
+## 6. Save and build
+
+1. Click **Save Store Setup**.
+2. Start with a **Preview** build for device testing.
+3. Use **Production** only when you are ready for store submission.
+
+---
+
+**Credential quick reference:**
+
+| Credential | Purpose | Bundled into app? |
+| --- | --- | --- |
+| `google-services.json` | Android Firebase app config | Yes (Android only) |
+| Firebase service account JSON | Server credential for push notifications | No |
+| Google Play service account JSON | Store submission | No |
+| App Store Connect API key | iOS signing and App Store upload | No |
+| APNs auth key | iOS push notifications | No |
+| WordPress application password | Publish deep-link files to tenant site | No |

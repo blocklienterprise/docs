@@ -17,70 +17,35 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "concepts"
+              "quickstart"
             ]
           },
           {
-            "group": "Configuration",
+            "group": "WordPress Plugin",
             "pages": [
-              "configuration/module",
-              "configuration/adapter",
-              "configuration/global-options"
+              "plugin/installation",
+              "plugin/settings",
+              "plugin/studio-connection",
+              "plugin/push-notifications",
+              "plugin/authentication",
+              "plugin/in-app-purchases",
+              "plugin/app-pages",
+              "plugin/custom-post-types"
             ]
           },
           {
-            "group": "Building Blocks",
+            "group": "Studio Cloud",
             "pages": [
-              "blocks/define-blocks",
-              "blocks/block-options",
-              "blocks/field-component",
-              "blocks/provider-component"
-            ]
-          },
-          {
-            "group": "Editor Features",
-            "pages": [
-              "editor/overview",
-              "editor/editing-workflow",
-              "editor/built-in-features",
-              "editor/keyboard-shortcuts"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "integrations/drupal",
-              "integrations/custom-backend"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Composables",
-            "pages": [
-              "api/define-blokkli",
-              "api/define-blokkli-edit-adapter",
-              "api/use-blokkli"
-            ]
-          },
-          {
-            "group": "Adapter Methods",
-            "pages": [
-              "api/adapter-required",
-              "api/adapter-blocks",
-              "api/adapter-state",
-              "api/adapter-advanced"
-            ]
-          },
-          {
-            "group": "Components",
-            "pages": [
-              "api/blokkli-provider",
-              "api/blokkli-field"
+              "studio/setup-checklist",
+              "studio/overview",
+              "studio/create-app",
+              "studio/wordpress-connection",
+              "studio/app-configuration",
+              "studio/credentials-ios",
+              "studio/credentials-android",
+              "studio/eas-build",
+              "studio/ota-updates",
+              "studio/store-submission"
             ]
           }
         ]
@@ -89,13 +54,15 @@
   },
   "navbar": {
     "primary": {
-      "type": "github",
-      "href": "https://github.com/blokkli/editor"
+      "type": "button",
+      "href": "https://blockli-studio-cloud.onrender.com",
+      "label": "Studio"
     }
   },
   "logo": {
     "light": "/images/logo_black.png",
     "dark": "/images/logo_white.png",
     "href": "https://blockli.app"
-  }
+  },
+  "description": "Documentation for the Blockli platform — WordPress plugin, Studio Cloud, and SDK for building and publishing white-label mobile community apps."
 }

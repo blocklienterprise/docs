@@ -1,0 +1,58 @@
+---
+title: "WordPress Connection"
+sidebarTitle: "WordPress Connection"
+description: "How to connect your WordPress site to Studio Cloud — syncing capabilities, troubleshooting connection issues."
+---
+
+Studio reads your site's configuration through the Blockli WordPress plugin. The connection tells Studio what your site supports — which community features are active, what modules are available, and how the app should be configured.
+
+## Connecting your site
+
+1. In Studio, open your app and go to **Settings → WordPress Connection**.
+2. Verify the site URL (set when you created the app). Update it if your site has moved.
+3. Click **Connect** (or **Verify Connection** if it was previously connected).
+4. Studio calls `GET /wp-json/blockli-mobile/v1/config` on your site.
+5. On success, Studio shows a green "Connected" badge and lists the detected capabilities.
+
+<Note>
+  The Blockli plugin must be installed and activated on the WordPress site before connecting. See [Installation](/plugin/installation).
+</Note>
+
+## What Studio syncs
+
+After a successful connection, Studio stores:
+
+| Data | Where it comes from |
+| --- | --- |
+| Community provider | Auto-detected: BuddyBoss, BuddyPress, or FluentCommunity |
+| Active modules | Plugin settings \+ installed plugin detection |
+| Plugin version | Plugin header |
+| REST endpoints | Constructed from site URL \+ `/wp-json/` routes |
+| Site name | WordPress `get_bloginfo('name')` |
+
+This data is used to pre-populate App Configuration and warn you if a module you’ve enabled in Studio requires a plugin that isn’t installed on your site.
+
+## Re-syncing
+
+Click **Sync Now** at any time to re-read your site's capabilities. Do this after:
+
+- Installing a new plugin that enables a Blockli module (e.g. adding LearnDash for Courses)
+- Updating the Blockli plugin
+- Changing your WordPress site URL
+
+## Troubleshooting
+
+**"Could not reach site" on connect**
+
+1. Confirm the Blockli plugin is activated
+2. Check pretty permalinks: **Settings → Permalinks** in WordPress admin (any structure except "Plain")
+3. Test directly: visit `https://your-site.com/wp-json/blockli-mobile/v1/ping` — you should see a JSON response
+4. Check that no security plugin is blocking the REST API for unauthenticated requests to the `/blockli-mobile/` namespace
+
+**Capabilities show as unavailable after install**
+
+Click **Sync Now** — Studio caches the capability list and won't update automatically. Syncing re-reads your site.
+
+**Site URL changed after connecting**
+
+Update the URL in **Settings → WordPress Connection**, then click **Reconnect**. Studio runs the handshake again and updates the plugin's cloud settings with the new URL.

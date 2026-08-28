@@ -1,0 +1,68 @@
+---
+title: "Connecting to Studio"
+sidebarTitle: "Studio Connection"
+description: "How the Blockli WordPress plugin connects to Studio Cloud — the handshake process, what data is synced, and how to reconnect."
+---
+
+The plugin exposes a REST API that Studio uses to read your site's configuration and write back app settings. The connection is initiated from Studio — you don't configure it manually in the plugin.
+
+## How the connection works
+
+1. In Studio, you enter your WordPress site URL and click **Connect**.
+2. Studio calls `GET /wp-json/blockli-mobile/v1/config` on your site.
+3. The plugin responds with your site's capabilities: active community providers, enabled modules, plugin version, and site metadata.
+4. Studio stores the connection and sets the following fields in the plugin via the admin REST API (`/wp-json/blockli-mobile/v1/admin/settings`):
+   - `cloud.enabled = true`
+   - `cloud.app_id` — your Studio app's unique ID
+   - `cloud.config_url` — the edge CDN URL for published app config
+   - `cloud.api_base_url` — the Studio API base for callbacks
+
+After connection, the plugin's **Blockli → Settings** page shows a "Connected" badge with your app ID.
+
+## What Studio reads from the plugin
+
+Studio syncs the following from your site on connection and on each subsequent sync:
+
+- **Community provider** — BuddyBoss, BuddyPress, or FluentCommunity (auto-detected)
+- **Active modules** — which content types and features are available
+- **Plugin version** — used to warn when the plugin is outdated
+- **REST base URLs** — the endpoints Studio will deliver to the app at runtime
+- **Authentication capabilities** — whether social login providers are configured
+
+## Local development
+
+To connect a local WordPress install to Studio (e.g. via Local by Flywheel), your site must be reachable from the internet. Options:
+
+- Use a tunnel tool like **ngrok** or **Cloudflare Tunnel** to expose your local site
+- Add the tunnel URL to Studio as the site URL
+
+Alternatively, set the Studio URL in `wp-config.php` to point at a local Studio instance:
+
+```php
+define( 'BLOCKLI_STUDIO_URL', 'http://127.0.0.1:5174' );
+```
+
+This overrides the default Studio URL (`https://blockli-studio-cloud.onrender.com`) for the plugin's admin panel only.
+
+## Reconnecting
+
+If you need to reconnect (e.g. after migrating your site to a new URL):
+
+1. In Studio, go to **Settings → WordPress Connection** and click **Reconnect**.
+2. Update the site URL if it changed.
+3. Studio re-runs the connection handshake and updates the plugin settings.
+
+The plugin token secret is not changed during reconnection — existing app sessions remain valid.
+
+## Troubleshooting
+
+**Connection fails with "Could not reach site"**
+
+- Check that pretty permalinks are enabled (**Settings → Permalinks** — any structure except "Plain")
+- Ensure the REST API is not blocked by a security plugin (Wordfence, iThemes Security, etc.)
+- Verify the site URL is publicly reachable from Studio's servers
+
+**"Plugin not detected" after connection**
+
+- Confirm the plugin is activated (not just installed)
+- Visit `https://your-site.com/wp-json/blockli-mobile/v1/ping` — if this returns 404, the REST routes are not registered

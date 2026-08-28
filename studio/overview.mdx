@@ -1,0 +1,36 @@
+---
+title: "Studio Cloud Overview"
+sidebarTitle: "Overview"
+description: "What Blockli Studio Cloud is, what it manages, and how it fits into the platform."
+---
+
+Blockli Studio Cloud is the web dashboard where you create, configure, build, and publish your Blockli mobile app. It is the control plane that connects your WordPress site to the App Store and Google Play.
+
+## What Studio manages
+
+| Area | What you do in Studio |
+| --- | --- |
+| **App records** | Create apps, set bundle IDs, manage multiple apps per account |
+| **WordPress connection** | Connect your site, sync capabilities, track plugin version |
+| **App configuration** | Branding, navigation, modules, screens, feature flags |
+| **Credentials** | iOS/Android signing keys, APNs keys, Firebase config |
+| **Builds** | Trigger EAS builds, track status, download binaries |
+| **OTA updates** | Push config/JS changes to production without a new App Store release |
+| **Monetization** | IAP products, entitlements |
+| **Edge delivery** | Published app-config served from CDN to every app instance |
+
+## Account model
+
+- One Studio account can own multiple apps
+- Each app has its own WordPress site connection, credentials, build history, and config
+- Apps are identified by a unique `appId` that is shared between Studio and the WordPress plugin
+
+## Configuration ownership
+
+WordPress owns **editable app configuration** (branding, navigation, module toggles, app pages). Studio owns **infrastructure** (builds, OTA jobs, credentials, edge delivery, entitlements).
+
+When you publish from Studio, it reads the latest configuration from WordPress, composes it into a single app-config JSON, and pushes it to the CDN. The app fetches this config on startup.
+
+## Accessing Studio
+
+Studio is available at [blockli-studio-cloud.onrender.com](https://blockli-studio-cloud.onrender.com). Sign in with your Blockli account. If your organization uses Clerk for authentication, sign in via your Clerk credentials.

@@ -1,0 +1,58 @@
+---
+title: "In-App Purchases"
+sidebarTitle: "In-App Purchases"
+description: "Set up iOS and Android in-app purchases in the Blockli plugin — product mapping, entitlements, and Studio configuration."
+---
+
+Blockli supports native in-app purchases (IAP) on both iOS and Android via the `BMA_IAP` module. IAP lets you sell subscriptions or one-time purchases directly inside the app, with entitlements tied back to WordPress user accounts.
+
+## How it works
+
+1. You create products in **App Store Connect** (iOS) and **Google Play Console** (Android)
+2. You define the same products in **Studio → Monetization**
+3. The plugin maps purchased product IDs to WordPress capabilities or membership levels
+4. When a user completes a purchase in the app, the plugin verifies the receipt and grants the appropriate access
+
+## Plugin configuration
+
+IAP settings are managed primarily in Studio. The plugin side (`BMA_IAP`) handles:
+
+- **Receipt verification** — validates purchase receipts against Apple/Google servers
+- **Entitlement assignment** — maps verified purchases to WordPress user meta
+- **Restore purchases** — handles the restore flow when a user reinstalls the app
+
+## Product types
+
+| Type | Description |
+| --- | --- |
+| **Auto-renewable subscription** | Recurring subscription (monthly, annual). Best for membership access. |
+| **Non-consumable** | One-time purchase that persists (e.g. "Premium" tier). |
+| **Consumable** | One-time purchase that is used up (e.g. credits). Less common for community apps. |
+
+## Connecting to membership plugins
+
+You can link IAP products to membership levels in these plugins:
+
+- **Paid Memberships Pro**
+- **MemberPress**
+- **Restrict Content Pro**
+- **BuddyBoss** membership levels
+
+After a successful IAP purchase, the plugin activates the corresponding membership level on the user's account. This gives them access to the same gated content on both web and mobile.
+
+## Testing
+
+Apple and Google both provide sandbox environments for IAP testing:
+
+- **iOS**: Create sandbox tester accounts in App Store Connect. Use a development or TestFlight build.
+- **Android**: Add test accounts in Google Play Console. Use an internal testing build.
+
+The plugin's IAP endpoint (`/wp-json/blockli-mobile/v1/iap/verify`) accepts a `sandbox` flag for test receipts.
+
+## Admin panel
+
+Go to **Blockli → In-App Purchases** in WordPress admin to:
+
+- View recent purchase events and their verification status
+- Manually grant or revoke entitlements
+- Check the current entitlement status for any user

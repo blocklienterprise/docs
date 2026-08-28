@@ -1,0 +1,63 @@
+---
+title: "Installation & Requirements"
+sidebarTitle: "Installation"
+description: "How to install and activate the Blockli Mobile App WordPress plugin, including system requirements and first-run setup."
+---
+
+## Requirements
+
+| Requirement | Minimum version |
+| --- | --- |
+| WordPress | 5.8 |
+| PHP | 7.4 |
+| BuddyBoss Platform | Latest stable |
+
+The plugin also detects and integrates with optional plugins when present:
+
+- **BuddyBoss Platform Pro** — unlocks messaging and document features
+- **LearnDash** — enables Courses module
+- **Easy Digital Downloads** — enables Shop/Products module
+- **WooCommerce** — enables Shop module (alternative to EDD)
+- **Mux** — enables Livestream module (requires Mux account and webhook setup)
+
+## Installation
+
+### From a zip file
+
+1. Download the `blockli-mobile-app.zip` from your Studio account.
+2. In WordPress admin, go to **Plugins → Add New → Upload Plugin**.
+3. Choose the zip file and click **Install Now**.
+4. Click **Activate Plugin**.
+
+### Via WP-CLI
+
+```bash
+wp plugin install blockli-mobile-app.zip --activate
+```
+
+## What happens on activation
+
+On first activation the plugin:
+
+1. Creates the `bma_settings` option with sensible defaults (app name pulled from your site name, app slug derived from it).
+2. Generates a random 64-character token secret stored in `bma_token_secret`. **Do not delete this option** — it invalidates all existing app sessions.
+3. Registers all REST API routes under `/wp-json/blockli-mobile/v1/`.
+4. Registers the Blockli admin menu in WordPress.
+
+## Verifying the installation
+
+After activation, visit:
+
+```text
+https://your-site.com/wp-json/blockli-mobile/v1/ping
+```
+
+You should receive a JSON response confirming the plugin version and site URL. If you get a 404, check that **pretty permalinks** are enabled in **Settings → Permalinks** (any structure other than "Plain" works).
+
+## Updates
+
+Updates are delivered through your Studio account. Download the new zip and follow the same installation steps — WordPress will detect the existing plugin and offer to replace it.
+
+<Warning>
+  Deactivating and reactivating the plugin does not reset settings. To fully reset, delete the `bma_settings` and `bma_token_secret` options from the database (or use WP-CLI: `wp option delete bma_settings bma_token_secret`).
+</Warning>

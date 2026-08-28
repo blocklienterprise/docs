@@ -1,0 +1,84 @@
+---
+title: "App Configuration"
+sidebarTitle: "App Configuration"
+description: "Configure your app's branding, navigation, modules, and feature flags in Studio."
+---
+
+App Configuration in Studio controls how your app looks and behaves. Configuration changes are published to the CDN — the app picks them up on next launch without requiring a new build.
+
+## Branding
+
+### App icon and splash screen
+
+Upload your app icon and splash screen images in **App Config → Branding**.
+
+| Asset | Requirements |
+| --- | --- |
+| **App icon** | 1024×1024 px PNG, no transparency (required for App Store) |
+| **Android adaptive icon** | 1024×1024 px PNG with a subject centered in a safe zone |
+| **Android notification icon** | White PNG on transparent background, 96×96 px |
+| **Splash screen** | 2732×2732 px PNG (covers all device sizes) |
+
+<Warning>
+  Icon and splash screen changes require a new build. They are embedded in the binary, not delivered via OTA updates.
+</Warning>
+
+### Colors and theme
+
+Set your brand colors for light and dark themes. These token values are delivered as part of the published app config and can be updated via OTA without a new build.
+
+| Token | Purpose |
+| --- | --- |
+| Primary | Buttons, links, active states |
+| Background | Main screen background |
+| Surface | Cards, sheets, modals |
+| Text | Body and heading text |
+| Muted | Secondary text, placeholders |
+
+Set **Theme Mode** to `system`, `light`, or `dark` to control the default appearance.
+
+## Navigation
+
+Configure the bottom tab bar and the "More" overflow menu in **App Config → Navigation**.
+
+- **Tab bar** — up to 5 items. Each item has a label, icon, route, and optional audience (all users / logged in / logged out).
+- **More menu** — everything else accessible from the last tab. Supports the same audience scoping.
+- **Header bar** — icon buttons shown in the top navigation bar on certain screens.
+
+Built-in routes:
+
+| Route | Screen |
+| --- | --- |
+| `activity` | Activity feed |
+| `groups` | Groups list |
+| `members` | Members list |
+| `forums` | Forums |
+| `notifications` | Notifications |
+| `profile` | My profile |
+| `courses` | LearnDash course list |
+| `podcasts` | Podcast list |
+| `shop` | Product list |
+| `livestream` | Livestream list |
+| `chats` | Messaging |
+| `documents` | Documents |
+
+For custom App Pages, use the `app-page/:id` route.
+
+## Enabled modules
+
+Toggle modules on or off in **App Config → Modules**. Studio shows which modules are available based on what's installed on your WordPress site (from the last sync).
+
+## Feature flags
+
+Feature flags let you enable or disable specific behaviors without a new build:
+
+- Registration open / closed
+- Social login providers enabled
+- Onboarding flow shown to new users
+- In-app purchases enabled
+
+## Publishing
+
+After making configuration changes, click **Publish** to push the updated config to the CDN. The app will pick up the changes on next launch.
+
+You can preview the config before publishing by checking the **Preview URL** shown in Studio — this delivers the unpublished draft config to a development build.

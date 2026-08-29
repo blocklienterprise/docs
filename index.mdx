@@ -1,78 +1,131 @@
 ---
-title: "blökkli – WYSIWYG Block Editor Module for Nuxt 3"
+title: "Blockli Documentation"
 sidebarTitle: "Home"
-description: "blökkli is a drag-and-drop WYSIWYG block editor for Nuxt 3. Build rich, in-context page editing with a flexible adapter and Vue components."
+description: "Everything you need to build, configure, and publish a white-label community mobile app on iOS and Android."
+mode: "custom"
 ---
 
-blökkli is a Nuxt 3 module that brings a fully interactive, drag-and-drop WYSIWYG block editor to your application. Whether you're building a headless CMS frontend, a marketing page builder, or a content-rich web app, blökkli gives your editors a live editing experience while you stay in full control of markup and styling through standard Vue components.
+<div style={{maxWidth: '800px', margin: '0 auto', padding: '48px 24px 80px'}}>
+  <img src="/images/blockli-app-logo.png" alt="Blockli" style={{height: '40px', marginBottom: '32px'}} />
 
-<CardGroup cols={2}>
-  <Card
-    title="Introduction"
-    icon="book-open"
-    href="/introduction"
-  >
-    Learn what blökkli is, how it's architected, and whether it fits your project.
-  </Card>
-  <Card
-    title="Quickstart"
-    icon="bolt"
-    href="/quickstart"
-  >
-    Install blökkli, wire up your first adapter, and render your first block in under 10 minutes.
-  </Card>
-  <Card
-    title="Core Concepts"
-    icon="layer-group"
-    href="/concepts"
-  >
-    Understand blocks, entities, fields, bundles, and the adapter pattern.
-  </Card>
-  <Card
-    title="API Reference"
-    icon="code"
-    href="/api/define-blokkli"
-  >
-    Explore the full `defineBlokkli` composable API and all available options.
-  </Card>
-</CardGroup>
+  # Welcome to Blockli Docs
 
-## How It Works
+  Blockli turns your BuddyBoss WordPress community into a native iOS and Android app — no mobile development required. Configure it in Studio, build it with EAS, publish it to the App Store and Google Play.
 
-<Steps>
-  <Step title="Install the module">
-    Add `@blokkli/editor` to your Nuxt 3 project and register it in `nuxt.config.ts`. The module auto-imports everything you need — no manual plugin setup required.
-  </Step>
-  <Step title="Configure your adapter">
-    Create `app/blokkli.editAdapter.ts` and implement the adapter interface. The adapter is the bridge between blökkli's editor UI and your backend — you decide how blocks are loaded, saved, and mutated.
-  </Step>
-  <Step title="Add a provider and field to your page">
-    Wrap your page content with `<BlokkliProvider>` to set the editing context, then place `<BlokkliField>` wherever you want a list of editable blocks to appear.
-  </Step>
-  <Step title="Define your block components">
-    Create Vue SFCs inside `components/Blokkli/` and call `defineBlokkli({ bundle: 'my-bundle' })` in the `<script setup>` block. blökkli automatically maps each block in your data to the matching component.
-  </Step>
-</Steps>
+  <CardGroup cols={3} style={{marginTop: '40px', marginBottom: '48px'}}>
+    <Card title="WordPress Plugin" icon="plug" href="/plugin/installation">
+      Install the plugin, connect your site to Studio, and enable push notifications, auth, and IAP.
+    </Card>
 
-## Key Features
+    <Card title="Studio Cloud" icon="cloud" href="/studio/setup-checklist">
+      Create your app, add credentials, configure branding and navigation, then build and publish.
+    </Card>
 
-<CardGroup cols={3}>
-  <Card
-    title="Drag-and-Drop Editing"
-    icon="hand-pointer"
-  >
-    Editors reorder, add, and remove blocks directly on the page with a fluid drag-and-drop interface — no separate admin UI needed.
-  </Card>
-  <Card
-    title="Built-in Editor Features"
-    icon="wand-magic-sparkles"
-  >
-    History (undo/redo), multi-select, clipboard, block options panel, and a publish workflow come out of the box with zero configuration.
-  </Card>
-  <Card
-    title="Flexible Adapter System"
-    icon="plug"
-  >
-    The adapter pattern keeps blökkli fully backend-agnostic. Connect it to Drupal, a REST API, GraphQL, or even `localStorage` — your backend, your rules.
-  </Card>
-</CardGroup>
+    <Card title="Quickstart" icon="rocket" href="/quickstart">
+      End-to-end walkthrough from plugin install to your first build in under 30 minutes.
+    </Card>
+  </CardGroup>
+
+  ***
+
+  ## WordPress Plugin
+
+  Install and configure the plugin that connects your WordPress site to the Blockli ecosystem.
+
+  <CardGroup cols={2}>
+    <Card title="Installation & Requirements" icon="download" href="/plugin/installation">
+      System requirements, installation steps, and what happens on first activation.
+    </Card>
+
+    <Card title="Plugin Settings" icon="sliders" href="/plugin/settings">
+      Identity, branding, theme colors, navigation, modules, and cloud connection settings.
+    </Card>
+
+    <Card title="Studio Connection" icon="link" href="/plugin/studio-connection">
+      How the plugin connects to Studio — the handshake, what gets synced, and troubleshooting.
+    </Card>
+
+    <Card title="Push Notifications" icon="bell" href="/plugin/push-notifications">
+      Firebase setup, notification types, and real-time event delivery.
+    </Card>
+
+    <Card title="Authentication" icon="lock" href="/plugin/authentication">
+      Token auth, social login, access control, and biometric re-auth.
+    </Card>
+
+    <Card title="In-App Purchases" icon="credit-card" href="/plugin/in-app-purchases">
+      IAP setup, product types, and linking purchases to membership plugins.
+    </Card>
+
+    <Card title="App Pages" icon="layout-panel-top" href="/plugin/app-pages">
+      Build custom app screens with Gutenberg blocks and the Cards system.
+    </Card>
+
+    <Card title="Custom Post Types" icon="database" href="/plugin/custom-post-types">
+      Expose any WordPress CPT as a list or detail screen in the app.
+    </Card>
+  </CardGroup>
+
+  ***
+
+  ## Studio Cloud
+
+  Configure, build, and publish your app from the Blockli Studio dashboard.
+
+  <CardGroup cols={2}>
+    <Card title="Creating Your First App" icon="star" href="/studio/setup-checklist">
+      Step-by-step checklist: app record, iOS & Android credentials, deep links, and first build.
+    </Card>
+
+    <Card title="Overview" icon="circle-info" href="/studio/overview">
+      What Studio manages and how it fits into the platform.
+    </Card>
+
+    <Card title="WordPress Connection" icon="wordpress" href="/studio/wordpress-connection">
+      Connect your site, sync capabilities, and troubleshoot connection issues.
+    </Card>
+
+    <Card title="App Configuration" icon="paintbrush" href="/studio/app-configuration">
+      Branding, navigation, enabled modules, and feature flags.
+    </Card>
+
+    <Card title="iOS Credentials" icon="apple" href="/studio/credentials-ios">
+      App Store Connect API key and APNs auth key — step by step.
+    </Card>
+
+    <Card title="Android Credentials" icon="android" href="/studio/credentials-android">
+      Firebase config, service account, and Google Play credentials.
+    </Card>
+
+    <Card title="EAS Build" icon="hammer" href="/studio/eas-build">
+      Trigger iOS and Android builds, track status, and manage build credits.
+    </Card>
+
+    <Card title="OTA Updates" icon="arrow-up-circle" href="/studio/ota-updates">
+      Push config and JS bundle changes to live apps without a new store release.
+    </Card>
+
+    <Card title="Store Submission" icon="store" href="/studio/store-submission">
+      Submit to the App Store and Google Play directly from Studio.
+    </Card>
+  </CardGroup>
+
+  ***
+
+  ## How the platform fits together
+
+  ```
+  WordPress site                 Studio Cloud                  App stores
+  ──────────────                 ────────────                  ──────────
+  BuddyBoss + Plugin ──────────► Configure app ─────────────► iOS + Android
+  (data, auth,        sync        Build binary   publish        (users)
+   push, IAP)                     OTA updates ───────────────► (live updates)
+  ```
+
+  | Component            | Role                                                                             |
+  | -------------------- | -------------------------------------------------------------------------------- |
+  | **WordPress Plugin** | Your site's data and auth layer. Connects to Studio via REST API.                |
+  | **Studio Cloud**     | Control plane. Owns builds, OTA jobs, credentials, and edge config delivery.     |
+  | **Mobile App**       | White-label React Native app on iOS and Android, powered by your site.           |
+  | **SDK**              | Optional. For custom themes and screens built with `@blocklienterprise/runtime`. |
+</div>

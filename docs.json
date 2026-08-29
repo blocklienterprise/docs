@@ -7,7 +7,7 @@
     "light": "#6366f1",
     "dark": "#6366f1"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "https://blockli.app/icons/Logo%20/logo_black.png",
   "navigation": {
     "tabs": [
       {

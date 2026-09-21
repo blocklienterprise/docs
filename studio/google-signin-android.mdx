@@ -38,8 +38,22 @@ Once the keystore exists, the SHA-1, SHA-256, and MD5 fingerprints are shown for
 
 Repeat for your test package name with a separate OAuth client ID (e.g. `Blockli Android Test`).
 
+You should now have at least three Client IDs in your Google Cloud project:
+
+- **Web Client ID** — created when you set up the OAuth consent screen
+- **Android Release Client ID** — just created above
+- **Android Test Client ID** — just created above
+
+## Step 3 — Add the Client IDs to your WordPress settings
+
+1. In your WordPress admin, open the **Blockli** plugin and go to **Settings**.
+2. Scroll down to the **Social Login** section.
+3. Check **Enable Google sign-in**.
+4. Under **Google client IDs**, add each of your Client IDs — Web, Android Release, and Android Test — one at a time using the input field and the **Add** button.
+5. Save your settings.
+
 <Note>
-  Android Client IDs do not have a client secret — they are used by the app to initiate sign-in. The **Web Client ID** is what the backend uses to verify tokens. You set the Web Client ID in your Blockli app settings, not the Android one.
+  All three Client IDs go in the same field. The backend accepts any of them as a valid audience when verifying the Google token, so both your release and test builds will work.
 </Note>
 
 ## Verify it works
@@ -48,4 +62,4 @@ Build a test app (Preview profile) and confirm Google Sign-In completes successf
 
 - The SHA-1 in Google Cloud Console matches exactly what Studio shows.
 - The package name in the OAuth client ID matches the app you are testing.
-- You are using the **Web Client ID** in your Blockli settings, not the Android Client ID.
+- All Client IDs have been added in WordPress Settings → Social Login.

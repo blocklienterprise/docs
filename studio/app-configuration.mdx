@@ -1,16 +1,16 @@
 ---
 title: "App Configuration"
 sidebarTitle: "App Configuration"
-description: "Configure your app's branding, navigation, modules, and feature flags in Studio."
+description: "Configure your app's branding, navigation, modules, and feature flags in Wordpress."
 ---
 
-App Configuration in Studio controls how your app looks and behaves. Configuration changes are published to the CDN — the app picks them up on next launch without requiring a new build.
+App Configuration in Wordpress controls how your app looks and behaves. When Edge Cache is enabled, configuration changes are published to the CDN — the app picks them up on next launch without requiring a new build.
 
 ## Branding
 
 ### App icon and splash screen
 
-Upload your app icon and splash screen images in **App Config → Branding**.
+Upload your app icon and splash screen images in **App Config** **→** **Settings → Identity & Branding**.
 
 | Asset | Requirements |
 | --- | --- |
@@ -20,22 +20,14 @@ Upload your app icon and splash screen images in **App Config → Branding**.
 | **Splash screen** | 2732×2732 px PNG (covers all device sizes) |
 
 <Warning>
-  Icon and splash screen changes require a new build. They are embedded in the binary, not delivered via OTA updates.
+  Icon and splash screen changes require a new build. They are embedded in the binary, not delivered via runtime config or On-Air updates.
 </Warning>
 
 ### Colors and theme
 
-Set your brand colors for light and dark themes. These token values are delivered as part of the published app config and can be updated via OTA without a new build.
+Set your brand colors for light and dark themes. These token values are delivered as part of the published app runtime config and can be updated without a new build.
 
-| Token | Purpose |
-| --- | --- |
-| Primary | Buttons, links, active states |
-| Background | Main screen background |
-| Surface | Cards, sheets, modals |
-| Text | Body and heading text |
-| Muted | Secondary text, placeholders |
-
-Set **Theme Mode** to `system`, `light`, or `dark` to control the default appearance.
+Set **Dark** **Theme Mode** color to control the appearance when a user views the app in dark mode.
 
 ## Navigation
 
@@ -61,24 +53,12 @@ Built-in routes:
 | `livestream` | Livestream list |
 | `chats` | Messaging |
 | `documents` | Documents |
-
-For custom App Pages, use the `app-page/:id` route.
+| `app page` | App Pages |
 
 ## Enabled modules
 
-Toggle modules on or off in **App Config → Modules**. Studio shows which modules are available based on what's installed on your WordPress site (from the last sync).
+Toggle modules on or off in **App Config → Modules**. App Config shows which modules are available based on what's installed on your WordPress site.
 
 ## Feature flags
 
-Feature flags let you enable or disable specific behaviors without a new build:
-
-- Registration open / closed
-- Social login providers enabled
-- Onboarding flow shown to new users
-- In-app purchases enabled
-
-## Publishing
-
-After making configuration changes, click **Publish** to push the updated config to the CDN. The app will pick up the changes on next launch.
-
-You can preview the config before publishing by checking the **Preview URL** shown in Studio — this delivers the unpublished draft config to a development build.
+Feature flags shows which features are available based on what's installed on your WordPress site.

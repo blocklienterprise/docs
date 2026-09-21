@@ -6,130 +6,133 @@ description: "Step-by-step checklist for setting up a tenant app in Blockli Stud
 
 Use this checklist when setting up a tenant app in Blockli Studio.
 
-## 1. Create or select the app
+## 1. Create the app and connect WordPress
 
-1. Open Studio and select the tenant app.
-2. Confirm the app name, site URL, package name, and bundle ID are correct.
-3. Save the app settings before uploading store credentials.
+There are two ways to do this — both lead to the same result.
 
-The Android package and iOS bundle ID must match the apps you create in Firebase, Apple Developer, and Google Play.
+**Option A — Create in Studio first:**
+
+1. Log in to Studio and click **New App**.
+2. Enter the **App Name** and click **Create**.
+3. In your WordPress admin, go to the **Blockli Mobile App** plugin → **Overview** and click **Connect**.
+4. You'll be redirected to Studio. Select the app you just created.
+5. Your WordPress URL and connection are set up automatically.
+
+**Option B — Connect from WordPress directly:**
+
+1. In your WordPress admin, go to the **Blockli Mobile App** plugin → **Overview** and click **Connect**.
+2. You'll be redirected to Studio. Create a new app from there and enter your **App Name**.
+3. The app and connection are set up in one step.
 
 ## 2. Connect iOS
 
-In **Store Setup → Credentials**, fill out **iOS — Apple Developer account**.
+In **Store Setup → Credentials → iOS**, fill in your Apple Developer credentials.
 
-### App Store Connect API Key
+### App Store Connect API key
 
-Use this for iOS build signing and App Store uploads.
+This lets Studio sign your builds, submit to the App Store, and register bundle identifiers.
 
-Where to get it:
+1. Open [Apple Developer](https://developer.apple.com/account) and note your **Team ID** under **Membership details**.
+2. Open [App Store Connect](https://appstoreconnect.apple.com) → **Users and Access → Integrations → App Store Connect API**.
+3. Open the **Team Keys** tab. Individual keys don't work with Studio.
+4. Copy the **Issuer ID** at the top of the page.
+5. Click **\+** to create a key. Name it and set the role to **Admin**.
+6. Copy the **Key ID** and download the `.p8` file. Apple only lets you download it once.
 
-1. Open [App Store Connect](https://appstoreconnect.apple.com/).
-2. Go to **Users and Access → Integrations → App Store Connect API**.
-3. Create or select an API key.
-4. Copy the **Issuer ID**.
-5. Copy the **Key ID**.
-6. Download the `.p8` key file.
+Fill in:
 
-Upload or paste those values into:
-
+- **Apple Team ID**
 - **Issuer ID**
 - **Key ID**
 - **API key (.p8)**
 
-### APNs Auth Key
+Click **Save & verify**. Studio confirms the connection and shows how many bundle IDs are in your account.
 
-Use this for iOS push notifications.
+### APNs auth key
 
-Where to get it:
+Required for iOS push notifications.
 
-1. Open [Apple Developer](https://developer.apple.com/account/).
-2. Go to **Certificates, Identifiers & Profiles → Keys**.
-3. Create a key with **Apple Push Notifications service (APNs)** enabled.
-4. Copy the **Key ID**.
-5. Download the `.p8` key file.
+1. Open [Apple Developer](https://developer.apple.com/account) → **Certificates, Identifiers & Profiles → Keys**.
+2. Click **\+**, name the key, and check **Apple Push Notifications service (APNs)**.
+3. Click **Continue → Register**, copy the **Key ID**, and download the `.p8` file.
 
-Upload or paste those values into:
+Fill in:
 
 - **APNs key ID**
 - **APNs auth key (.p8)**
 
 <Note>
-  One APNs key can be reused across multiple apps in the same Apple Developer account.
+  One APNs key can be reused across all apps in the same Apple Developer account.
 </Note>
+
+### Set the iOS bundle identifier
+
+In the **Blockli project** tab, open the **iOS** section.
+
+- **Pick an existing identifier** — Studio lists the ones in your Apple account. Select the release and test identifiers.
+- **Register new identifiers** — choose **Register new…**, enter a name and release identifier (e.g. `com.yourcompany.yourapp`). Studio suggests the test identifier by appending `.test`. Click **Create in Apple Developer**.
+
+Click **Save**.
 
 ## 3. Connect Android and Firebase
 
-In **Store Setup → Credentials**, fill out **Android — Google & Firebase**.
+In **Store Setup → Credentials → Android**, fill in your Firebase credentials.
 
-### google-services.json
+### Firebase service account JSON
 
-Use this for the Android app's Firebase client configuration. Studio bundles this file into Android builds.
+Required for push notifications and app registration.
 
-Where to get it:
-
-1. Open [Firebase Console](https://console.firebase.google.com/).
-2. Select the Firebase project for the tenant.
-3. Go to **Project settings → General → Your apps**.
-4. Add or select the Android app.
-5. Confirm the Android package name matches Studio.
-6. Download `google-services.json`.
-
-Upload it into:
-
-- **google-services.json**
-
-<Tip>
-  If you have both test and release Android apps in the same Firebase project, add both package names first. The downloaded file can contain multiple Android clients.
-</Tip>
-
-### Service Account Admin SDK JSON
-
-Use this so Expo/EAS can relay Firebase Cloud Messaging v1 push notifications.
-
-Where to get it:
-
-1. Open the same Firebase project.
-2. Go to **Project settings → Service accounts**.
-3. Click **Generate new private key**.
-4. Download the JSON file.
+1. Open [Firebase Console](https://console.firebase.google.com) and select or create a project.
+2. Click the **gear icon → Project settings → Service accounts**.
+3. Make sure **Firebase Admin SDK** is selected, then click **Generate new private key → Generate key**.
+4. Download the JSON file. Google keeps no copy.
 
 Upload it into:
 
 - **Service account (admin SDK) JSON**
 
-This file is not bundled into the app. It is a server-side credential.
+Click **Save & verify**. Studio connects to Firebase and lists your Android apps.
 
-### Google Play Service Account
+### Set the Android package name
 
-Use this only when Studio should submit builds to Google Play.
+In the **Blockli project** tab, open the **Android** section.
 
-Where to get it:
+- **Pick an existing app** — Studio lists the Android apps in your Firebase project. Select the release and test package names.
+- **Register new apps** — choose **Register new…**, enter a nickname and release package name. Studio suggests the test package name by appending `.test`. Click **Create in Firebase**.
 
-1. Open [Google Play Console](https://play.google.com/console).
-2. Go to **Setup → API access**.
-3. Link or create a Google Cloud service account.
-4. Grant the service account the required Play Console permissions.
-5. Download its JSON key.
+Studio registers both apps, generates `google-services.json` automatically, and fills in both fields.
 
-Upload it into:
+Click **Save**.
 
-- **Google Play service account**
+<Note>
+  You don't need to get or upload `google-services.json` yourself. Studio creates and manages it when you register apps through the Blockli project tab.
+</Note>
 
-You can leave this blank for preview builds and device testing.
+### Google Play service account (optional)
+
+Only needed for automated Play Store uploads. Skip this if you upload builds manually.
+
+1. Open [Google Cloud Console](https://console.cloud.google.com) and enable the **Google Play Android Developer API** for your project.
+2. Go to **IAM & Admin → Service Accounts** and create a new service account.
+3. Skip the permission steps — Play permissions are set in Play Console, not here.
+4. Open the new account → **Keys** tab → **Add key → Create new key → JSON**. Download the file.
+5. In Play Console → **Users and permissions → Invite new users**, paste the service account email and grant release or Admin permissions.
+
+Upload into:
+
+- **Google Play service account (.json)**
+
+Click **Save**.
 
 ## 4. Connect WordPress deep links
 
 In **Store Setup → Credentials**, fill out **Deep Links**.
 
-Use this so Studio can publish App Links and Universal Links files back to the tenant WordPress site.
-
-Where to get it:
+This lets Studio publish App Links and Universal Links files to the tenant WordPress site.
 
 1. Log in to the tenant WordPress admin.
-2. Go to **Users → Profile** for the admin user.
-3. Create an **Application Password**.
-4. Copy the generated password immediately.
+2. Go to **Users → Profile** for an admin user.
+3. Create an **Application Password** and copy it immediately.
 
 Fill in:
 
@@ -149,11 +152,11 @@ Typical fields include:
 
 This is only required when preparing store submissions.
 
-## 6. Save and build
+## 6. Build
 
-1. Click **Save Store Setup**.
-2. Start with a **Preview** build for device testing.
-3. Use **Production** only when you are ready for store submission.
+1. Click **Save** on any unsaved credential tabs.
+2. Go to **Build** and start your first build for device testing.
+3. Use a production build only when you are ready for store submission.
 
 ---
 
@@ -161,9 +164,9 @@ This is only required when preparing store submissions.
 
 | Credential | Purpose | Bundled into app? |
 | --- | --- | --- |
-| `google-services.json` | Android Firebase app config | Yes (Android only) |
-| Firebase service account JSON | Server credential for push notifications | No |
-| Google Play service account JSON | Store submission | No |
+| Firebase service account JSON | Push notifications + app registration | No |
+| `google-services.json` | Android Firebase config (auto-generated by Studio) | Yes (Android only) |
+| Google Play service account JSON | Automated store submission | No |
 | App Store Connect API key | iOS signing and App Store upload | No |
 | APNs auth key | iOS push notifications | No |
 | WordPress application password | Publish deep-link files to tenant site | No |

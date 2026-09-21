@@ -44,7 +44,7 @@
               "studio/credentials-ios",
               "studio/credentials-android",
               "studio/eas-build",
-              "studio/ota-updates",
+              "studio/on-air-releases",
               "studio/store-submission"
             ]
           }

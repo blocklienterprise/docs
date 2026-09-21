@@ -14,8 +14,8 @@ Blockli Studio Cloud is the web dashboard where you create, configure, build, an
 | **WordPress connection** | Connect your site, sync capabilities, track plugin version |
 | **App configuration** | Branding, navigation, modules, screens, feature flags |
 | **Credentials** | iOS/Android signing keys, APNs keys, Firebase config |
-| **Builds** | Trigger EAS builds, track status, download binaries |
-| **OTA updates** | Push config/JS changes to production without a new App Store release |
+| **Builds** | Trigger builds, track status, download binaries |
+| **On-Air updates** | Push config/JS changes to production without a new App Store release |
 | **Monetization** | IAP products, entitlements |
 | **Edge delivery** | Published app-config served from CDN to every app instance |
 
@@ -29,7 +29,7 @@ Blockli Studio Cloud is the web dashboard where you create, configure, build, an
 
 WordPress owns **editable app configuration** (branding, navigation, module toggles, app pages). Studio owns **infrastructure** (builds, OTA jobs, credentials, edge delivery, entitlements).
 
-When you publish from Studio, it reads the latest configuration from WordPress, composes it into a single app-config JSON, and pushes it to the CDN. The app fetches this config on startup.
+When you enable edge cache cdn, Studio reads the latest configuration from WordPress, composes it into a single app-config JSON, and pushes it to the CDN. The app fetches this config on startup.
 
 ## Accessing Studio
 

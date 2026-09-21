@@ -8,35 +8,24 @@ Blockli connects three pieces:
 
 | Component | What it does |
 | --- | --- |
-| **WordPress Plugin** | Installed on your site. Exposes your community data, handles authentication, push notifications, and connects your site to Studio. |
-| **Studio Cloud** | The web dashboard where you configure, build, and publish your app. Controls branding, navigation, app store credentials, and OTA updates. |
-| **Mobile App** | The white-label React Native app delivered to your users on iOS and Android. Powered by your WordPress site, configured by Studio. |
-
-An optional **SDK** is available for custom development and theming — documented separately.
+| **WordPress Plugin** | Installed on your site. Connects your community data, authentication, and push notifications to Studio. |
+| **Studio Cloud** | The web dashboard where you configure, build, and publish your app. Controls branding, navigation, credentials, and live updates. |
+| **Mobile App** | The white-label native app delivered to your members on iOS and Android. Powered by your WordPress site, configured by Studio. |
 
 ## How it works
 
-```text
-WordPress site                    Studio Cloud                 App stores
-─────────────────                 ────────────                 ──────────
-BuddyBoss + Plugin  ──────────►  Configure app  ──────────►  iOS + Android
-(data + auth)        sync         Build binary   publish       (users)
-                                  OTA updates ──────────────► (live)
-```
-
-1. **Install the plugin** on your WordPress / BuddyBoss site. It creates the REST API endpoints and settings that Studio reads.
-2. **Connect Studio** to your site. Studio syncs your site's capabilities (which community providers are active, what modules are enabled) and uses that to generate the app configuration.
-3. **Configure your app** in Studio: branding, navigation, screens, and feature flags.
+1. **Install the plugin** on your WordPress / BuddyBoss site.
+2. **Connect Studio** to your site from the plugin's Overview page.
+3. **Configure your app** in Studio — branding, navigation, and screens.
 4. **Add credentials** for the iOS App Store and Google Play.
-5. **Trigger a build** via EAS. Studio handles the Expo build pipeline and code-signing.
-6. **Publish** your app to the App Store and Google Play.
-7. **Push OTA updates** any time you change configuration or content — no new App Store release required.
+5. **Build and publish** your app to the App Store and Google Play.
+6. **Push live updates** any time you change configuration or content — no new App Store release required.
 
 ## Requirements
 
 - WordPress 5.8\+, PHP 7.4\+
-- **BuddyBoss Platform** (free) installed and activated — this is the community layer the app is built on top of
-- A [Blockli Studio](https://blockli-studio-cloud.onrender.com) account
+- **BuddyBoss Platform** installed and activated
+- A Blockli Studio account
 - Apple Developer account (for iOS builds and App Store distribution)
 - Google Play Developer account (for Android builds and Play Store distribution)
 

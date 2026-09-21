@@ -22,7 +22,7 @@ If your package names are configured but no keystore exists yet, you will see a 
 Once the keystore exists, the SHA-1, SHA-256, and MD5 fingerprints are shown for each package name. Click the copy icon next to **SHA-1** to copy it.
 
 <Info>
-  You need to register the SHA-1 for both your release package name and your test package name if you want Google Sign-In to work in both builds.
+  Register the SHA-1 for both your release package name and your test package name if you want Google Sign-In to work in both builds.
 </Info>
 
 ## Step 2 — Create an Android OAuth Client ID in Google Cloud Console
@@ -36,36 +36,16 @@ Once the keystore exists, the SHA-1, SHA-256, and MD5 fingerprints are shown for
 7. Paste the **SHA-1 certificate fingerprint** you copied from Studio.
 8. Click **Create**.
 
-Repeat for your test package name, using a separate OAuth client ID (e.g. `Blockli Android Test`).
+Repeat for your test package name with a separate OAuth client ID (e.g. `Blockli Android Test`).
 
 <Note>
-  Android Client IDs do not give you a client secret — they are used by the app to initiate sign-in. Your **Web Client ID** is what the backend uses to verify tokens. You set the Web Client ID in your Blockli app settings, not the Android one.
-</Note>
-
-## Step 3 — Add the SHA-1 to Firebase
-
-If you are using Firebase Authentication for Google Sign-In, Firebase also needs to know your SHA-1.
-
-1. Open [Firebase Console](https://console.firebase.google.com) and select your project.
-2. Go to **Project settings** (gear icon).
-3. Under **Your apps**, find your Android app.
-4. Click **Add fingerprint**.
-5. Paste the SHA-1 fingerprint and save.
-
-Do this for both your release and test apps.
-
-## Step 4 — Download the updated google-services.json
-
-After adding the SHA-1 to Firebase, download a fresh `google-services.json` from **Project settings → Your apps → google-services.json**. If you uploaded a custom `google-services.json` to Studio, replace it with this updated file — it now includes the SHA-1 entry that enables Google Sign-In.
-
-<Note>
-  If you are using Studio's auto-generated `google-services.json` (the default), you do not need to upload anything. Studio regenerates it from your Firebase project automatically.
+  Android Client IDs do not have a client secret — they are used by the app to initiate sign-in. The **Web Client ID** is what the backend uses to verify tokens. You set the Web Client ID in your Blockli app settings, not the Android one.
 </Note>
 
 ## Verify it works
 
-Build a test app (Preview profile) and confirm the Google Sign-In button appears and completes successfully. If sign-in fails with an error about an unregistered app, double-check that:
+Build a test app (Preview profile) and confirm Google Sign-In completes successfully. If it fails with an error about an unregistered app, check that:
 
 - The SHA-1 in Google Cloud Console matches exactly what Studio shows.
 - The package name in the OAuth client ID matches the app you are testing.
-- You are using the correct Web Client ID in your Blockli settings (not the Android Client ID).
+- You are using the **Web Client ID** in your Blockli settings, not the Android Client ID.

@@ -9,13 +9,9 @@ description: "How to create a new app record in Blockli Studio — naming, bundl
 You need:
 
 - A Blockli Studio account
-- Your iOS **bundle ID** (e.g. `com.yourcompany.yourapp`) — set when you create the app in App Store Connect
-- Your Android **package name** (e.g. `com.yourcompany.yourapp`) — set in Google Play Console
 - Your WordPress site URL
 
-<Warning>
-  Choose your bundle ID and package name carefully before creating your first build. These identifiers are permanent — they cannot be changed once submitted to Apple or Google. They should match the identifiers you register in App Store Connect and Google Play Console.
-</Warning>
+Bundle identifiers (iOS) and package names (Android) are set after the app is created, in **Store Setup → Credentials**. You don't need them before you begin.
 
 ## Creating the app record
 
@@ -23,8 +19,6 @@ You need:
 2. Fill in:
    - **App Name** — the display name (e.g. "My Community")
    - **Site URL** — your WordPress site URL (e.g. `https://community.example.com`)
-   - **iOS Bundle ID** — the Apple bundle identifier
-   - **Android Package Name** — the Google Play package identifier
 3. Click **Create**.
 
 Studio creates the app record and assigns a unique `appId`. This ID is shared across Studio, the WordPress plugin, and the app binary.
@@ -39,12 +33,16 @@ Studio creates the app record and assigns a unique `appId`. This ID is shared ac
     Set branding, navigation, and enabled modules. See [App Configuration](/studio/app-configuration).
   </Step>
   <Step title="Add credentials">
-    Upload iOS and Android signing credentials. See [iOS Credentials](/studio/credentials-ios) and [Android Credentials](/studio/credentials-android).
+    Upload signing credentials and set your bundle identifiers and package names. See [iOS Credentials](/studio/credentials-ios) and [Android Credentials](/studio/credentials-android).
   </Step>
   <Step title="Trigger a build">
     Go to **Build** and start your first EAS build. See [Building](/studio/eas-build).
   </Step>
 </Steps>
+
+<Warning>
+  Choose your bundle identifier and package name carefully before your first build. These identifiers are permanent — they cannot be changed once submitted to Apple or Google.
+</Warning>
 
 ## Managing multiple apps
 

@@ -43,6 +43,7 @@
               "studio/app-configuration",
               "studio/credentials-ios",
               "studio/credentials-android",
+              "studio/google-signin-android",
               "studio/eas-build",
               "studio/on-air-releases",
               "studio/store-submission"

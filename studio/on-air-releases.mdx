@@ -4,22 +4,24 @@ sidebarTitle: "On-Air Releases"
 description: "Push configuration and content updates to your live app without a new App Store or Google Play release."
 ---
 
-An On-Air Release lets you update your live app instantly — no new build, no App Store review. When you publish from Studio, the changes go out to all your members on their next app launch.
+Most of what your app displays — navigation, content, app pages, theme, modules — is delivered live from the Blockli runtime. These update automatically with no release of any kind.
 
-## What you can update with an On-Air Release
+An On-Air Release is different: it pushes an updated **JS bundle** directly to your users' installed apps. Use it when you've made code changes to the app that don't involve native platform changes.
 
-- Navigation structure and tab bar
-- Colors and theme
-- Enabled modules and feature flags
-- App page content
+This covers the vast majority of app updates — roughly 95% of what you'll ever ship.
 
-## What requires a new build
+## When to use an On-Air Release
 
-Some changes are baked into the app binary and can't be updated over the air:
+Use it whenever you've changed app code but haven't modified the underlying iOS or Android project — for example:
 
-- App icon and splash screen
-- New native features or integrations
+- Bug fixes and UI tweaks
+- New screens or flows built in JavaScript
+- Logic or behaviour changes
+
+## When a full build is required
+
+A full build is needed when changes touch the native platform layer — for example, adding a package that modifies the iOS or Android project itself (like a new native module or SDK integration).
 
 ## How to publish
 
-Click **Publish** in Studio. The update is pushed immediately and takes effect the next time a member opens the app.
+Go to **Build → On-Air Release** in Studio and trigger the release. The updated bundle is delivered to your users on their next app launch.

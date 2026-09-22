@@ -42,6 +42,7 @@
               "studio/wordpress-connection",
               "studio/app-configuration",
               "studio/credentials-ios",
+              "studio/app-links",
               "studio/credentials-android",
               "studio/google-signin-android",
               "studio/google-signin-ios",

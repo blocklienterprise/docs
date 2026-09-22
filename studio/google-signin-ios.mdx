@@ -1,0 +1,43 @@
+---
+title: "Google Sign-In (iOS)"
+sidebarTitle: "Google Sign-In (iOS)"
+description: "Set up Google Sign-In for your iOS app — create an iOS OAuth Client ID in Google Cloud Console and add it to your WordPress settings."
+---
+
+Google Sign-In on iOS uses your app's bundle identifier instead of a SHA-1 fingerprint. You create an iOS OAuth Client ID in Google Cloud Console and add it to your WordPress settings alongside the Web and Android Client IDs.
+
+You need a separate iOS Client ID for each bundle identifier — typically one for your release app and one for your test app.
+
+## Step 1 — Create an iOS OAuth Client ID in Google Cloud Console
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com) and open your project.
+2. Navigate to **APIs & Services → Credentials**.
+3. Click **+ Create Credentials → OAuth client ID**.
+4. Set **Application type** to **iOS**.
+5. Enter a name (e.g. `Blockli iOS Release`).
+6. Enter your **Bundle ID** — this must match your app's bundle identifier exactly (e.g. `com.example.myapp`).
+7. Click **Create**.
+
+Repeat for your test bundle identifier (e.g. `Blockli iOS Test`).
+
+<Note>
+  iOS Client IDs do not have a client secret. Google uses the bundle ID at runtime to verify the request comes from your app.
+</Note>
+
+## Step 2 — Add the Client IDs to your WordPress settings
+
+1. In your WordPress admin, open the **Blockli** plugin and go to **Settings**.
+2. Scroll down to the **Social Login** section.
+3. Check **Enable Google sign-in** if it is not already enabled.
+4. Under **Google client IDs**, add your iOS Release and iOS Test Client IDs using the input field and the **Add** button.
+5. Save your settings.
+
+Your Google client IDs list should now contain your Web, Android, and iOS Client IDs. The backend accepts any of them as a valid audience when verifying the token.
+
+## Verify
+
+Install a test build on an iOS device and confirm the Google Sign-In button appears and completes without error. If sign-in fails, check:
+
+- The bundle ID on the OAuth client ID matches the app build you are testing.
+- The iOS Client ID has been added in **WordPress → Blockli → Settings → Social Login**.
+- The **Web Client ID** is also in the list — it is required for backend token verification.

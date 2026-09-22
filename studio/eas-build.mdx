@@ -1,16 +1,15 @@
 ---
-title: "Building with EAS"
-sidebarTitle: "EAS Build"
-description: "Trigger iOS and Android builds from Studio using EAS Build."
+title: "Building Your App"
+sidebarTitle: "Builds"
+description: "Trigger iOS and Android builds from Studio and track their progress."
 ---
 
-Studio uses EAS Build to compile and sign your iOS and Android binaries in the cloud. You don't need a local build environment — everything runs remotely.
+Studio builds your iOS and Android app binaries in the cloud. You don't need a local build environment — everything runs remotely.
 
 ## Before your first build
 
 1. iOS and Android [credentials](/studio/credentials-ios) must be uploaded
 2. Your WordPress site must be [connected](/studio/wordpress-connection)
-3. An EAS project must be linked (Studio handles this automatically on first build)
 
 ## Triggering a build
 
@@ -19,20 +18,20 @@ Studio uses EAS Build to compile and sign your iOS and Android binaries in the c
 3. Select platform: **iOS**, **Android**, or **Both**.
 4. Click **Start Build**.
 
-Studio submits the job to EAS Build. The build typically takes **10–20 minutes** depending on queue time and platform.
+The build typically takes **10–20 minutes** depending on queue time and platform.
 
 ## Build status
 
-Studio polls EAS and shows live status in the Build tab:
+Studio shows live build status in the Build tab:
 
 | Status | Meaning |
 | --- | --- |
-| Queued | Waiting for an EAS build worker |
+| Queued | Waiting for a build worker |
 | Building | Build is in progress |
 | Finished | Build succeeded; binary ready to download or submit |
 | Failed | Build failed; check logs for errors |
 
-Click any build row to see the full EAS build log.
+Click any build row to see the full build log.
 
 ## Development builds
 

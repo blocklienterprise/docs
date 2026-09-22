@@ -6,78 +6,77 @@ description: "Install the Blockli plugin, connect Studio, configure your app, an
 
 ## Step 1 — Install the WordPress plugin
 
-1. Download the **Blockli Mobile App** plugin zip from your Studio account or the Blockli portal.
+1. Download the **Blockli Mobile App** plugin zip from your Studio account.
 2. In your WordPress admin, go to **Plugins → Add New → Upload Plugin**.
 3. Upload the zip and click **Activate**.
-4. A new **Blockli** menu item appears in the sidebar.
+4. A **Blockli Mobile App** menu item appears in your WordPress sidebar.
 
 <Note>
-  BuddyBoss Platform must be installed and active before activating Blockli. The plugin detects BuddyBoss on activation and will warn you if it is missing.
+  BuddyBoss Platform must be installed and active before activating Blockli.
 </Note>
 
-## Step 2 — Configure basic plugin settings
+## Step 2 — Create your app and connect WordPress
 
-Go to **Blockli → Settings** and fill in:
+You can do this in either order.
 
-| Field | What to enter |
-| --- | --- |
-| **App Name** | The display name shown to users in the app |
-| **App Slug** | A URL-safe identifier (e.g. `my-community`) — this becomes your deep-link scheme |
-| **Support Email** | Shown to users in the app's settings screen |
+**Option A — Create in Studio first:**
 
-Save changes. The plugin generates a REST API token secret automatically on first activation.
+1. Log in to Studio and click **New App**. Enter your app name and click **Create**.
+2. In your WordPress admin, go to **Blockli Mobile App → Overview** and click **Connect**.
+3. You'll be redirected to Studio. Select the app you just created — your WordPress site is connected automatically.
 
-## Step 3 — Create an app in Studio
+**Option B — Connect from WordPress directly:**
 
-1. Log in to [Blockli Studio](https://blockli-studio-cloud.onrender.com).
-2. Click **New App**.
-3. Enter your app name, site URL, iOS bundle ID, and Android package name.
-4. Save the app record.
+1. In your WordPress admin, go to **Blockli Mobile App → Overview** and click **Connect**.
+2. You'll be redirected to Studio. Create a new app there and enter your app name.
+3. The app and connection are set up in one step.
 
-## Step 4 — Connect Studio to your WordPress site
+See [Creating Your First App](/studio/create-app) for more detail.
 
-In Studio, open your app and go to **Settings → WordPress Connection**.
-
-1. Enter your WordPress site URL.
-2. Studio will call your site's plugin REST API to verify the connection.
-3. Once verified, Studio syncs your site's capabilities: active community providers, enabled modules, and plugin version.
-
-<Tip>
-  You need the plugin installed and activated before connecting Studio. Studio reads the `/wp-json/blockli-mobile/v1/config` endpoint during the connection check.
-</Tip>
-
-## Step 5 — Configure your app
+## Step 3 — Configure your app
 
 In Studio, go to **App Config** and set up:
 
-- **Branding** — upload your app icon, splash screen, and set brand colors
-- **Navigation** — choose which tabs appear in the bottom tab bar and what goes in the "More" menu
-- **Enabled Modules** — turn on/off Activity, Groups, Forums, Courses, Podcasts, etc.
+- **Branding** — app icon, splash screen, and brand colors
+- **Navigation** — which tabs appear in the bottom tab bar and what goes in the More menu
+- **Modules** — Activity, Groups, Forums, Courses, Podcasts, and other features
 
-## Step 6 — Add store credentials
+## Step 4 — Add store credentials
 
 Before you can build, you need credentials for each platform.
 
-**iOS:** Go to **Store Setup → Credentials → iOS** and add your App Store Connect API key and APNs auth key. See [iOS credentials](/studio/credentials-ios) for step-by-step instructions.
+**iOS:** Go to **Store Setup → Credentials → iOS** and add your App Store Connect API key, APNs auth key, and bundle identifiers. See [iOS Credentials](/studio/credentials-ios).
 
-**Android:** Go to **Store Setup → Credentials → Android** and upload your `google-services.json` and service account JSON. See [Android credentials](/studio/credentials-android).
+**Android:** Go to **Store Setup → Credentials → Android** and upload your Firebase service account and set your package names. See [Android Credentials](/studio/credentials-android).
 
-## Step 7 — Trigger a build
+## Step 5 — Build your app
 
-Go to **Build** in Studio and click **New Build**.
+Go to **Build** in Studio and click **New Build**. Choose your platform and build profile.
 
-- Select the platform (iOS, Android, or both)
-- Studio submits the job to EAS Build — this typically takes 10–20 minutes
-- You'll see status updates in the Build tab as the job progresses
+### Build profiles
 
-When the build completes, Studio shows a download link for the binary (`.ipa` / `.apk`) and the EAS submission flow.
+| Profile | What it is | When to use |
+| --- | --- | --- |
+| **Preview** | A test app using your test bundle identifier | Ongoing testing — install directly on your device without TestFlight or the Play Store |
+| **Release** | Your production app | When you're ready to submit to the App Store or Google Play |
+| **Development** | A development build using the Expo Dev client | For custom development work on the app binary |
 
-## Step 8 — Submit to App Store / Google Play
+Builds typically take 10–20 minutes. You'll see status updates in the Build tab as the job progresses.
 
-From the completed build, click **Submit to Store**. Studio walks you through the submission checklist. See [Store Submission](/studio/store-submission) for details.
+## Step 6 — Test your app
+
+**We recommend keeping a dedicated Preview app installed on your device at all times.** It uses your test bundle identifier, so it installs alongside your production app and can be updated freely.
+
+**iOS testing options:**
+
+- **Preview build** — install the `.ipa` directly on your device without going through TestFlight. Great for quick iteration.
+- **Release build → TestFlight** — from a completed release build, click **Submit to TestFlight** in Studio. Use TestFlight to test the production build before submitting it for App Store review.
+
+## Step 7 — Submit to the App Store and Google Play
+
+From a completed release build, click **Submit to Store**. See [Store Submission](/studio/store-submission) for the full checklist.
 
 ## Next steps
 
 - Set up [push notifications](/plugin/push-notifications)
-- Configure [in-app purchases](/plugin/in-app-purchases)
-- Learn about [OTA updates](/studio/ota-updates) so you can ship config changes without a new binary release
+- Learn about [On-Air Releases](/studio/on-air-releases) — ship configuration changes without a new build

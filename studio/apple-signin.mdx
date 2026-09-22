@@ -1,0 +1,35 @@
+---
+title: "Apple Sign-In"
+sidebarTitle: "Apple Sign-In"
+description: "Enable Sign in with Apple for your iOS app — configure the capability in Apple Developer and add your bundle IDs to WordPress."
+---
+
+Sign in with Apple requires the capability to be enabled on your App ID in the Apple Developer portal. Once it is on, you add your bundle identifiers to the Blockli WordPress settings and the SDK handles the rest.
+
+## Step 1 — Enable Sign in with Apple in Apple Developer
+
+1. Go to [Apple Developer](https://developer.apple.com) → **Certificates, Identifiers & Profiles → Identifiers**.
+2. Select your App ID (e.g. `com.example.myapp`).
+3. Scroll to **Sign In with Apple** and check the box to enable it.
+4. Click **Save** and confirm.
+
+Repeat for your test bundle identifier if you have one.
+
+## Step 2 — Add your bundle IDs to WordPress settings
+
+1. In your WordPress admin, open the **Blockli** plugin and go to **Settings**.
+2. Scroll down to the **Social Login** section.
+3. Check **Enable Apple sign-in** if it is not already enabled.
+4. Under **Apple client IDs**, add each bundle identifier using the input field and the **Add** button. The field accepts bundle IDs or Sign in with Apple Service IDs.
+5. Check **Create WordPress users from verified social sign-ins** if you want new users to be able to register through Apple Sign-In. When this is off, social login only works for accounts that already exist in WordPress (matched by email or a previously linked account).
+5. Save your settings.
+
+The Blockli backend uses the values in this list to validate Apple identity tokens. Add every bundle identifier you build with — release and test.
+
+## Verify
+
+Install a test build on an iOS device and confirm the **Sign in with Apple** button appears and completes without error. If sign-in fails, check:
+
+- The capability is enabled on the App ID in Apple Developer for the exact bundle identifier you are testing.
+- The bundle identifier has been added to **WordPress → Blockli → Settings → Social Login → Apple client IDs**.
+- The device is signed in to iCloud (Sign in with Apple requires an active Apple ID on the device).

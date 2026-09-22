@@ -1,0 +1,66 @@
+---
+title: "Google Sign-In (Android)"
+sidebarTitle: "Google Sign-In (Android)"
+description: "Set up Google Sign-In for your Android app — get your SHA-1 fingerprint from Studio and register it in Google Cloud Console."
+---
+
+Google Sign-In on Android requires your app's SHA-1 certificate fingerprint to be registered in Google Cloud Console. This tells Google which apps are allowed to request an OAuth token using your Client ID.
+
+You need a separate fingerprint for each package name — your release app and your test app each have their own signing certificate.
+
+## Step 1 — Get your SHA-1 fingerprint from Studio
+
+Blockli Studio manages your Android signing keystore. You can view and copy your fingerprints without needing access to Expo.
+
+1. Open your app in Studio and go to **Store Setup**.
+2. Click the **Credentials** tab.
+3. Scroll down to the **Android — Google & Firebase** card.
+4. At the bottom of that card you will find the **Android keystore fingerprints** section.
+
+If your package names are configured but no keystore exists yet, you will see a **Generate keystore** button next to each one. Click it — Studio generates a signing keystore and registers it immediately. You do not need to run a build first.
+
+Once the keystore exists, the SHA-1, SHA-256, and MD5 fingerprints are shown for each package name. Click the copy icon next to **SHA-1** to copy it.
+
+<Info>
+  Register the SHA-1 for both your release package name and your test package name if you want Google Sign-In to work in both builds.
+</Info>
+
+## Step 2 — Create an Android OAuth Client ID in Google Cloud Console
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com) and open your project.
+2. Navigate to **APIs & Services → Credentials**.
+3. Click **+ Create Credentials → OAuth client ID**.
+4. Set **Application type** to **Android**.
+5. Enter a name (e.g. `Blockli Android Release`).
+6. Enter your **Package name** (e.g. `com.example.myapp`).
+7. Paste the **SHA-1 certificate fingerprint** you copied from Studio.
+8. Click **Create**.
+
+Repeat for your test package name with a separate OAuth client ID (e.g. `Blockli Android Test`).
+
+You should now have at least three Client IDs in your Google Cloud project:
+
+- **Web Client ID** — created when you set up the OAuth consent screen
+- **Android Release Client ID** — just created above
+- **Android Test Client ID** — just created above
+
+## Step 3 — Add the Client IDs to your WordPress settings
+
+1. In your WordPress admin, open the **Blockli** plugin and go to **Settings**.
+2. Scroll down to the **Integrations** section.
+3. Check **Enable Google sign-in**.
+4. Under **Google client IDs**, add each of your Client IDs — Web, Android Release, and Android Test — one at a time using the input field and the **Add** button.
+5. Check **Create WordPress users from verified social sign-ins** if you want new users to be able to register through Google Sign-In. When this is off, social login only works for accounts that already exist in WordPress (matched by email or a previously linked account).
+5. Save your settings.
+
+<Note>
+  All three Client IDs go in the same field. The backend accepts any of them as a valid audience when verifying the Google token, so both your release and test builds will work.
+</Note>
+
+## Verify it works
+
+Build a test app (Preview profile) and confirm Google Sign-In completes successfully. If it fails with an error about an unregistered app, check that:
+
+- The SHA-1 in Google Cloud Console matches exactly what Studio shows.
+- The package name in the OAuth client ID matches the app you are testing.
+- All Client IDs have been added in WordPress Settings → Social Login.

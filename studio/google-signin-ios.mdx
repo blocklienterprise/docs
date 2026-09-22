@@ -30,6 +30,7 @@ Repeat for your test bundle identifier (e.g. `Blockli iOS Test`).
 2. Scroll down to the **Social Login** section.
 3. Check **Enable Google sign-in** if it is not already enabled.
 4. Under **Google client IDs**, add your iOS Release and iOS Test Client IDs using the input field and the **Add** button.
+5. Check **Create WordPress users from verified social sign-ins** if you want new users to be able to register through Google Sign-In. When this is off, social login only works for accounts that already exist in WordPress (matched by email or a previously linked account).
 5. Save your settings.
 
 Your Google client IDs list should now contain your Web, Android, and iOS Client IDs. The backend accepts any of them as a valid audience when verifying the token.

@@ -1,0 +1,52 @@
+---
+title: "Universal App Links"
+sidebarTitle: "App Links"
+description: "How Universal App Links work in Blockli — every URL on your site opens natively in the app, with automatic fallback to the browser."
+---
+
+A Universal App Link is a regular `https://` URL on your site that opens directly inside your app when tapped on a phone. There's no special link format — any URL you share from your site (a post, a group, a product page) already works as an app link the moment your app is installed on that phone.
+
+If the app isn't installed, the link just opens in the browser like any other web link. Nothing is ever a dead end.
+
+## What Studio handles automatically
+
+You don't need to configure most of this. Studio takes care of it:
+
+- **Verification** — iOS and Android both require your app to prove it's authorized to open your domain. Studio generates these verification files and tells your WordPress site to serve them. This happens when you click **Configure App Links** in Store Setup, and again automatically after every build.
+- **Domain detection** — Studio reads your site URL and derives the correct domain for your app. As long as your site URL is accurate in WordPress, this is correct automatically.
+- **Build-time wiring** — Studio bakes your domain into each app build so the OS knows which domain to listen for.
+
+## Setting it up
+
+1. In Studio, open your app and go to **Store Setup**.
+2. Click **Configure App Links**.
+
+That's it. Studio connects to your WordPress site, writes the verification files, and your app will handle links from your domain after the next build.
+
+## What you can customize
+
+Under **WordPress admin → Blockli → Settings → App Identity**:
+
+**Deep link scheme** — this is the `yourapp://` style link used in specific technical contexts (payment return URLs, handoffs from other apps you control). It defaults to your app's slug, which is already unique. You can set a custom word here if you prefer. Note that changing it only takes effect after your next app build — it doesn't update the currently installed app.
+
+The `https://` Universal Links are not affected by this setting. They're governed by your site's domain, which is automatic.
+
+## How a link reaches the app
+
+However someone shares a link to your content, it reaches the app through one of these paths:
+
+| Source | What happens |
+| --- | --- |
+| Shared URL (email, social, SMS, QR code) | If the app is installed, it opens directly. If not, opens in the browser. |
+| Push notification tap | Opens the app to the exact screen — no URL matching needed. |
+| Link tapped from inside the app | Resolved locally, no network round trip. |
+
+Content that doesn't have a dedicated native screen yet still opens — it loads inside an in-app browser instead of natively, so nothing ever produces a dead link.
+
+## Things to know
+
+**If you change your site's domain**, run **Configure App Links** again in Studio and trigger a new build. The domain is baked into the app at build time — the currently installed app will keep the old domain until it's updated.
+
+**If your app is distributed through the Google Play Store**, Google re-signs the app with its own key after you upload it. You'll need to add Google Play's signing fingerprint in Studio so Android can verify the link authorization for Play-installed users. Studio walks you through this in the Store Setup credentials section.
+
+**Universal Links require a publicly reachable domain.** The OS verifies the link authorization by fetching a file from your live site. A local development URL or staging domain on a private network won't work — Universal Links only function against your real production domain.

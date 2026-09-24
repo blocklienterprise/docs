@@ -1,0 +1,100 @@
+---
+title: "iOS In-App Purchase Setup"
+sidebarTitle: "iOS IAP Setup"
+description: "Connect App Store subscriptions and one-time purchases to the Blockli plugin — credentials, products, notifications, and sandbox testing."
+---
+
+The steps below follow the order you'd actually do them. Plugin configuration comes first because it shows you which values you need to gather from App Store Connect.
+
+## 1. Enter your App Store credentials in the plugin
+
+In WordPress admin → **Blockli Mobile App → In-App Purchases → Store Credentials → Apple App Store tab**, fill in four values:
+
+- **Issuer ID** — a UUID shown at the top of **App Store Connect → Users and Access → Integrations → In-App Purchase**.
+- **Key ID** — created on that same page (see step 2 below).
+- **Bundle ID** — must match your app's bundle identifier exactly. This is the same one Studio bakes into the iOS build.
+- **Private key (.p8)** — the file you download in step 2.
+
+## 2. Create the In-App Purchase key in App Store Connect
+
+1. Go to **App Store Connect → Users and Access → Integrations → In-App Purchase** (not the team "App Store Connect API" tab — it's a different section).
+2. Click **Generate In-App Purchase Key**, give it a name, and note the **Key ID**.
+3. Download the `.p8` file. Apple only lets you download it once — keep it safe.
+
+## 3. Upload and save
+
+Upload the `.p8` file in the plugin and click **Save Store Credentials**. The badge next to the key changes to "Configured."
+
+## 4. Add your products in the plugin
+
+Under the **Store Products tab**, add one row per subscription or one-time product:
+
+- **Product ID** — your own label (e.g. `pro_monthly`).
+- **Type** — Subscription or One-time.
+- Tick **iOS** and enter the **iOS product ID**. This must exactly match the product ID you create in App Store Connect in the next step.
+
+## 5. Create subscriptions in App Store Connect
+
+1. Open your app in App Store Connect → **Monetization → Subscriptions**.
+2. Create a **subscription group**. Users can hold only one active subscription per group, so put related tiers (e.g. Pro Monthly and Pro Yearly) in the same group.
+3. Add each subscription: set the product ID, duration, price, display name, and description.
+4. Add a **review screenshot**. Apple requires one before it will approve the subscription.
+
+## 6. Wire up Packages, Offerings, and Paywalls
+
+All under **Blockli Mobile App → In-App Purchases**. The structure rolls up: **Package → Offering → Paywall**.
+
+### Packages
+
+One Package per store product.
+
+- **Package ID** — your own short ID.
+- **Source** — Native (App Store / Play).
+- **Store product** — pick the product from step 4.
+- **Interval** — Monthly or Yearly, matching the billing period. Leave blank for flat, non-recurring products.
+
+### Offerings
+
+An Offering is one tier (e.g. "Pro") with its own entitlement and copy.
+
+- **Name, Tagline, Description** — shown on this tier's card.
+- **Included access** — feature checklist for this tier.
+- **Packages** — add both monthly and yearly Packages here if you want a Monthly/Yearly switcher on the card. Add just one for a single-interval tier.
+- **Access grant** — what purchasing any Package in this Offering actually unlocks (a membership group, a course, etc.).
+
+### Paywalls
+
+The purchase screen itself.
+
+- **Title, Tagline, Description, Image** — shown once at the top of the screen.
+- **Offerings** — one Offering for a single-tier screen, or several to show multiple tier cards.
+- **Visible** — must be checked for the app to fetch this paywall.
+
+## 7. Point Apple's notifications at WordPress
+
+The plugin needs to hear from Apple when a subscription renews or expires — this is what grants and revokes access.
+
+1. On the **Apple App Store tab** in the plugin, copy the **App Store Server Notifications URL** (pre-filled, read-only).
+2. In App Store Connect → your app → **App Information → App Store Server Notifications**, paste that URL as both the **Production** and **Sandbox** server URL.
+3. Set the version to **Version 2**.
+
+<Note>
+  The URL must be publicly reachable. On a local development setup, use an ngrok tunnel and enter the tunnel URL here instead.
+</Note>
+
+## 8. Test with a sandbox account
+
+1. In App Store Connect → **Users and Access → Sandbox**, create a sandbox tester.
+2. Install a build from TestFlight on a physical device and sign in with the sandbox tester.
+3. Complete a purchase. Sandbox renewals run on a compressed schedule — you'll see expiry and renewal events within minutes.
+
+For a quick first check before doing a full purchase, use **Send Test Notification** in the App Store Server Notifications section of App Store Connect. The event appears as `test` in the **Notification Events** tab in WordPress.
+
+### What to look for
+
+| What | Where |
+| --- | --- |
+| Purchase completes | Button shows spinner, then reads "Manage Subscription" |
+| Notification received | An `apple` event appears in **Notification Events** |
+| Access granted | Entry appears in **Access Grants** |
+| Renewal / expiry | Arrives as an Apple notification; expiry removes the access grant |

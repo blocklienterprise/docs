@@ -30,6 +30,7 @@
               "plugin/authentication",
               "plugin/in-app-purchases",
               "plugin/iap-google-cloud",
+              "plugin/iap-google-products",
               "plugin/app-pages",
               "plugin/custom-post-types"
             ]

@@ -1,0 +1,90 @@
+---
+title: "Google IAP — Part 2: Products & Plugin Setup"
+sidebarTitle: "Google IAP: Products & Setup"
+description: "Create your subscription and one-time products in Play Console, then wire them up in the Blockli plugin."
+---
+
+With RTDN confirmed working from [Part 1](/plugin/iap-google-cloud), this page covers creating your products in Play Console and connecting them to the Blockli plugin.
+
+## Create products in Play Console
+
+### Subscriptions
+
+1. Play Console → **Monetize → Products → Subscriptions → Create subscription**.
+2. Set the **Product ID** (e.g. `pro_monthly`) — this is permanent once created, and is the ID you'll enter as the Store Product in the plugin.
+3. Give it a name and description.
+4. Under **Base plans and offers**, click **Add base plan**:
+   - Set the billing period (e.g. Monthly).
+   - Set the price per country/region.
+   - Set renewal type to **Auto-renewing**.
+   - Activate the base plan.
+5. Activate the subscription once its base plan is ready.
+
+Repeat for any additional subscription products (e.g. `pro_yearly`). You can also add a second base plan to the same subscription product if you'd prefer Google to model monthly/yearly as one product with two billing options — either approach works with Blockli's schema.
+
+### One-time purchases
+
+1. Play Console → **Monetize → Products → In-app products → Create product**.
+2. Set the **Product ID**, name, description, and price.
+3. Activate the product.
+
+---
+
+## Wire it up in the plugin
+
+All under **WordPress admin → Blockli Mobile App → In-App Purchases**. The structure rolls up: **Store Product → Package → Offering → Paywall**.
+
+### 1. Store Products
+
+One row per Play product ID.
+
+- **Product ID** — must exactly match the Product ID from Play Console (e.g. `pro_monthly`).
+- **Type** — Subscription or One-time. This controls whether the app shows "Manage Subscription" or "Active" for owned items.
+- Enable **Android** and enter the Android product ID (same as the Play Product ID).
+- Enable **iOS** too if this tier also sells on the App Store, with its own iOS product ID.
+
+### 2. Packages
+
+One Package per store product.
+
+- **Package ID** — your own short ID (e.g. `pro_monthly`).
+- **Source** — Native (App Store / Play) for products you just created; Stripe for web.
+- **Store product** — pick the Store Product from above.
+- **Interval** — Monthly or Yearly, only if this product actually bills on that period. Leave blank for flat, non-recurring products.
+
+If you created separate Play products for monthly and yearly, make two Packages — one per product, each with its own Interval.
+
+### 3. Offerings
+
+An Offering is one tier (e.g. "Pro", "Premium") with its own entitlement and marketing copy.
+
+- **Name, Tagline, Description** — shown on this tier's card in the app.
+- **Included access** — this tier's feature checklist.
+- **Packages** — add both monthly and yearly Packages here if you want a Monthly/Yearly switcher on this tier's card. Add just one for a single-interval tier.
+- **Access grant** — what purchasing any Package in this Offering actually unlocks (a membership group, a course, etc.).
+
+### 4. Paywalls
+
+The purchase screen itself.
+
+- **Title, Tagline, Description, Image** — shown once at the top of the screen.
+- **Offerings** — pick one Offering for a single-tier screen, or several to show multiple tiers (e.g. Pro + Premium) as separate cards.
+- **Visible** — must be checked for the app to fetch this paywall at all.
+
+---
+
+## How the paywall renders
+
+| Configuration | What the user sees |
+| --- | --- |
+| One Offering, one interval | A single card with one purchase button. |
+| One Offering, two intervals | One card with both options listed and a Continue button — no page-level toggle. |
+| Multiple Offerings | A Monthly/Yearly toggle above all tier cards (if any tier has both intervals), re-pricing every tier at once. |
+| Already subscribed | The button reads "Manage Subscription" and opens the store's own subscription settings. |
+| One-time purchase owned | The button reads "Active." |
+
+---
+
+## Testing
+
+Real store pricing and purchase flows only work on a build installed through TestFlight (iOS) or Play Internal Testing (Android). Sideloaded or development builds can't reach the store catalog.

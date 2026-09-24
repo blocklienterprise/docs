@@ -31,6 +31,7 @@
               "plugin/in-app-purchases",
               "plugin/iap-google-cloud",
               "plugin/iap-google-products",
+              "plugin/iap-stripe",
               "plugin/app-pages",
               "plugin/custom-post-types"
             ]

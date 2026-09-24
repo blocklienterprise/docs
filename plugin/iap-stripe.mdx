@@ -1,0 +1,86 @@
+---
+title: "Stripe Web Checkout Setup"
+sidebarTitle: "Stripe Web Checkout"
+description: "Set up Stripe as a web checkout option alongside or instead of App Store and Google Play native purchases."
+---
+
+Stripe is a parallel purchase path to the native App Store and Google Play flows — it handles web checkout. You can offer it alongside native purchases (letting users choose), or on its own. Everything lives under **WordPress admin → Blockli Mobile App → In-App Purchases → Store Credentials → Stripe tab**.
+
+## 1. API keys
+
+1. Go to [dashboard.stripe.com](https://dashboard.stripe.com) → **Developers → API keys**.
+2. While testing, use the **test mode** keys (they start with `pk_test_...` / `sk_test_...`). Switch to live keys only when you're ready to take real payments.
+3. Copy the **Publishable key** and **Secret key** into the matching fields on the Stripe tab in WordPress.
+
+## 2. Webhook & signing secret
+
+Stripe needs to notify your WordPress site when a checkout completes, a subscription renews, or a subscription is cancelled — this is what actually grants or revokes access.
+
+1. The **Webhook endpoint** field on the Stripe tab is pre-filled and read-only. Copy it (it ends in `.../wp-json/blockli-mobile/v1/iap/stripe/webhook`).
+2. In Stripe Dashboard → **Developers → Webhooks → Add endpoint**, paste that URL.
+3. Select these events:
+   - `checkout.session.completed`
+   - `invoice.payment_succeeded`
+   - `customer.subscription.deleted`
+4. Save the endpoint. Stripe reveals a **signing secret** (`whsec_...`) — copy it into the **Webhook signing secret** field in WordPress.
+5. Click **Save Store Credentials**.
+
+## 3. Create products and prices in Stripe
+
+1. Stripe Dashboard → **Product catalog → Add product**.
+2. Name the product, then add one or more **Prices** under it — for example, a recurring Monthly price and a recurring Yearly price on the same product. Stripe supports multiple prices per product natively.
+3. Copy each Price's ID (it starts with `price_...`). You'll paste these into the plugin next.
+
+## 4. Register products in the plugin
+
+### Stripe Products tab
+
+Create one row per Stripe product.
+
+- **Type** — Subscription or One-time.
+- **Prices** — add one price row per interval. For each:
+  - **Price ID** — the `price_...` ID from Stripe.
+  - **Price shown** — the display string users see (e.g. `$9.99/mo`). You set this yourself; Stripe doesn't return formatted pricing at runtime the way native stores do.
+  - **Fine print / Badge** — optional, shown beneath the price.
+
+### Packages tab
+
+Create one Package per Stripe product.
+
+- **Package ID** — your own short ID.
+- **Source** — set to **Stripe**.
+- **Store product** — pick the Stripe product from above.
+- **Interval** — Monthly or Yearly, matching the billing period of this package.
+
+A Stripe package can sit in the same Offering as native (App Store / Play) packages, or in its own.
+
+### Offerings tab
+
+An Offering is one tier (e.g. "Pro", "Premium") with its own entitlement and marketing copy.
+
+- **Name, Tagline, Description** — shown on this tier's card in the app.
+- **Included access** — this tier's feature checklist.
+- **Packages** — add both monthly and yearly Packages here if you want a Monthly/Yearly switcher on this tier's card. Add just one for a single-interval tier. Mix native and Stripe packages freely.
+- **Access grant** — what purchasing any Package in this Offering actually unlocks (a membership group, a course, etc.).
+
+### Paywalls tab
+
+The purchase screen itself.
+
+- **Title, Tagline, Description, Image** — shown once at the top of the screen.
+- **Offerings** — pick one Offering for a single-tier screen, or several (e.g. Pro + Premium) to display multiple tier cards on the same screen.
+- **Visible** — must be checked for the app to fetch this paywall at all.
+
+**How it renders:**
+
+| Configuration | What the user sees |
+| --- | --- |
+| One Offering, one interval | A single card with one purchase button. |
+| One Offering, two intervals | One card with both options and a Continue button — no page-level toggle. |
+| Multiple Offerings | A Monthly/Yearly toggle above all tier cards, re-pricing every tier at once. |
+| Already subscribed | The button reads "Manage Subscription." |
+| One-time purchase owned | The button reads "Active." |
+
+## Testing
+
+Use a [Stripe test card](https://stripe.com/docs/testing) (e.g. `4242 4242 4242 4242`) through the app's checkout flow. Confirm the event appears under **Notification Events** and the resulting entitlement under **Transactions** in the WordPress plugin.

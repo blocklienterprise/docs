@@ -25,10 +25,6 @@ Stripe needs to notify your WordPress site when a checkout completes, a subscrip
 4. Save the endpoint. Stripe reveals a **signing secret** (`whsec_...`) — copy it into the **Webhook signing secret** field in WordPress.
 5. Click **Save Store Credentials**.
 
-<Note>
-  Stripe can't reach a local `.local` address. While testing locally you'll need a tool like ngrok to expose your WordPress site publicly and use that tunnel URL as the webhook endpoint instead.
-</Note>
-
 ## 3. Create products and prices in Stripe
 
 1. Stripe Dashboard → **Product catalog → Add product**.

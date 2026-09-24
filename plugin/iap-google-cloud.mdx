@@ -1,0 +1,61 @@
+---
+title: "Google IAP — Part 1: Google Cloud Setup"
+sidebarTitle: "Google IAP: Cloud Setup"
+description: "Provision the Google Cloud resources Play needs to send real-time purchase notifications to your WordPress site."
+---
+
+This part automates the Google Cloud side of Play's Real-Time Developer Notifications (RTDN) — the mechanism that tells your WordPress site when a subscription renews, expires, or gets cancelled. You won't need to click through Google Cloud by hand; the plugin handles it with a one-time automation key you provide.
+
+## Prerequisites
+
+- A Google Cloud project linked to the same Google account as your Play Console developer account. Any project you control works.
+- A one-time automation service account key (JSON) for that project. You'll create it below, upload it once to run the provisioning steps, and then delete your local copy — the plugin doesn't store it.
+
+## Step 1 — Create the automation service account key
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) signed in as the Google account that manages your Play Console developer account.
+2. In the top-left project dropdown, create a new project or select an existing one.
+3. Open the left navigation menu → **IAM & Admin → Service Accounts**.
+4. Click **+ Create Service Account**.
+5. Name it something recognizable (e.g. `blockli-automation`) → **Create and Continue**.
+6. Under "Grant this service account access to project," add exactly three roles:
+   - Service Usage Admin
+   - Service Account Admin
+   - Pub/Sub Admin
+7. Click **Continue**, then **Done**.
+8. On the Service Accounts list, click the account you just created.
+9. Go to its **Keys** tab → **Add Key → Create new key → JSON → Create**. The key file downloads automatically.
+
+<Warning>
+  Treat this file like a password. You only need it once for provisioning — delete your local copy after uploading it in the next step.
+</Warning>
+
+## Step 2 — Run the provisioning wizard in WordPress
+
+1. In WordPress admin, go to **Blockli Mobile App → In-App Purchases → Store Credentials → Google Play tab**.
+2. Scroll to **Automate Google Cloud setup**.
+3. Upload the automation service account key JSON you just downloaded.
+4. Fill in three IDs:
+   - **Project ID** — your GCP project ID (e.g. `blockli-mobile`)
+   - **Push service account ID** — a short ID for a new service account the plugin will create (e.g. `blockli-play-rtdn-push`)
+   - **Topic ID** — a short ID for the Pub/Sub topic (e.g. `mobile-1-rtdn`)
+5. Click **Provision Google Cloud**.
+
+The plugin runs 8 steps automatically: enables APIs, creates the Pub/Sub topic, creates a push service account, grants it the roles it needs, grants Google's Play publisher permission to publish to the topic, creates a push subscription pointing at your site's notification endpoint, verifies each step, and confirms the subscription is live.
+
+On success, the **Pub/Sub topic name** (`projects/<project>/topics/<topic-id>`) is saved as a read-only field on this page. You'll need it in the next step.
+
+## Step 3 — Link the topic in Play Console
+
+This one step can't be automated — it's a one-time manual action in Play Console.
+
+1. Play Console → your app → **Monetize → Monetization setup**.
+2. Under **Real-time developer notifications**, paste the topic name saved in the previous step.
+3. Save, then click **Send test notification**.
+4. Confirm the notification appears under **Blockli Mobile App → In-App Purchases → Notification Events** in WordPress.
+
+Once the test notification is confirmed, go back to the top of the **Google Play tab** and click **Save Store Credentials** to lock in the configuration.
+
+<Info>
+  Continue to [Part 2: Products & Plugin Setup](/plugin/iap-google-products) to create your products in Play Console and wire everything up in the plugin.
+</Info>

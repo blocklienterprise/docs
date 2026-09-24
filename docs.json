@@ -29,6 +29,7 @@
               "plugin/push-notifications",
               "plugin/authentication",
               "plugin/in-app-purchases",
+              "plugin/iap-google-cloud",
               "plugin/app-pages",
               "plugin/custom-post-types"
             ]

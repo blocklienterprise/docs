@@ -26,6 +26,7 @@
               "plugin/installation",
               "plugin/settings",
               "plugin/studio-connection",
+              "plugin/typography",
               "plugin/push-notifications",
               "plugin/authentication",
               "plugin/in-app-purchases",

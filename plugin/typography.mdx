@@ -1,0 +1,42 @@
+---
+title: "Typography"
+sidebarTitle: "Typography"
+description: "Set a custom font for your app — upload your own files or browse Google Fonts directly from the WordPress admin."
+---
+
+The Typography section lets you pick one font for your entire app. You'll find it under **WordPress admin → Settings → Identity & Branding → Typography**.
+
+You can bring in a font two ways:
+
+- **Upload files** — upload TTF or OTF files directly. Regular weight is required; Medium, SemiBold, and Bold are optional.
+- **Google Fonts** — browse and import from the Google Fonts library. The plugin downloads the font files to your server, so phones never contact Google directly. This requires a free API key (see below).
+
+Leave the selection on the default to use the app's built-in font.
+
+## Managing installed fonts
+
+Installed fonts appear in a table on the Typography page. Each row has a **Delete** button. Deleting the currently selected font puts the app back on the built-in font.
+
+**A few things to know:**
+
+- Weights you don't provide fall back to the closest weight you did supply.
+- Italics are not supported.
+
+## Setting up a Google Fonts API key
+
+Uploading your own files works without any API key. The key is only needed to browse and import from Google Fonts.
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) and sign in with any Google account.
+2. Create a new project or select an existing one. A dedicated project named something like "Blockli Fonts" keeps things tidy, but any project works.
+3. Open **APIs & Services → Library**, search for **Web Fonts Developer API**, and click **Enable**.
+4. Go to **APIs & Services → Credentials**, click **Create credentials → API key**, and copy the key.
+5. Optionally, click the key and restrict it to the **Web Fonts Developer API** only, so it can't be used for anything else.
+6. Back in WordPress, paste the key into the **Google Fonts API key** field on the Typography page and click **Save**. The font list loads.
+
+<Note>
+  The Web Fonts Developer API is free. Google Cloud may ask you to add billing details when you first create a project — that's a Google requirement, not ours. You won't be charged for font browsing.
+</Note>
+
+<Warning>
+  Don't set an app or website restriction on the API key. Requests come from your WordPress server, so a website restriction would block them. An API restriction to the Web Fonts Developer API is safe and recommended.
+</Warning>

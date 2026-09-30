@@ -30,7 +30,6 @@
             "pages": [
               "introduction",
               "quickstart",
-              "changelog",
               "app-changelog"
             ]
           },
@@ -81,5 +80,17 @@
         ]
       }
     ]
-  }
+  },
+  "redirects": [
+    {
+      "source": "/changelog",
+      "destination": "/changelog/plugin-changelog",
+      "permanent": true
+    },
+    {
+      "source": "/app-changelog",
+      "destination": "/changelog/app-changelog",
+      "permanent": true
+    }
+  ]
 }

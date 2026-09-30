@@ -1,20 +1,19 @@
 ---
 title: "App Changelog"
 sidebarTitle: "App Changelog"
-description: "What’s new in each build of the Blockli mobile app."
+description: "What's new in each build of the Blockli mobile app."
 ---
 
-## Build 2 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-29</span>
+## Build 4 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-29</span>
 
 ### Added
 
-- Chat: message edit and delete, pin/unpin with real-time broadcasts, message reactions, forwarding, emoji picker, groups tab, and skeleton loaders for loading states.
+- Chat: message edit and delete, pin/unpin with real-time broadcasts, message reactions, forwarding, emoji picker, groups tab, and skeleton loaders.
 - Multiple pinned messages per chat thread, with cycling between them.
 - Progress Map block in the app page editor.
 - Custom font support — theme fonts load at runtime and apply across the app.
 - Configurable form field styling: placeholder text, icon, and focus colors from Identity & Branding settings.
-- Stripe subscription management flow and active subscription handling.
-- Native store prices shown in purchase CTA buttons.
+- Native iOS in-app purchase flow with store prices shown in purchase CTA buttons.
 - Multi-attachment posting in the composer.
 - Tenant splash background support.
 
@@ -29,11 +28,75 @@ description: "What’s new in each build of the Blockli mobile app."
 - App header appearing on screens other than the activity feed.
 - Dark mode display bugs in profile, chat, and post-creation screens.
 - WebView back navigation leaving the screen instead of going back within the page.
-- Missing sender name on your own chat messages.
+- Missing sender name on own chat messages.
 - LearnDash locked lesson handling and web chrome visibility.
 
 ---
 
-## Build 1 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-14</span>
+## Build 3 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-22</span>
+
+### Added
+
+- In-app purchases screen wired to live paywalls, with subscription plan selection and purchase loading states.
+- Stripe checkout with Android back-button support and active subscription handling.
+- Stripe subscription management flow.
+
+### Changed
+
+- Revamped paywall and purchase plan UI with refined card details and pricing hook.
+
+### Fixed
+
+- OTA update bundling and Stripe redirect handling.
+- Exercise guide header and buttons remaining visible during workout loading state.
+- Multiday workout flow bugs.
+- Update banner wording and styling refined; now driven by the runtime OTA hook.
+
+---
+
+## Build 2 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-14</span>
+
+### Added
+
+- Chat: new-chat screen, loading skeletons, optimistic message send, thread actions, iOS rich push extension, and inverted message list.
+- Profile card block.
+- Profile points and achievements redesigned into separate sections, capped at three cards.
+- OTP email verification on sign-up.
+- Login screen redesign.
+- Forum: discussion action sheet, pinned discussion highlighting, and topic actions.
+- Forum and group block filtering.
+- YouTube link previews in activity feeds.
+- Page view tracking and stable hardware device IDs.
+
+### Changed
+
+- Joined date and bio hidden from profile view.
+- Chat list and tab pagination with lazy-loaded unread badges.
+- Tab bar labels and terms text fixed on narrow screens.
+
+### Fixed
+
+- Push notification delivery.
+- Chat keyboard spacing on Android.
+- Chat avatar fallback in details view.
+- Stale follow/connect state in member action sheet.
+- Header logo dimensions mapped from config values.
+- Exercise guide in-app bug reports; multiday and single-day workout flow bugs.
+
+---
+
+## Build 1 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-08-30</span>
 
 Initial release.
+
+### Added
+
+- Core screens: activity feed, groups, forums, courses, chat, profile, notifications, and more menu.
+- BuddyBoss, LearnDash, and exercise guide integrations.
+- Course video playback, category filters, and download actions.
+- Forum discussion actions, pinned discussions, and topic content.
+- App blocks with view-all navigation.
+- Dark mode across all screens.
+- Runtime theming for tab bar, buttons, and shell color tokens.
+- Reactions on posts and comments.
+- YouTube previews in activity feeds.

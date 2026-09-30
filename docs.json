@@ -70,6 +70,10 @@
               "studio/on-air-releases",
               "studio/store-submission"
             ]
+          },
+          {
+            "group": "Changelog",
+            "pages": []
           }
         ]
       }

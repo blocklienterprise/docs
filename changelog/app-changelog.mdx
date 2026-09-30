@@ -1,0 +1,163 @@
+---
+title: "App Changelog"
+sidebarTitle: "App Changelog"
+description: "Release history for the Blockli mobile app binary — what changed in each build."
+---
+
+## Build 4 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>September 29, 2026</span>
+
+### Chat
+
+- Edit and delete your own messages
+- React to messages with emoji (SDK-backed picker)
+- Forward messages, including from received threads
+- Groups tab added to the Chats screen
+- Multiple pinned messages per thread
+- Failed message retry
+- Search in chat screen
+
+### Profiles
+
+- Member profile redesign with refined card layout
+- More-actions sheet wired to BuddyBoss member actions (follow, connect, message)
+- Chat button added to member actions
+- Fix: profile points showing correctly for viewed members
+
+### Screens & Blocks
+
+- Progress Map block live
+- Custom HTML block rendered in a WebView
+- Paywall deep links routed correctly
+- WebView back navigation fixed
+- Skeleton loaders for courses and lesson details
+
+### Custom Fonts
+
+- Theme font loading from Studio configuration
+- Font aliases and runtime bootstrap
+
+### Auth & Forms
+
+- Form field colors configurable from Identity & Branding
+- Field style overrides scoped to Auth screens only
+
+### In-App Purchases
+
+- Native iOS prices shown in purchase CTA
+- Purchase confirmation loading state
+- Stripe subscription management flow
+- Android back behavior fixed in Stripe checkout
+
+### Other
+
+- Tenant splash background support
+- Multi-attachment posting in composer
+- OTA debug overlay removed; redirect fixes
+
+---
+
+## Build 3 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>September 22, 2026</span>
+
+### In-App Purchases
+
+- Purchases screen wired to live paywalls
+- New paywall flow with subscription selector and pricing
+- Purchase plan card details and selection UI
+
+### OTA Updates
+
+- Runtime OTA update hook
+- Update banner with themed status dot and refined copy
+
+### Exercise Guide
+
+- Multi-day workout flow refactored
+- Swipe-to-delete and re-order animations in Edit Workout
+- Loading state fix: header and buttons stay visible during workout load
+- Fix: crash on add-exercise when customizing a workout
+
+### Fixes
+
+- LearnDash data and auth issue fixes
+- Course block access handling
+
+---
+
+## Build 2 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>September 14, 2026</span>
+
+### Chat
+
+- Full chat actions: send, reply, thread actions
+- Optimistic message send
+- Prefetch threads and paginate chat tabs
+- iOS rich push notification extension
+- New-chat screen with loading skeletons
+
+### Profile
+
+- Profile cards block wired to real data
+- Points and achievements split into separate sections
+- Achievements wired to GamiPress points (hidden when empty)
+- Fix: stale follow/connect state in member action sheet
+
+### Auth
+
+- OTP sign-up verification flow
+- Face ID bypass after OTP
+- Tappable legal links on auth screens
+
+### Screens & Blocks
+
+- Discussion action sheet for forum posts
+- LearnDash topic content and block fixes
+- Block enhancements
+- Rubber-band scroll effect
+- Loading skeletons across settings screens
+
+### Exercise Guide
+
+- Pagination, filter, and layout bug fixes
+
+### Push Notifications
+
+- Fixed push registration (stable hardware device IDs)
+- Track page views on route changes
+
+### Other
+
+- Livestream gated behind feature flag
+
+---
+
+## Build 1 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>August 30, 2026</span>
+
+Initial release.
+
+### Screens
+
+- Home feed, activity, notifications, profile, search, and settings screens
+- Edit profile, send feedback, report bug, about, export data
+- Onboarding flow: welcome, interests, birthday, pronoun, OTP verification, Face ID, PIN setup
+- Auth: sign in, sign up, forgot password
+- Chat, marketplace, shop, and livestream screens (initial)
+
+### Features
+
+- Reactions on posts and activities
+- Exercise guide and workout screens
+- Video cards and poll redesign
+- WebView login/logout
+- Tenant-specific URL scheme
+- Dark mode support
+
+### Integrations
+
+- BuddyBoss API v2 integration
+- LearnDash courses and lessons
+- Page refresh support
+
+### Infrastructure
+
+- Navigation stack with typed routes
+- iOS deployment target configured
+- Logo assets and branding

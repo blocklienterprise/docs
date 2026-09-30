@@ -1,13 +1,25 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "Blockli",
   "theme": "luma",
+  "name": "Blockli",
+  "description": "Documentation for the Blockli platform — WordPress plugin, Studio Cloud, and SDK for building and publishing white-label mobile community apps.",
   "colors": {
     "primary": "#6366f1",
     "light": "#6366f1",
     "dark": "#6366f1"
   },
+  "logo": {
+    "light": "/images/logo_black.png",
+    "dark": "/images/logo_white.png",
+    "href": "https://blockli.app"
+  },
   "favicon": "https://blockli.app/icons/Logo%20/logo_black.png",
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Studio",
+      "href": "https://blockli-studio-cloud.onrender.com"
+    }
+  },
   "navigation": {
     "tabs": [
       {
@@ -17,9 +29,7 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "app-changelog"
-              "changelog"
+              "quickstart"
             ]
           },
           {
@@ -58,22 +68,28 @@
               "studio/on-air-releases",
               "studio/store-submission"
             ]
+          },
+          {
+            "group": "Changelog",
+            "pages": [
+              "changelog/plugin-changelog",
+              "changelog/app-changelog"
+            ]
           }
         ]
       }
     ]
   },
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "href": "https://blockli-studio-cloud.onrender.com",
-      "label": "Studio"
+  "redirects": [
+    {
+      "source": "/changelog",
+      "destination": "/changelog/plugin-changelog",
+      "permanent": true
+    },
+    {
+      "source": "/app-changelog",
+      "destination": "/changelog/app-changelog",
+      "permanent": true
     }
-  },
-  "logo": {
-    "light": "/images/logo_black.png",
-    "dark": "/images/logo_white.png",
-    "href": "https://blockli.app"
-  },
-  "description": "Documentation for the Blockli platform — WordPress plugin, Studio Cloud, and SDK for building and publishing white-label mobile community apps."
+  ]
 }

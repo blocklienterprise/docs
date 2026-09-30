@@ -1,102 +1,170 @@
 ---
 title: "App Changelog"
 sidebarTitle: "App Changelog"
-description: "What's new in each build of the Blockli mobile app."
+description: "Release history for the Blockli mobile app binary — what changed in each build."
 ---
 
-## Build 4 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-29</span>
+## Build 4 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>September 29, 2026</span>
 
-### Added
+### Chat
+- Edit and delete your own messages
+- React to messages with emoji (SDK-backed picker)
+- Forward messages, including from received threads
+- Groups tab added to the Chats screen
+- Multiple pinned messages per thread
+- Chat message list now uses inverted scroll
+- Failed message retry
+- Search in chat screen
 
-- Chat: message edit and delete, pin/unpin with real-time broadcasts, message reactions, forwarding, emoji picker, groups tab, and skeleton loaders.
-- Multiple pinned messages per chat thread, with cycling between them.
-- Progress Map block in the app page editor.
-- Custom font support — theme fonts load at runtime and apply across the app.
-- Configurable form field styling: placeholder text, icon, and focus colors from Identity & Branding settings.
-- Native iOS in-app purchase flow with store prices shown in purchase CTA buttons.
-- Multi-attachment posting in the composer.
-- Tenant splash background support.
+### Profiles
+- Member profile redesign with refined card layout
+- More-actions sheet wired to BuddyBoss member actions (follow, connect, message)
+- Chat button added to member actions
+- Fix: profile points showing correctly for viewed members
+- Fix: header variant appearing on wrong screens
 
-### Fixed
+### Screens & Blocks
+- Progress Map block live (reads Roadmap API, maps colors)
+- Custom HTML block rendered in a WebView
+- App page links and HTML block taps routed through deep-link parser
+- Paywall deep links routed correctly
+- WebView back navigation fixed (back button traverses WebView history first)
+- Skeleton loaders for courses and lesson details
+- Locked lesson handling and web chrome
 
-- Images not loading in posts and content.
-- Custom HTML blocks not rendering — now displayed in a sandboxed WebView with correct script and CORS handling.
-- More-menu web links not opening.
-- GamiPress wrong points shown on other member profiles.
-- Full reload on every app reopen — content is now cached on launch.
-- No message button on member profiles.
-- App header appearing on screens other than the activity feed.
-- Dark mode display bugs in profile, chat, and post-creation screens.
-- WebView back navigation leaving the screen instead of going back within the page.
-- Missing sender name on own chat messages.
-- LearnDash locked lesson handling and web chrome visibility.
+### Custom Fonts
+- Theme font loading from Studio configuration
+- Font aliases and runtime bootstrap
 
----
+### Auth & Forms
+- Form field placeholder, icon, and focus colors configurable from Identity & Branding
+- Field style overrides scoped to Auth screens only
 
-## Build 3 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-22</span>
+### In-App Purchases
+- Native iOS prices shown in purchase CTA
+- Purchase confirmation loading state
+- Unified entitlement handling across stores
+- Stripe subscription management flow
+- IAP fetches limited to visible paywalls
+- Android back behavior fixed in Stripe checkout
+- Active subscription state handled after checkout
 
-### Added
-
-- In-app purchases screen wired to live paywalls, with subscription plan selection and purchase loading states.
-- Stripe checkout with Android back-button support and active subscription handling.
-- Stripe subscription management flow.
-
-### Changed
-
-- Revamped paywall and purchase plan UI with refined card details and pricing hook.
-
-### Fixed
-
-- OTA update bundling and Stripe redirect handling.
-- Exercise guide header and buttons remaining visible during workout loading state.
-- Multiday workout flow bugs.
-- Update banner wording and styling refined; now driven by the runtime OTA hook.
-
----
-
-## Build 2 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-14</span>
-
-### Added
-
-- Chat: new-chat screen, loading skeletons, optimistic message send, thread actions, iOS rich push extension, and inverted message list.
-- Profile card block.
-- Profile points and achievements redesigned into separate sections, capped at three cards.
-- OTP email verification on sign-up.
-- Login screen redesign.
-- Forum: discussion action sheet, pinned discussion highlighting, and topic actions.
-- Forum and group block filtering.
-- YouTube link previews in activity feeds.
-- Page view tracking and stable hardware device IDs.
-
-### Changed
-
-- Joined date and bio hidden from profile view.
-- Chat list and tab pagination with lazy-loaded unread badges.
-- Tab bar labels and terms text fixed on narrow screens.
-
-### Fixed
-
-- Push notification delivery.
-- Chat keyboard spacing on Android.
-- Chat avatar fallback in details view.
-- Stale follow/connect state in member action sheet.
-- Header logo dimensions mapped from config values.
-- Exercise guide in-app bug reports; multiday and single-day workout flow bugs.
+### Other
+- Tenant splash background support
+- Multi-attachment posting in composer
+- Runtime cache hydrated before app providers
+- OTA debug overlay removed; redirect fixes
 
 ---
 
-## Build 1 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-08-30</span>
+## Build 3 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>September 22, 2026</span>
+
+### In-App Purchases
+- Purchases screen wired to live paywalls
+- New paywall flow with subscription selector and pricing
+- Purchase plan card details and selection UI
+- Improved purchases loading states
+
+### OTA Updates
+- Runtime OTA update hook (`useRuntimeOta`)
+- Update banner with themed status dot and refined copy
+
+### Exercise Guide
+- Multi-day workout flow refactored
+- Swipe-to-delete and re-order animations in Edit Workout
+- Loading state fix: header and buttons stay visible during workout load
+- Fix: crash on add-exercise when customizing a workout
+- In-app bug report fixes
+
+### Fixes
+- LearnDash data and auth issue fixes
+- Course block access handling
+
+---
+
+## Build 2 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>September 14, 2026</span>
+
+### Chat
+- Full chat actions: send, reply, thread actions
+- Optimistic message send
+- Inverted message list
+- Prefetch threads and paginate chat tabs
+- Lazy-load unread badges
+- iOS rich push notification extension
+- Chat keyboard spacing fix on Android
+- New-chat screen with loading skeletons
+
+### Profile
+- Profile cards block wired to real data
+- Points and achievements split into separate sections
+- Achievements wired to GamiPress points (hidden when empty)
+- Profile layout: joined date and bio hidden
+- Limit points cards to three
+- Fix: stale follow/connect state in member action sheet
+
+### Auth
+- OTP sign-up verification flow
+- Face ID bypass after OTP
+- Tappable legal links on auth screens
+- Themed SVG on forgot-password screen
+- Button primary color applied across auth styles
+
+### Screens & Blocks
+- Discussion action sheet for forum posts
+- LearnDash topic content and block fixes
+- Block enhancements (timeline activity filters dynamic, interaction handling)
+- Rubber-band scroll effect
+- Loading skeletons for settings, achievements, and more screens
+- Header logo dimensions configurable from config
+- Tab bar label wrapping fix on narrow screens
+- Terms and conditions text fix on narrow screens
+
+### Exercise Guide
+- All-exercises pagination fix
+- Exercise filter sheet scroll fix
+- Exercise details tabs layout fix
+- Bug report fixes
+
+### Push Notifications
+- Fixed push registration (stable hardware device IDs)
+- Track page views on route changes
+- Blockli app ID sent on device registration
+
+### Other
+- Livestream gated behind feature flag
+- Inactive blog header action buttons hidden
+
+---
+
+## Build 1 <span style={{color: '#9ca3af', fontWeight: 400, fontSize: '0.875rem'}}>August 30, 2026</span>
 
 Initial release.
 
-### Added
+### Screens
+- Home feed, activity, notifications, profile, search, and settings screens
+- Edit profile, send feedback, report bug, about, export data
+- Onboarding flow: welcome, interests, birthday, pronoun, OTP verification, Face ID, PIN setup
+- Auth: sign in, sign up, forgot password
+- Chat, marketplace, shop, and livestream screens (initial)
+- Group invites, login info config screen
 
-- Core screens: activity feed, groups, forums, courses, chat, profile, notifications, and more menu.
-- BuddyBoss, LearnDash, and exercise guide integrations.
-- Course video playback, category filters, and download actions.
-- Forum discussion actions, pinned discussions, and topic content.
-- App blocks with view-all navigation.
-- Dark mode across all screens.
-- Runtime theming for tab bar, buttons, and shell color tokens.
-- Reactions on posts and comments.
-- YouTube previews in activity feeds.
+### Features
+- Reactions on posts and activities
+- Exercise guide and workout screens
+- Video cards
+- Poll redesign
+- WebView login/logout
+- Tenant-specific URL scheme
+- Dark mode support
+- App header component with logo and variant support
+
+### Integrations
+- BuddyBoss API v2 integration
+- LearnDash courses and lessons
+- Page refresh support
+- Tenant URL rewrite and routing
+
+### Infrastructure
+- Navigation stack with typed routes
+- iOS deployment target configured
+- Logo assets and branding

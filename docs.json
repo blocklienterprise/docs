@@ -29,8 +29,7 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "app-changelog"
+              "quickstart"
             ]
           },
           {

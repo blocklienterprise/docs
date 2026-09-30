@@ -97,11 +97,11 @@ mode: "custom"
       Firebase config, service account, and Google Play credentials.
     </Card>
 
-    <Card title="EAS Build" icon="hammer" href="/studio/eas-build">
+    <Card title="Builds" icon="hammer" href="/studio/eas-build">
       Trigger iOS and Android builds, track status, and manage build credits.
     </Card>
 
-    <Card title="OTA Updates" icon="arrow-up-circle" href="/studio/ota-updates">
+    <Card title="OTA Updates" icon="arrow-up-circle" href="/studio/on-air-releases">
       Push config and JS bundle changes to live apps without a new store release.
     </Card>
 
@@ -112,20 +112,15 @@ mode: "custom"
 
   ***
 
-  ## How the platform fits together
+  ## Changelog
 
-  ```
-  WordPress site                 Studio Cloud                  App stores
-  ──────────────                 ────────────                  ──────────
-  BuddyBoss + Plugin ──────────► Configure app ─────────────► iOS + Android
-  (data, auth,        sync        Build binary   publish        (users)
-   push, IAP)                     OTA updates ───────────────► (live updates)
-  ```
+  <CardGroup cols={2}>
+    <Card title="Plugin Changelog" icon="list" href="/changelog/plugin-changelog">
+      What's new in the Blockli WordPress plugin — release notes for every version.
+    </Card>
 
-  | Component            | Role                                                                             |
-  | -------------------- | -------------------------------------------------------------------------------- |
-  | **WordPress Plugin** | Your site's data and auth layer. Connects to Studio via REST API.                |
-  | **Studio Cloud**     | Control plane. Owns builds, OTA jobs, credentials, and edge config delivery.     |
-  | **Mobile App**       | White-label React Native app on iOS and Android, powered by your site.           |
-  | **SDK**              | Optional. For custom themes and screens built with `@blocklienterprise/runtime`. |
+    <Card title="App Changelog" icon="mobile" href="/changelog/app-changelog">
+      Release history for the Blockli mobile app binary — what changed in each build.
+    </Card>
+  </CardGroup>
 </div>

@@ -73,7 +73,9 @@
           },
           {
             "group": "Changelog",
-            "pages": []
+            "pages": [
+              "changelog/plugin-changelog"
+            ]
           }
         ]
       }

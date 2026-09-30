@@ -1,0 +1,185 @@
+---
+title: "Changelog"
+sidebarTitle: "Changelog"
+description: "What’s new in the Blockli Mobile App plugin — release notes for every version."
+---
+
+## 1.0.9 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-27</span>
+
+### Added
+
+- Configurable splash screen display mode, with logo or background presentation and a background color setting.
+- GamiPress profile endpoints for points, achievements, and ranks can target a specified user.
+- Chat: per-message edit/delete, pin/unpin with real-time broadcasts, message reactions, and cycling through multiple pinned messages.
+- Progress Map block in the app page editor.
+- In-app documentation panel, with docs links across the IAP admin pages and support for safe embedded media.
+- Custom font management for app themes.
+- BuddyBoss App branding import tool, with splash background support and import toasts.
+- App pages: copyable deep links, a trash action in the admin UI/API, and an option to hide webview chrome.
+- Logo dimensions and form field style settings, with optional form field colors and extra overrides.
+- OpenAI API key setting and password visibility toggle.
+- Nested sub-tabs and color section pills in Settings.
+
+### Changed
+
+- Updated the default Blockli Studio URL.
+- Identity settings split into sub-tabs; login screen input settings moved to Identity & Branding.
+- Field style overrides moved into Auth Screens as a General section.
+- File upload fields unified, with improved spacing.
+- Tab bar items limited in the navigation editor.
+- Google Fonts search results limited.
+
+### Fixed
+
+- Invalid GamiPress target user IDs no longer fall back to the logged-in user.
+- Course gating now follows access rules, and unnecessary header spacing is hidden.
+- Admin RTL layout and docs dark-mode styles.
+
+---
+
+## 1.0.8 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-25</span>
+
+### Added
+
+- Apple App Store server notification handling.
+- Automated Google Play RTDN provisioning.
+- Native package intervals and tier grouping for IAP offerings, with expanded offering metadata.
+
+### Changed
+
+- Improved Stripe IAP admin management; saved Stripe customers are reused.
+- Improved IAP access grants admin view and search field styling.
+- Simplified IAP package source fields; removed the paywall “included access” field.
+- Modules and core features are always enabled; the save button is hidden on the Modules tab.
+- Settings tab is persisted in the URL query string.
+- Simplified the Overview connection section and clarified app theme and app scheme hints.
+
+### Removed
+
+- Blueprint and payload admin pages.
+- Livestreaming settings and nav link.
+
+### Fixed
+
+- Duplicate web IAP subscriptions are prevented.
+- Group invites are cleared after purchase-based joins.
+- Entitlement responses are no longer cached.
+- Admin bar callback is preserved when clearing hooks.
+
+---
+
+## 1.0.7 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-14</span>
+
+### Added
+
+- Unread message count REST endpoint.
+
+### Changed
+
+- Docs moved and release excludes simplified.
+
+---
+
+## 1.0.6 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-14</span>
+
+### Added
+
+- Push page with targeted push audiences, direct audience filters, and push-eligible counts.
+- Personalized BuddyBoss push content.
+- App names in device observability.
+- GamiPress profile REST endpoints.
+- Events API endpoint mapping.
+- Native Profile Card block (replaces the legacy version).
+
+### Changed
+
+- Push devices are batched and device ownership is secured.
+- Push devices are scoped to this site’s own app.
+- Improved device registration cleanup.
+- Navigation grid reduced to two columns; updated count badge styling.
+
+### Fixed
+
+- BuddyBoss notification push hook.
+- Realtime message content filter arguments.
+
+---
+
+## 1.0.5 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-05</span>
+
+### Added
+
+- Configurable auth screens and auth endpoints, with background color fields.
+- Signup email verification via OTP.
+
+### Changed
+
+- Auth screen keys normalized to camelCase.
+
+### Removed
+
+- Signup verification debug logging.
+
+---
+
+## 1.0.4 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-04</span>
+
+### Added
+
+- Theme settings tab with Cove theme style options.
+
+### Changed
+
+- Navigation icons are auto-assigned unless the user has configured one.
+
+---
+
+## 1.0.3 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-01</span>
+
+### Added
+
+- Taxonomy group selectors and card category term management for card blocks.
+- “See all” REST endpoints for card blocks.
+
+---
+
+## 1.0.2 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-01</span>
+
+### Added
+
+- Specific selection for groups and forums.
+- LearnDash course category filter endpoint and `category_id` parameter on courses.
+- LearnDash author and step video metadata.
+- Generated video thumbnails in REST output.
+
+---
+
+## 1.0.1 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-08-28</span>
+
+### Added
+
+- Extended theme color tokens in settings.
+
+### Changed
+
+- Deep link scheme defaults to the app slug; `app_scheme` is derived from `app_slug` when unset.
+
+---
+
+## 1.0.0 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-08-25</span>
+
+Initial release.
+
+### Added
+
+- WordPress token authentication for the mobile app, social login, and one-time WebView session handoff URLs.
+- Integrations for BuddyBoss Platform, BuddyPress, bbPress, FluentCommunity, WooCommerce, LearnDash, podcasts, and Blockli Streamer.
+- Blockli Studio connection, multi-tenant cloud config, and feature flags.
+- App Pages with native blocks, legacy card migration, CPT sources, and a CPT screen layout builder.
+- Versioned mobile navigation (tab bar, more menu, header bar) with an icon picker and multi-locale labels.
+- Push notifications with deep links, per-type preferences, targeted test pushes, and device observability.
+- Realtime bridge for messages, notifications, activity, groups, forums, friendships, and profile updates.
+- Bunny Edge caching with scoped cache invalidation.
+- Access control with audiences, paywalls, and content gates.
+- In-app purchases (Apple, Google Play, Stripe web checkout) with access grants.
+- React admin SPA with light/dark mode.

@@ -74,7 +74,8 @@
           {
             "group": "Changelog",
             "pages": [
-              "changelog/plugin-changelog"
+              "changelog/plugin-changelog",
+              "changelog/app-changelog"
             ]
           }
         ]

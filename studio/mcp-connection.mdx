@@ -1,0 +1,132 @@
+---
+title: "Connect a Coding Agent (MCP)"
+sidebarTitle: "Coding Agent (MCP)"
+description: "Connect Claude, Codex, Cursor, or another coding agent to Blockli Studio so it can use the Blockli SDK guidance and read your app's live preview logs."
+---
+
+Blockli Studio hosts an MCP server for coding agents. Once connected, your agent can look up how the Blockli SDK works instead of guessing, check the code it writes against Blockli's rules, and read the runtime logs from your app's live preview.
+
+Use this when you are building your own app from a custom repository in Studio.
+
+You connect by pasting one address, your **Connection URL**, into your agent's desktop app. No terminal is needed. Each Connection URL belongs to one app, and an agent connected with it can only reach that app.
+
+## What your agent can do
+
+| Area | What the tools provide |
+| --- | --- |
+| SDK guidance | Which hooks to use, their signatures, the fields each item type has, and recommended patterns. |
+| Snippets | Ready-made, typed starting code for list screens, detail screens, app pages, and feeds. |
+| Validation | Checks that screens use the SDK correctly before you ship, including sign-in, sign-out, and navigation flow. |
+| Your content types | The custom post type sources on your WordPress site and the fields each one exposes. |
+| Translations | The app's translatable strings, and a check for hardcoded text. |
+| Live preview | Your preview's status, and its recent runtime logs with search. |
+| Shipping | Whether a set of changed files can go out as an On-Air Release or needs a new build. |
+
+## Before you start
+
+- Your app in Studio uses a custom repository.
+- You can sign in to Studio and open the app's **Development** page.
+- For the live preview tools, a live preview must be running. The other tools work without one.
+
+## Step 1 — Get your Connection URL from Studio
+
+1. In Studio, open your app and go to the **Development** page.
+2. Find the **Connect Your Coding Agent** card.
+3. Click **Generate Token**.
+4. Copy the **Connection URL**.
+
+<Warning>
+  The Connection URL is shown only once, and it works like a password: anyone who has it can use these tools for your app. Do not share it or paste it into your repository. If you lose it or it is exposed, revoke the token and generate a new one.
+</Warning>
+
+## Step 2 — Add it to your agent
+
+<Tabs>
+  <Tab title="Claude">
+    These steps are for the Claude desktop app.
+
+    1. Open **Customize**, then **Connectors**.
+    2. Click **Add custom connector**.
+    3. Enter a name, for example `Blockli Studio`.
+    4. Paste your **Connection URL** as the server URL.
+    5. If Claude asks how to authenticate, choose **No sign-in**. The Connection URL already identifies you.
+    6. Click **Add**.
+
+    To use it in a conversation, click the **\+** button in the chat, select **Connectors**, and switch **Blockli Studio** on.
+
+    <Note>
+      On Team and Enterprise plans, an Owner adds custom connectors for the organization under **Organization settings > Connectors**. If you do not see **Add custom connector**, ask an Owner to add it. On the Free plan, you can add one custom connector.
+    </Note>
+  </Tab>
+  <Tab title="Codex">
+    These steps are for the Codex desktop app.
+
+    1. Open **Settings**, then select **MCP servers**.
+    2. Click **Add server**.
+    3. Enter a name, for example `blockli-studio`.
+    4. Choose **Streamable HTTP**.
+    5. Paste your **Connection URL** as the server URL.
+    6. Save the server, then click **Restart**.
+  </Tab>
+  <Tab title="Cursor">
+    1. Open **Cursor Settings** and go to the **MCP** section.
+    2. Click **New MCP Server**. Cursor opens its `mcp.json` file.
+    3. Add the server, replacing `YOUR_CONNECTION_URL` with the value from Studio:
+
+    ```json
+    {
+      "mcpServers": {
+        "blockli-studio": {
+          "url": "YOUR_CONNECTION_URL"
+        }
+      }
+    }
+    ```
+
+    4. Save the file and return to the **MCP** section.
+    5. Switch **blockli-studio** on if it is off.
+
+    This file lives in Cursor's own settings on your computer, not in your repository.
+  </Tab>
+  <Tab title="Other agents">
+    Any agent that supports remote MCP servers over HTTP can connect. Add a server, choose the HTTP (Streamable HTTP) type if asked, and paste your **Connection URL** as its address.
+
+    If your agent has a separate field for a token, you can use the **MCP URL** and **Token** from the same Studio card instead. Send the token in this header:
+
+    ```text
+    Authorization: Bearer YOUR_TOKEN
+    ```
+  </Tab>
+</Tabs>
+
+## Verify
+
+Your agent's MCP or connector settings should show the Blockli server as connected, with its tools listed.
+
+Then ask your agent something that needs the tools, for example:
+
+```text
+Use the Blockli Studio tools to get the active preview for my app and show its recent logs. Then tell me which collections I can list with useCollection.
+```
+
+You should get your preview's status, its recent log lines, and the list of collections the SDK supports.
+
+Back in Studio, the **Connect Your Coding Agent** card shows when each token was last used.
+
+## Manage tokens
+
+- **Revoke a token** from the **Connect Your Coding Agent** card. Its Connection URL stops working immediately.
+- **Use one token per person or machine**, so you can revoke one without interrupting the others. Each app can have up to 10 active tokens.
+- **Keep the Connection URL private.** It contains the token. Do not put it in your repository, a pull request, a screenshot, or a chat.
+
+## Troubleshooting
+
+| What you see | Likely cause | What to do |
+| --- | --- | --- |
+| The connection fails with an authorization error | The Connection URL is incomplete, or its token was revoked. | Copy the whole address again. If in doubt, generate a new token. |
+| The agent connects but lists no tools | The server is switched off in your agent's settings. | Switch it on, then reload the agent's tool list or restart the agent. |
+| Claude does not show **Add custom connector** | Your organization manages connectors centrally. | Ask an Owner to add it under **Organization settings > Connectors**. |
+| Preview tools report no active preview | No live preview is running for the app. | Start a live preview from the **Development** page, then ask again. |
+| Requests are refused as too many | The token is making requests too quickly. | Wait a minute and try again. |
+
+If the connection still does not work, contact support from inside Studio.

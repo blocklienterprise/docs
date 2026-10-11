@@ -1,14 +1,14 @@
 ---
 title: "Connect a Coding Agent (MCP)"
 sidebarTitle: "Coding Agent (MCP)"
-description: "Connect Cursor, Claude Code, or another coding agent to Blockli Studio so it can use the Blockli SDK guidance and read your app's live preview logs."
+description: "Connect Claude, Codex, Cursor, or another coding agent to Blockli Studio so it can use the Blockli SDK guidance and read your app's live preview logs."
 ---
 
 Blockli Studio hosts an MCP server for coding agents. Once connected, your agent can look up how the Blockli SDK works instead of guessing, check the code it writes against Blockli's rules, and read the runtime logs from your app's live preview.
 
 Use this when you are building your own app from a custom repository in Studio.
 
-Each connection uses a token that belongs to one app. An agent connected with that token can only reach that app.
+You connect by pasting one address, your **Connection URL**, into your agent's desktop app. No terminal is needed. Each Connection URL belongs to one app, and an agent connected with it can only reach that app.
 
 ## What your agent can do
 
@@ -28,35 +28,56 @@ Each connection uses a token that belongs to one app. An agent connected with th
 - You can sign in to Studio and open the app's **Development** page.
 - For the live preview tools, a live preview must be running. The other tools work without one.
 
-## Step 1 — Generate a token in Studio
+## Step 1 — Get your Connection URL from Studio
 
 1. In Studio, open your app and go to the **Development** page.
 2. Find the **Connect Your Coding Agent** card.
 3. Click **Generate Token**.
-4. Copy the **MCP URL** and the **Token**.
+4. Copy the **Connection URL**.
 
 <Warning>
-  The token is shown only once. If you lose it, revoke it and generate a new one.
+  The Connection URL is shown only once, and it works like a password: anyone who has it can use these tools for your app. Do not share it or paste it into your repository. If you lose it or it is exposed, revoke the token and generate a new one.
 </Warning>
 
-## Step 2 — Add the connection to your agent
-
-In the examples below, replace `YOUR_MCP_URL` and `YOUR_TOKEN` with the values from Studio.
+## Step 2 — Add it to your agent
 
 <Tabs>
+  <Tab title="Claude">
+    These steps are for the Claude desktop app.
+
+    1. Open **Customize**, then **Connectors**.
+    2. Click **Add custom connector**.
+    3. Enter a name, for example `Blockli Studio`.
+    4. Paste your **Connection URL** as the server URL.
+    5. If Claude asks how to authenticate, choose **No sign-in**. The Connection URL already identifies you.
+    6. Click **Add**.
+
+    To use it in a conversation, click the **\+** button in the chat, select **Connectors**, and switch **Blockli Studio** on.
+
+    <Note>
+      On Team and Enterprise plans, an Owner adds custom connectors for the organization under **Organization settings > Connectors**. If you do not see **Add custom connector**, ask an Owner to add it. On the Free plan, you can add one custom connector.
+    </Note>
+  </Tab>
+  <Tab title="Codex">
+    These steps are for the Codex desktop app.
+
+    1. Open **Settings**, then select **MCP servers**.
+    2. Click **Add server**.
+    3. Enter a name, for example `blockli-studio`.
+    4. Choose **Streamable HTTP**.
+    5. Paste your **Connection URL** as the server URL.
+    6. Save the server, then click **Restart**.
+  </Tab>
   <Tab title="Cursor">
-    1. In Cursor, open **Cursor Settings** and go to the **MCP** section.
+    1. Open **Cursor Settings** and go to the **MCP** section.
     2. Click **New MCP Server**. Cursor opens its `mcp.json` file.
-    3. Add the server:
+    3. Add the server, replacing `YOUR_CONNECTION_URL` with the value from Studio:
 
     ```json
     {
       "mcpServers": {
         "blockli-studio": {
-          "url": "YOUR_MCP_URL",
-          "headers": {
-            "Authorization": "Bearer YOUR_TOKEN"
-          }
+          "url": "YOUR_CONNECTION_URL"
         }
       }
     }
@@ -65,42 +86,27 @@ In the examples below, replace `YOUR_MCP_URL` and `YOUR_TOKEN` with the values f
     4. Save the file and return to the **MCP** section.
     5. Switch **blockli-studio** on if it is off.
 
-    This file lives in Cursor's own settings on your computer, not in your repository, so the token is never committed.
-  </Tab>
-  <Tab title="Claude Code">
-    Run this command in your terminal:
-
-    ```bash
-    claude mcp add --transport http blockli-studio YOUR_MCP_URL --header "Authorization: Bearer YOUR_TOKEN"
-    ```
-
-    If your project is based on the Blockli app starter, it already contains a `.mcp.json` file that reads two environment variables. In that case, set them in the terminal where you start Claude Code instead of running the command above:
-
-    ```bash
-    export BLOCKLI_MCP_URL=YOUR_MCP_URL
-    export BLOCKLI_MCP_TOKEN=YOUR_TOKEN
-    ```
-
-    Studio shows these two lines, filled in, as **Shell setup** when you generate a token.
+    This file lives in Cursor's own settings on your computer, not in your repository.
   </Tab>
   <Tab title="Other agents">
-    Any agent that supports remote MCP servers over HTTP can connect. Configure it with:
+    Any agent that supports remote MCP servers over HTTP can connect. Add a server, choose the HTTP (Streamable HTTP) type if asked, and paste your **Connection URL** as its address.
 
-    - **URL:** `YOUR_MCP_URL`
-    - **Header:** `Authorization: Bearer YOUR_TOKEN`
+    If your agent has a separate field for a token, you can use the **MCP URL** and **Token** from the same Studio card instead. Send the token in this header:
 
-    Keep the word `Bearer` and the space before the token.
+    ```text
+    Authorization: Bearer YOUR_TOKEN
+    ```
   </Tab>
 </Tabs>
 
 ## Verify
 
-Your agent's MCP settings should show **blockli-studio** as connected, with the Blockli tools listed.
+Your agent's MCP or connector settings should show the Blockli server as connected, with its tools listed.
 
 Then ask your agent something that needs the tools, for example:
 
 ```text
-Use the blockli-studio tools to get the active preview for my app and show its recent logs. Then tell me which collections I can list with useCollection.
+Use the Blockli Studio tools to get the active preview for my app and show its recent logs. Then tell me which collections I can list with useCollection.
 ```
 
 You should get your preview's status, its recent log lines, and the list of collections the SDK supports.
@@ -109,18 +115,18 @@ Back in Studio, the **Connect Your Coding Agent** card shows when each token was
 
 ## Manage tokens
 
-- **Revoke a token** from the **Connect Your Coding Agent** card. It stops working immediately.
+- **Revoke a token** from the **Connect Your Coding Agent** card. Its Connection URL stops working immediately.
 - **Use one token per person or machine**, so you can revoke one without interrupting the others. Each app can have up to 10 active tokens.
-- **Treat a token like a password.** Do not paste it into your repository, a pull request, or a chat. Keep it in your agent's settings or in an environment variable.
+- **Keep the Connection URL private.** It contains the token. Do not put it in your repository, a pull request, a screenshot, or a chat.
 
 ## Troubleshooting
 
 | What you see | Likely cause | What to do |
 | --- | --- | --- |
-| The connection fails with an authorization error | The token is wrong, was revoked, or the header is missing `Bearer` and a space before the token. | Check the header. If in doubt, generate a new token. |
-| The agent connects but lists no tools | The server is switched off in your agent's MCP settings. | Switch **blockli-studio** on, then reload the agent's tool list. |
+| The connection fails with an authorization error | The Connection URL is incomplete, or its token was revoked. | Copy the whole address again. If in doubt, generate a new token. |
+| The agent connects but lists no tools | The server is switched off in your agent's settings. | Switch it on, then reload the agent's tool list or restart the agent. |
+| Claude does not show **Add custom connector** | Your organization manages connectors centrally. | Ask an Owner to add it under **Organization settings > Connectors**. |
 | Preview tools report no active preview | No live preview is running for the app. | Start a live preview from the **Development** page, then ask again. |
 | Requests are refused as too many | The token is making requests too quickly. | Wait a minute and try again. |
-| A tool the agent expects is missing | The agent is asking for a tool that is not part of the Blockli set. | Ask the agent to list the blockli-studio tools and choose from those. |
 
 If the connection still does not work, contact support from inside Studio.

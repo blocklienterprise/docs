@@ -1,0 +1,51 @@
+---
+title: "Store Listing"
+sidebarTitle: "Store Listing"
+description: "Write your App Store and Google Play text in Studio and send it to both stores."
+---
+
+Keep your app's store text in one place, in Studio, and send it to the App Store and Google Play from there.
+
+Open your app in Studio and go to **Store Setup → Listings & devices**. The **App Store & Play copy** card holds the listing.
+
+## Fields
+
+| Field | Store | Limit |
+| --- | --- | --- |
+| App name | Both | 30 characters (required) |
+| App Store subtitle | App Store | 30 characters |
+| Google Play short description | Google Play | 80 characters (required for Google Play) |
+| Description | Both | 4,000 characters (required) |
+| App Store keywords | App Store | 100 characters, comma-separated (required for the App Store) |
+| App Store promotional text | App Store | 170 characters |
+| What's new in this version | Both | 500 characters |
+| Support URL | App Store | Required for the App Store |
+| Marketing URL | App Store | Optional |
+| Privacy policy URL | Both | Required |
+
+Each field shows a character count and a copy button. Below the fields, the card lists what each store still needs.
+
+You'll also get warnings that don't stop a save, for example spaces after commas in keywords (Apple doesn't need them, and they use up characters), keywords already in the app name, or a subtitle that repeats the name.
+
+## Save
+
+Click **Save listing**. If the listing was changed elsewhere since you opened it, for example by an AI agent, the save is refused so neither change is lost. Click **Reload** to see the latest, then make your edits again.
+
+The card shows when the listing was last changed and by whom.
+
+## Send to the stores
+
+Click **Send to stores** to replace the text on your App Store and Google Play pages with what's saved. Save your changes first: the button sends the saved listing. Empty fields are left as they are on the store.
+
+This uses your [App Store Connect](/studio/credentials-ios) and [Google Play](/studio/credentials-android) connections. The app must already exist in App Store Connect and the Play Console.
+
+After sending, the card shows for each store what was updated and anything skipped, with the reason:
+
+- **App Store:** the name, subtitle, and privacy link change on the app's information. The description, keywords, promotional text, what's new, and links go on the version being prepared. If no version is being prepared, add a new version in App Store Connect and send again. The first version of an app can't have "what's new".
+- **Google Play:** the title and the short and full descriptions are updated in your app's default language. Google Play takes "what's new" with each release, and the privacy policy is set under **Policy → App content** in the Play Console.
+
+Store changes still go through each store's own review with your next submission.
+
+## With an AI agent
+
+Agents connected to your WordPress site can read the listing, draft it with you, save it, and send it to the stores, depending on what you allow under **Development → Builds from WordPress**. See [Builds and releases by chat](/ai/builds).

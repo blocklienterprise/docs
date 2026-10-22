@@ -30,8 +30,19 @@ Studio shows live build status in the Build tab:
 | Building | Build is in progress |
 | Finished | Build succeeded; binary ready to download or submit |
 | Failed | Build failed; check logs for errors |
+| Canceled | Build was stopped before it finished |
 
 Click any build row to see the full build log.
+
+## Canceling a build
+
+To stop a build that's queued or running, open its **⋯** menu in **Builds & Releases** and choose **Cancel build**. On-Air Releases and store submissions can be canceled only while they're still waiting to start.
+
+- Credits come back for every platform that hadn't finished. A platform that already finished keeps its cost, because you got that build.
+- The build stays in your history marked **Canceled**. Use the **Canceled** filter to find canceled builds.
+- **Delete build** in the same menu removes a build from the history completely.
+
+AI agents can also cancel builds they started from WordPress, if you allow it. See [Builds and releases by chat](/ai/builds).
 
 ## Development builds
 

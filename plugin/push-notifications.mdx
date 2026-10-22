@@ -1,18 +1,43 @@
 ---
 title: "Push Notifications"
 sidebarTitle: "Push Notifications"
-description: "How to set up push notifications for your Blockli app — Firebase, APNs, notification types, and real-time events."
+description: "How to set up push notifications for your Blockli app — Firebase, APNs, sending, scheduling, history, and automatic notifications."
 ---
 
 Blockli apps support push notifications on both iOS and Android. Notifications can include **images** alongside the title and message.
 
 To enable push notifications, you need to upload your Firebase and APNs credentials in Studio first. See [iOS Credentials](/studio/credentials-ios) and [Android Credentials](/studio/credentials-android).
 
-## Manual notifications
+You manage push in WordPress under **Blockli → Push**, which has three tabs: **Send**, **Scheduled**, and **History**.
 
-You can send a push notification to any audience directly from Studio. Choose who receives it, write your message, optionally attach an image, and send.
+## Send a push
 
-This is useful for announcements, promotions, or any message you want to push to a specific group of members.
+On the **Send** tab, choose who receives it:
+
+- **All registered devices**
+- **Specific users**
+- **Filter members**: access groups, profile types, groups, courses, and memberships, with a count of how many can receive it
+
+Write a title and message, and optionally add an image and a link the push opens. Click **Send push**.
+
+The tab also shows delivery stats: registered devices, deliveries in the last 24 hours, and the last delivery.
+
+## Schedule a push
+
+Tick **Send later** and pick a date and time, in your site's time zone and up to 90 days ahead. The button changes to **Schedule push**.
+
+Who receives it is worked out when it's sent, so members who match your filters by then are included.
+
+Scheduled pushes appear on the **Scheduled** tab, with a counter on the tab while any are waiting. For each one you can:
+
+- **Edit** — change the text, image, link, audience, or time.
+- **Cancel** — it won't be sent, and stays in the list as canceled.
+
+## History
+
+The **History** tab lists every push sent in the last 30 days, one line per push, newest first: when it was sent, the title and message, who sent it, and how many were delivered and failed. Click a line to see each device it went to, with the reason for any failure.
+
+Filter by who sent it (admin, AI agent, scheduled, automatic, or tests), show only pushes with failures, or search the title and message. Delivery details older than 30 days are removed automatically.
 
 ## Automatic notifications
 
@@ -22,3 +47,7 @@ Automatic notifications are triggered by activity on your platform — no manual
 - **Custom notifications** — any additional notification events integrated into the plugin
 
 Members can manage which notifications they receive from the notification preferences screen in the app.
+
+## Push notifications from AI agents
+
+With the [AI App Builder](/ai/overview), agents can preview, send, and schedule pushes after you allow it. See [Push notifications by chat](/ai/push).

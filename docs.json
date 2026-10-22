@@ -78,7 +78,8 @@
               "studio/eas-build",
               "studio/on-air-releases",
               "studio/store-submission",
-              "studio/mcp-connection"
+              "studio/mcp-connection",
+              "studio/store-listing"
             ]
           },
           {

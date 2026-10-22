@@ -52,7 +52,11 @@
           },
           {
             "group": "AI App Builder",
-            "pages": []
+            "pages": [
+              "ai/overview",
+              "ai/connect",
+              "ai/tools"
+            ]
           },
           {
             "group": "Studio Cloud",

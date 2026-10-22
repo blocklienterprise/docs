@@ -1,0 +1,82 @@
+---
+title: "What Agents Can Do"
+sidebarTitle: "What Agents Can Do"
+description: "Every tool the Blockli AI App Builder gives your agent, by area."
+---
+
+Your agent sees these tools once it's connected. Tool names start with `blockli-app-` in most agents, for example `blockli-app-get-started`. You don't need to name tools yourself: describe what you want and the agent picks them.
+
+Tools marked **two-step** first show what will happen and return a confirmation. The agent only goes ahead after you agree.
+
+## Start and undo
+
+| Tool | What it does |
+| --- | --- |
+| `get-started` | What your site and app have, active plugins, app pages, and the rules the agent follows. |
+| `list-changes` | The AI changes from the last 30 days. |
+| `undo-change` | Puts back what a change altered (**two-step**). Refused if the same thing was changed again since. |
+
+## App pages and blocks
+
+| Tool | What it does |
+| --- | --- |
+| `list-pages`, `get-page` | Your app pages and the blocks on each. |
+| `create-page` | A new app page, always as a draft. |
+| `update-page`, `set-page-status` | Change a page's title or blocks; publish or unpublish it. |
+| `add-block`, `update-block`, `move-block`, `remove-block` | Change one block at a time. |
+| `list-blocks`, `get-block` | The blocks you can use and their settings. |
+| `find-content`, `list-content-sources`, `list-app-screens` | Posts, courses, groups, and other content blocks can show; the app's screens. |
+| `import-image` | Adds an image from a web address to the media library. |
+
+## Menus, look, and settings
+
+| Tool | What it does |
+| --- | --- |
+| `get-navigation`, `set-menu`, `remove-menu` | The tab bar, More menu, and header bar, including versions for signed-out visitors or member groups. |
+| `list-navigation-targets`, `list-icons` | What a menu item can open, and icons to use. |
+| `get-app-look`, `update-colors`, `update-theme-style` | Colours (light and dark), theme style, with readability warnings. |
+| `update-app-identity`, `update-app-images` | App name, support email, icon, and splash screen. |
+| `add-google-font`, `set-font` | Fonts. |
+| `get-app-settings`, `update-app-settings`, `update-sign-in-screens` | Languages, active members, and the sign-in, sign-up, and password screens. |
+
+## Content, access, and purchases
+
+| Tool | What it does |
+| --- | --- |
+| `update-content-source`, `test-content-source` | Turn content sources on or off and check what the app receives. |
+| `list-cards`, `save-card`, `remove-card` | The card library used by card blocks. |
+| `list-access-groups`, `save-access-group`, `remove-access-group` | Groups of members (**two-step**), with member counts. |
+| `get-access-rules`, `set-access-rule` | Who can see a page or piece of content, and what others see (**two-step**). |
+| `get-in-app-setup`, `save-in-app-item`, `remove-in-app-item` | Products, packages, offerings, and paywalls, with a checklist of what's missing (**two-step**). |
+
+## Moving from BuddyBoss App
+
+| Tool | What it does |
+| --- | --- |
+| `get-migration-status`, `preview-migration-step` | What was found and what each step would bring over. |
+| `run-migration-step`, `undo-migration-step` | Run or undo a step (**two-step**). See [Moving from BuddyBoss App](/plugin/buddyboss-migration). |
+
+## Builds, releases, and the stores
+
+These work through Blockli Studio and are controlled by the app owner. See [Builds and releases by chat](/ai/builds).
+
+| Tool | What it does |
+| --- | --- |
+| `get-build-status`, `get-build` | Credits, what's allowed, recent builds, install links, and why a build failed. |
+| `start-build` | A release, preview, or development build (**two-step**). |
+| `start-on-air-release` | Ships code changes to installed apps when no new build is needed (**two-step**). |
+| `submit-to-stores` | Submits the latest release build for review (**two-step**). |
+| `cancel-build` | Stops a build or release started from WordPress (**two-step**). |
+| `get-store-setup` | A checklist of what the app needs before it can go to the stores, and where to fix each item. |
+| `get-store-listing`, `update-store-listing` | Your App Store and Google Play text, with store limits checked. |
+| `send-store-listing` | Puts the saved listing on the App Store and Google Play pages (**two-step**). |
+
+## Push notifications
+
+Off until you allow it. See [Push notifications by chat](/ai/push).
+
+| Tool | What it does |
+| --- | --- |
+| `get-push-setup`, `preview-push` | Whether push is ready, and exactly who a push would reach. |
+| `send-push` | Sends now or schedules for later (**two-step**); can send a test to you first. |
+| `list-scheduled-pushes`, `update-scheduled-push`, `cancel-scheduled-push` | Manage pushes that haven't gone out. |

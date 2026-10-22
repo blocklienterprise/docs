@@ -51,6 +51,10 @@
             ]
           },
           {
+            "group": "AI App Builder",
+            "pages": []
+          },
+          {
             "group": "Studio Cloud",
             "pages": [
               "studio/setup-checklist",

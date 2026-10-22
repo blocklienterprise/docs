@@ -1,0 +1,53 @@
+---
+title: "Push Notifications by Chat"
+sidebarTitle: "Push Notifications"
+description: "Let agents preview, send, and schedule push notifications, with a test to your own phone first."
+---
+
+Agents can send push notifications to your app's members, now or at a time you choose. They always show you exactly who a push reaches before sending.
+
+## Turn it on
+
+In WordPress, open **Blockli → Tools → AI Tools** and switch on **Allow AI agents to send push notifications**. It's off by default, and appears once the AI tools are on.
+
+Push notifications need your Apple and Firebase keys set up in Studio first. See [Push Notifications](/plugin/push-notifications).
+
+## Who gets a push
+
+An agent can send to:
+
+- **Everyone** with the app, or
+- Members of one or more **access groups** (any or all of them).
+
+Pushes from agents always skip members who turned off admin notifications in the app, including when sent to everyone.
+
+## Send a push
+
+```text
+Preview a push to everyone saying "Our new course is live. Tap to start."
+that opens my Courses page. Send it to just me as a test first.
+```
+
+<Steps>
+  <Step title="Preview">
+    The agent shows the title, message, what tapping it opens (an app page, a post or course, or a web link), and how many people and devices it reaches right now. It warns you if the text will be cut off on a lock screen.
+  </Step>
+  <Step title="Test to yourself (recommended)">
+    The agent sends the push only to your own devices so you can see it. This needs no confirmation. Sign in to the app on your phone with notifications allowed.
+  </Step>
+  <Step title="Send or schedule">
+    The agent shows the exact count and waits for your yes. A sent push can't be recalled.
+  </Step>
+</Steps>
+
+## Schedule a push
+
+Ask for a time, for example "Schedule it for everyone next Monday at 9am." Times use your site's time zone and can be from 2 minutes to 90 days ahead.
+
+Who's in the audience is worked out when the push goes out, so members who join a group in the meantime are included.
+
+Scheduled pushes appear in **Blockli → Push → Scheduled**, marked as made by an AI agent, where you can **Edit** or **Cancel** them. Agents can also list, change, and cancel scheduled pushes, and "undo the last change" unschedules one that hasn't gone out.
+
+## After it's sent
+
+Every push shows in **Blockli → Push → History** with how many were delivered and how many failed. Pushes sent by agents are marked **AI agent**.

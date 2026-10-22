@@ -47,7 +47,8 @@
               "plugin/iap-google-products",
               "plugin/iap-stripe",
               "plugin/app-pages",
-              "plugin/custom-post-types"
+              "plugin/custom-post-types",
+              "plugin/buddyboss-migration"
             ]
           },
           {
@@ -55,7 +56,9 @@
             "pages": [
               "ai/overview",
               "ai/connect",
-              "ai/tools"
+              "ai/tools",
+              "ai/builds",
+              "ai/push"
             ]
           },
           {

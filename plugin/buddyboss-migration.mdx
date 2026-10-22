@@ -1,0 +1,72 @@
+---
+title: "Moving from BuddyBoss App"
+sidebarTitle: "BuddyBoss App Migration"
+description: "Bring your BuddyBoss App setup into Blockli: branding, pages, menus, access, in-app products, existing purchases, and bookmarks."
+---
+
+If your site used BuddyBoss App, the Blockli plugin can bring that setup across. Preview each step first: nothing changes until you press **Migrate**, and every step can be undone. Your BuddyBoss App data is never changed.
+
+Open it in WordPress under **Blockli → Tools → BuddyBoss App Migration**. If no BuddyBoss App data is found on the site, the page says so.
+
+## What comes across
+
+The steps run in this order. Some need an earlier step first.
+
+| Step | What it brings over | Needs first |
+| --- | --- | --- |
+| Branding | App icons, splash screen, and logos. | — |
+| Colours & font | Your app colours and the font used for text. | — |
+| App settings | App name, whether people can sign up in the app, and your store bundle identifiers. | — |
+| App pages | Your app pages, with BuddyBoss blocks swapped for their Blockli versions. | — |
+| In-app products | Your in-app products with the same App Store and Google Play product IDs, what each one unlocks, and your subscription groups. | — |
+| Access control | Your access groups as Blockli audiences, then your access rules and restricted message. | App pages, In-app products |
+| Menus | Your tab bar and More menu, including who sees each menu. | App pages, Access control |
+| Existing purchases | Members' active purchases and subscriptions, checked with Apple and Google when that's set up, so they keep what they paid for. | In-app products |
+| Bookmarks | Members' saved posts, courses, and other content. | — |
+
+Links in old notifications and shared links that point at BuddyBoss App pages and screens keep working: they open the matching Blockli page or screen.
+
+## Run the migration
+
+<Steps>
+  <Step title="Preview">
+    Click **Preview everything**, or **Preview** on a single step. You'll see exactly what each step would create or change, and anything that can't come across. Nothing is saved yet.
+  </Step>
+  <Step title="Decide about existing setup">
+    If you've already set some things up in Blockli, leave **Replace things I've already set up in Blockli** off to keep them, or turn it on to let the migration overwrite them.
+  </Step>
+  <Step title="Migrate">
+    Run steps one at a time with **Migrate**, or all at once with **Migrate everything**. Each step shows a report when it's done, with notes on anything that needs your attention.
+  </Step>
+  <Step title="Check, and undo if needed">
+    Open the app and check the result. **Undo** on a step removes everything that step created and puts back the settings it changed.
+  </Step>
+</Steps>
+
+<Tip>
+  Run **Existing purchases** last, after **In-app products** and **Access control**, so members keep exactly what they paid for.
+</Tip>
+
+## Store credentials for Studio
+
+Your BuddyBoss app's Apple and Google credentials can move to Blockli Studio in one encrypted file, so you don't have to set them up again.
+
+1. On the migration page, find **Store credentials for Blockli Studio** and click **Download migration file**.
+2. Copy the code that's shown. It appears only once and isn't stored.
+3. In Studio, open your app's **Store Setup → Credentials** and choose **Moving from BuddyBoss App?**.
+4. Upload the file and enter the code. Studio shows what it will fill in before saving.
+
+<Warning>
+  Keep the code separate from the file. Anyone with both can open your store credentials. If you lose the code, download a new file.
+</Warning>
+
+## Migrate with an AI agent
+
+With the [AI App Builder](/ai/overview) connected, you can ask an agent to do the move with you:
+
+```text
+Preview what moving my BuddyBoss app pages to Blockli would do.
+Preview only, don't run it.
+```
+
+The agent shows each step's preview, runs steps only after you agree, and follows the order above. It refuses to run a step before the steps it needs.

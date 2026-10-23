@@ -1,0 +1,87 @@
+---
+title: "Builds and Releases by Chat"
+sidebarTitle: "Builds and Releases"
+description: "Let agents start builds and On-Air Releases, submit to the stores, check store readiness, and manage your store listing, with switches you control in Studio."
+---
+
+Agents connected to your WordPress site can start app builds, send On-Air Releases, submit to the stores, and manage your store listing. They do this through your site's existing connection to Blockli Studio, so they only need the one WordPress connection.
+
+You decide what's allowed in Studio. Everything is off until you turn it on.
+
+## Turn it on in Studio
+
+1. In Studio, open your app and go to **Development**.
+2. Find the **Builds from WordPress** card.
+3. Switch on **Allow builds from WordPress**.
+4. Choose what agents may do:
+
+| Switch | What it allows | When first turned on |
+| --- | --- | --- |
+| Preview builds | Test builds to install on registered devices. | On |
+| On-Air Releases | Updates sent to installed apps, when a change doesn't need a new build. | On |
+| Development builds | Builds with developer tools for live preview. | Off |
+| Release builds | Store builds. | Off |
+| Store submission | Sends the latest release build to the App Store and Google Play. | Off |
+| Store listing text | Writes and updates your listing text in Studio. | On |
+| Sending the listing to the stores | Replaces the text on your App Store and Google Play pages with the saved listing. | Off |
+| Canceling | Stops a build or release an agent started from WordPress. | Off |
+
+5. Set the **Daily limit**: how many builds and releases agents can start per day (resets at midnight UTC). Canceled ones still count.
+
+Builds and releases started by an agent use the same credits and checks as starting them yourself, and show in **Builds & Releases** as started by WordPress AI.
+
+## Builds and On-Air Releases
+
+Ask your agent, for example:
+
+```text
+I want a preview build for iOS and Android. Check it first and tell me what
+it will cost. Don't start it until I say so.
+```
+
+The agent checks first and shows you what will happen, the credits it uses, today's count against your limit, and anything missing. It starts only after you agree. Then ask "How is my latest build going?" for its progress and install link.
+
+For an On-Air Release, Studio first checks whether your changes can go over the air. If they need a new build, or there's nothing new to send, the agent tells you instead of spending a credit.
+
+<Note>
+  Pages, menus, colours, access, and settings changed with the AI tools show in the app without a build or release.
+</Note>
+
+## Canceling
+
+Builds can be canceled while queued or running. On-Air Releases and store submissions can be canceled only while they're still waiting to start.
+
+- Agents can cancel only what was started from WordPress. Builds you started in Studio can only be canceled in Studio.
+- Credits come back for anything not built yet. A platform that already finished keeps its cost, because you got that build.
+- A canceled build stays in your build history marked **Canceled**.
+
+You can also cancel any build from Studio: open the build's **⋯** menu in **Builds & Releases** and choose **Cancel build**.
+
+## Store setup checklist
+
+Ask "Is my app ready for the App Store and Google Play?" The agent goes through a checklist and says where to fix each missing item:
+
+- Blockli project, iOS bundle ID, and Android package name
+- App icon
+- App Store Connect and Google Play connections
+- Android signing key
+- Store listing text
+- A finished release build
+- Push notification keys for iPhone and Android
+
+The agent never creates or asks for store logins, keys, or key files. You add those yourself in Studio under **Store Setup**.
+
+## Store listing
+
+Your store listing is kept in Studio under **Store Setup → Listings & devices** (see [Store Listing](/studio/store-listing)). Agents can read it, draft new text with you, and save it after showing you before and after:
+
+```text
+Write my app's store listing for the App Store and Google Play: name,
+subtitle, short description, full description, keywords, and the support
+and privacy links. Use my site to understand what the app is. Show me
+before and after first, then save it when I agree.
+```
+
+The store limits are checked, for example 30 characters for the name and subtitle and 100 for keywords. You'll get a warning for things like spaces after commas in keywords. If you edit the listing in Studio while the agent is working, its save is refused and it reads the new text first. Saved listings can be undone with "undo the last change".
+
+With **Sending the listing to the stores** on, the agent can also put the saved text on your App Store and Google Play pages. It reports, for each store, what was updated and what was skipped and why.

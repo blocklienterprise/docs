@@ -1,0 +1,68 @@
+---
+title: "AI App Builder"
+sidebarTitle: "Overview"
+description: "Set up your whole Blockli app by chatting with an AI agent such as Cursor, Claude, or ChatGPT."
+---
+
+Connect an AI agent to your WordPress site and set up your Blockli app by describing what you want. The agent builds app pages, sets up menus and branding, protects content, starts builds, writes your store listing, and sends push notifications, using the same tools the Blockli plugin gives you in the admin.
+
+The tools are part of the Blockli plugin. They work with any agent that supports MCP (Model Context Protocol), including Cursor, Claude Code, Claude Desktop, Claude.ai, and ChatGPT.
+
+## What you can ask for
+
+```text
+Build me a Welcome app page for new members: a big heading, a short intro,
+our latest 4 courses, and quick links to Groups, Courses and Forums.
+Show me the plan first, then create it. Don't publish it.
+```
+
+```text
+Give my app a purple brand look based on #7c3aed. Preview it first and tell
+me about any readability problems.
+```
+
+```text
+Make my Resources page visible only to members of the Premium access group,
+and send everyone else to the paywall.
+```
+
+```text
+Is my app ready for the App Store and Google Play? Then write my store
+listing and show me before and after.
+```
+
+See [What agents can do](/ai/tools) for the full list.
+
+## How it keeps your app safe
+
+- **Admins only.** Agents sign in as a WordPress administrator, and only while the AI tools are switched on.
+- **Off until you turn it on.** The AI tools, push notifications from agents, and builds from WordPress each have their own switch, all off by default.
+- **Preview first.** Changes can be previewed before they're saved. The agent shows you the plan and waits for your answer.
+- **Two-step for risky changes.** Changing who can see or pay for something, removing things, starting builds, and sending push notifications need a second confirmation tied to exactly what you approved.
+- **No overwriting your work.** If a page is open in the block editor, or someone changed it since the agent read it, the agent's change is refused and it reads again.
+- **Undo.** Every change the agent makes is recorded for 30 days and can be undone with "undo the last change".
+- **No secrets in the chat.** Agents never read or write store logins, keys, or passwords. When something like that is missing, the agent tells you where to add it yourself.
+
+## Requirements
+
+- WordPress 6.9 or newer.
+- The Blockli plugin, connected to your app in [Blockli Studio](/plugin/studio-connection).
+- An administrator account on the site.
+
+## Get started
+
+<Steps>
+  <Step title="Turn on the AI tools">
+    In WordPress, open **Blockli → Tools → AI Tools** and switch on **Allow AI agents to use the Blockli tools**.
+  </Step>
+  <Step title="Connect your agent">
+    Follow [Connect an agent](/ai/connect) for Cursor, Claude, ChatGPT, or another agent.
+  </Step>
+  <Step title="Ask it to look around">
+    Start with: "Call get-started and tell me about my app." The agent reports your site, app pages, active plugins, and the tools it can use.
+  </Step>
+</Steps>
+
+<Note>
+  Most changes, such as pages, menus, colours, and access, show in the app on their own. The app icon, splash screen, and new native features need a new build. The agent tells you when that's the case.
+</Note>

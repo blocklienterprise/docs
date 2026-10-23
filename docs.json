@@ -47,7 +47,18 @@
               "plugin/iap-google-products",
               "plugin/iap-stripe",
               "plugin/app-pages",
-              "plugin/custom-post-types"
+              "plugin/custom-post-types",
+              "plugin/buddyboss-migration"
+            ]
+          },
+          {
+            "group": "AI App Builder",
+            "pages": [
+              "ai/overview",
+              "ai/connect",
+              "ai/tools",
+              "ai/builds",
+              "ai/push"
             ]
           },
           {
@@ -67,7 +78,8 @@
               "studio/eas-build",
               "studio/on-air-releases",
               "studio/store-submission",
-              "studio/mcp-connection"
+              "studio/mcp-connection",
+              "studio/store-listing"
             ]
           },
           {

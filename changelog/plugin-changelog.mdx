@@ -4,6 +4,167 @@ sidebarTitle: "Plugin Changelog"
 description: "What's new in the Blockli Mobile App plugin — release notes for every version."
 ---
 
+## 1.1.14 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-23</span>
+
+### Added
+
+- Blog Posts block options: category and tag filters, featured images, post details, author avatars, comments and bookmarks. Existing category filters carry over automatically.
+- App sign-ins renew themselves: members who keep using the app stay signed in.
+- Changing a password signs out every app sign-in made before the change. A change made from the app keeps that device signed in.
+- The app is told why a sign-in was refused, so it can handle expired or invalid sign-ins gracefully.
+
+### Changed
+
+- App sign-ins now last 90 days without the app being opened (previously 7 days, never renewed).
+- Post filters and author details work the same way for blog posts and custom post types.
+
+### Fixed
+
+- BuddyBoss App Posts blocks now convert correctly during migration.
+
+---
+
+## 1.1.13 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-23</span>
+
+### Changed
+
+- Menu audiences are picked from a searchable dropdown instead of chips.
+
+### Fixed
+
+- BuddyBoss App migration: card blocks from Blockli For BuddyBoss App (featured, video, graphic and post cards) import cleanly, so the editor no longer reports them as invalid.
+
+---
+
+## 1.1.12 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-23</span>
+
+### Added
+
+- Access rules for Blockli cards, podcasts and episodes.
+
+### Changed
+
+- Clearer BuddyBoss App migration previews and import guidance. Existing audiences are reused only when their status matches, and are never modified.
+
+### Fixed
+
+- Locked Blockli cards keep showing their content but no longer reveal where they link to.
+
+---
+
+## 1.1.1 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-23</span>
+
+### Added
+
+- WishList Member X level unlocks and reusable consumable in-app products, including migrating them from BuddyBoss App.
+- A downloadable BuddyBoss migration diagnostics report (sensitive details removed) to share with support.
+- Pick store products directly from the Apple App Store and Google Play.
+
+### Fixed
+
+- Refunding a consumable purchase affects only that purchase. Duplicate refund notices are handled safely, and paid access is never removed early if a refund can't be recorded.
+
+---
+
+## 1.1.0 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-22</span>
+
+### Added
+
+- [AI App Builder](/ai/overview): set up app pages and blocks, menus, settings, content, access, purchases and your BuddyBoss App migration by chatting with an AI assistant, with secure admin sign-in.
+- Push notifications from WordPress: preview, send, schedule, edit scheduled pushes, and see history.
+- GIF search in the app, using your site's BuddyBoss GIPHY key.
+
+### Changed
+
+- Access control now supports default rules, category rules, more plugin conditions, and BuddyBoss-compatible precedence.
+- Better block editor previews, content source search, carousel excerpts, and undo for each change.
+
+### Fixed
+
+- Access rules are enforced everywhere the app reads content, including navigation and media.
+- The BuddyBoss Theme footer is hidden on pages the app opens in a web view.
+- Migration and editor edge cases involving unavailable blocks, private previews, media lists and video timing.
+
+---
+
+## 1.0.15 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-21</span>
+
+### Added
+
+- [BuddyBoss App migration](/plugin/buddyboss-migration): bring across settings, branding, navigation, pages, styling, access rules, products, purchases and bookmarks.
+- Native Discussions, Image Carousel and Video Carousel blocks, with BuddyBoss block conversion and more custom post type card and directory options.
+- Bookmarks: members can save content and find it again from the app's navigation.
+- Header input background colour setting.
+
+### Changed
+
+- Expanded access control with default and category rules and more plugin conditions.
+- Improved block editor previews, source search, carousel excerpts and undo.
+
+### Fixed
+
+- The BuddyBoss Theme footer is hidden on pages the app opens in a web view.
+- Migration and block editor edge cases.
+
+---
+
+## 1.0.14 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-10</span>
+
+### Added
+
+- Blockli in-app message notifications, notification images, and follow-back status in notifications.
+- Cove theme option to hide the header image.
+
+### Changed
+
+- BuddyBoss documents, photos and videos download securely with the member's app sign-in.
+
+---
+
+## 1.0.13 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-06</span>
+
+### Fixed
+
+- Sign-up is only offered when both the app's Signup Screen setting and WordPress registration allow it.
+
+---
+
+## 1.0.12 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-05</span>
+
+### Changed
+
+- Simpler Login and Signup screen colours: one shared set of title, link and button text colours.
+
+---
+
+## 1.0.11 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-02</span>
+
+### Fixed
+
+- Blockli's card, Profile Card and Progress Map blocks no longer clash with blocks of the same name on BuddyBoss app pages. Existing pages update automatically; no app update needed.
+- Blockli's blocks appear again in the BuddyBoss app page editor.
+
+---
+
+## 1.0.10 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-10-01</span>
+
+### Added
+
+- Menu items can open a specific group or LearnDash course directly.
+- Input text colour setting for login and signup screens.
+- Help tips for the app icon, Android adaptive icon and Android notification icon settings.
+
+### Changed
+
+- Search when choosing pages, groups and courses in Navigation settings.
+- Simpler login screen colour controls.
+
+### Fixed
+
+- Uploading a custom font no longer crashes; uploaded fonts now appear in the admin.
+
+---
+
 ## 1.0.9 <span style={{color:'#6b7280',fontWeight:'normal',fontSize:'0.875rem',marginLeft:'0.5rem'}}>2026-09-27</span>
 
 ### Added

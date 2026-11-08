@@ -1,0 +1,58 @@
+---
+title: "Quickstart for BuddyBoss App users"
+sidebarTitle: "Coming from BuddyBoss App"
+description: "Move your BuddyBoss App to Blockli and ship it as an update to your existing App Store and Google Play listings."
+keywords: ["BuddyBoss App", "migration", "move", "switch", "bundle identifier", "update"]
+---
+
+If your site already has an app built with BuddyBoss App, you don't start from scratch. Blockli brings your setup across and ships as an **update to the app your members already have**, under the same App Store and Google Play listings.
+
+Starting without a BuddyBoss app? Follow the [Quickstart](/quickstart) instead.
+
+<Info>
+  Leave your BuddyBoss App setup in place while you move. The migration reads from it and never changes it.
+</Info>
+
+<Steps>
+  <Step title="Install the Blockli plugin">
+    Download the **Blockli Mobile App** plugin zip from your Studio account, then in WordPress go to **Plugins → Add New → Upload Plugin**, upload it and click **Activate**. A **Blockli App** menu appears in your WordPress sidebar.
+  </Step>
+  <Step title="Create your app in Studio and connect your site">
+    In WordPress, go to **Blockli App → Overview** and click **Connect**. Studio opens: create your app there (or pick one you already made) and your site is connected. See [Creating Your First App](/studio/create-app) for more detail.
+  </Step>
+  <Step title="Bring your setup across">
+    In WordPress, go to **Blockli App → Tools → BuddyBoss App Migration**. Click **Preview everything** to see what each step would bring over, then **Migrate** step by step or **Migrate everything**.
+
+    This moves your branding, colours and font, app settings, app pages, in-app products, access rules, menus, members' existing purchases and bookmarks. Every step can be undone.
+
+    Run **Existing purchases** last, after **In-app products** and **Access control**, so members keep exactly what they paid for. The full list of steps is in [BuddyBoss App Migration](/plugin/buddyboss-migration).
+  </Step>
+  <Step title="Move your store credentials">
+    On the same migration page, under **Store credentials for Blockli Studio**, click **Download migration file** and copy the code that's shown. It appears only once.
+
+    In Studio, open your app's **Store Setup → Credentials**, choose **Moving from BuddyBoss App?**, upload the file and enter the code. Studio shows what it will fill in before saving: your App Store Connect key, Firebase and Google Play files, and your Android upload keystore.
+
+    <Warning>
+      Keep the code separate from the file. Anyone with both can open your store credentials.
+    </Warning>
+  </Step>
+  <Step title="Keep your bundle identifiers">
+    In Studio, under **Moving from BuddyBoss App?**, click **Get my BuddyBoss App identifiers**, then **Use these identifiers**, and save.
+
+    Using the same iOS bundle identifier and Android package name is what makes your Blockli app an update to your existing app. Members keep their subscriptions and keep getting notifications.
+  </Step>
+  <Step title="Test with a Preview build">
+    Go to **Build**, click **New Build** and choose the **Preview** profile. Install it on your phone and check your pages, menus, sign-in and purchases. A Preview app installs alongside your live app, so members aren't affected.
+  </Step>
+  <Step title="Release the update">
+    When you're happy, start a **Release** build and submit it from Studio with **Submit to Store**. Give it a version number higher than the version of your BuddyBoss app that's in the stores now: Apple and Google only accept updates with a higher version.
+
+    Members get Blockli as a normal app update. Links in old notifications and shared links to BuddyBoss App pages keep working and open the matching Blockli page or screen.
+  </Step>
+</Steps>
+
+## Next steps
+
+- Set up [push notifications](/plugin/push-notifications)
+- Ship configuration changes without a new build with [On-Air Releases](/studio/on-air-releases)
+- See the [Store Submission](/studio/store-submission) checklist

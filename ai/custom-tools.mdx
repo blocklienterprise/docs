@@ -1,0 +1,189 @@
+---
+title: "Add your own tools to the AI App Builder"
+sidebarTitle: "Custom tools"
+description: "Build a small WordPress plugin that adds your own tools to the Blockli AI App Builder, so agents can use them next to the built-in tools."
+keywords: ["custom tools", "MCP", "plugin", "extend", "AI App Builder"]
+---
+
+The Blockli AI App Builder lets other WordPress plugins add their own tools. If one client needs a specialised tool, such as looking up an order in their own system, you put it in a small plugin for that client. The tool then shows up for their agent next to the built-in tools, and nothing changes for anyone else.
+
+<Note>
+  This page is for developers. You need to be comfortable writing PHP and building a WordPress plugin.
+</Note>
+
+## How it works
+
+A custom tool has two parts:
+
+1. **A tool class**, written the same way as the built-in tools.
+2. **One registration call**, made when Blockli says it is ready for tools.
+
+Blockli runs your registration only while the Blockli plugin is active. If Blockli is switched off, your plugin does nothing and nothing breaks.
+
+## Example plugin
+
+This plugin adds one tool that changes the site tagline. It previews the change first and records it, so the customer can undo it.
+
+<CodeGroup>
+
+```php blockli-ai-tool-example.php
+<?php
+/**
+ * Plugin Name: Blockli AI Tool Example
+ * Description: Adds an example tool to the Blockli AI App Builder.
+ * Version:     1.0.0
+ * Requires Plugins: blockli-mobile-app
+ */
+
+defined('ABSPATH') || exit;
+
+add_action(
+	'blockli_ai_ready',
+	function () {
+		require_once __DIR__ . '/class-example-set-tagline-tool.php';
+
+		blockli_register_ai_tool(new Example_Set_Tagline_Tool());
+	}
+);
+```
+
+```php class-example-set-tagline-tool.php
+<?php
+defined('ABSPATH') || exit;
+
+class Example_Set_Tagline_Tool extends BMA_AI_Tool
+{
+	public function slug()
+	{
+		return 'example-set-tagline';
+	}
+
+	public function label()
+	{
+		return 'Set site tagline';
+	}
+
+	public function description()
+	{
+		return 'Changes the site tagline (the short line under the site title). Call with preview: true first and show the customer the change, then call again without it to apply. Can be undone with undo-change.';
+	}
+
+	public function input_properties()
+	{
+		return array(
+			'tagline' => array(
+				'type'        => 'string',
+				'maxLength'   => 160,
+				'description' => 'The new tagline.',
+			),
+			'preview' => array(
+				'type'        => 'boolean',
+				'default'     => false,
+				'description' => 'Show what would change without changing it.',
+			),
+		);
+	}
+
+	public function required()
+	{
+		return array('tagline');
+	}
+
+	public function annotations()
+	{
+		return array(
+			'readonly'    => false,
+			'destructive' => false,
+			'idempotent'  => true,
+		);
+	}
+
+	public function run(array $input)
+	{
+		$tagline = sanitize_text_field((string) $input['tagline']);
+		$current = (string) get_option('blogdescription', '');
+
+		if ($tagline === $current) {
+			return array('done' => 'The tagline is already set to that.', 'changed' => false);
+		}
+
+		if (! empty($input['preview'])) {
+			return array(
+				'preview' => true,
+				'summary' => sprintf('Change the tagline from "%1$s" to "%2$s".', $current, $tagline),
+			);
+		}
+
+		// Snapshot first, change the thing, then log it so it can be undone.
+		$before = BMA_AI_Change_Log::snapshot_option('blogdescription');
+		update_option('blogdescription', $tagline);
+
+		$summary   = sprintf('Changed the tagline to "%s".', $tagline);
+		$change_id = BMA_AI_Change_Log::record(
+			array(
+				'tool'         => $this->name(),
+				'summary'      => $summary,
+				'target_type'  => 'option',
+				'target_key'   => 'blogdescription',
+				'before_state' => $before,
+			)
+		);
+
+		return array(
+			'done'      => $summary,
+			'changed'   => true,
+			'change_id' => $change_id,
+		);
+	}
+}
+```
+
+</CodeGroup>
+
+Once the plugin is active, agents see the tool as `blockli-app-example-set-tagline`.
+
+<Warning>
+  Hook `blockli_ai_ready` directly from your plugin's main file, as in the example. Don't hook it from inside a later action such as `init`. Tools must be registered before Blockli builds its tool list. Registering later returns `false` and is logged.
+</Warning>
+
+## Write the tool class
+
+Your class extends `BMA_AI_Tool`. These are the methods you write:
+
+| Method | What it is for |
+| --- | --- |
+| `slug()` | The tool's name: lowercase letters, numbers, and single dashes, like `order-lookup`. Agents call it `blockli-app-` plus the slug. |
+| `label()` | A short name for people. |
+| `description()` | Written for the AI agent: what the tool does and when to use it. |
+| `input_properties()` and `required()` | The tool's input, as JSON Schema properties and a list of the required ones. |
+| `annotations()` | Three hints: `readonly`, `destructive`, and `idempotent`. Agents and clients use them to decide when to ask for approval. Set `destructive` only for tools that remove something. |
+| `run( array $input )` | Does the work. Return an array, or `BMA_AI_Tool::error( $code, $message )` when something is wrong. |
+
+The built-in tools that change things take a `preview: true` input and show what would change before they do it. Do the same in your tools, so the agent can show the customer a plan first.
+
+## Rules your tool follows
+
+- **Admins only.** Every tool runs only for site administrators, whatever your class says.
+- **Unique names.** A slug that matches a built-in tool, or another plugin's tool, is rejected. Put a prefix on your slugs, like `acme-order-lookup`, to stay clear of tools added later.
+- **A complete tool.** It needs a valid slug, a label, and a description.
+- **One bad tool doesn't break the rest.** A tool that fails while Blockli is listing or registering it is skipped, and the other tools carry on. A tool that throws an error while running gives the agent a generic error message.
+
+Skipped tools are written to the PHP error log as `[Blockli AI] Skipped tool ...` with the reason. If your tool doesn't appear, look there first.
+
+## Let customers undo changes
+
+To make a change undoable, take a snapshot before you change anything, then log the change with `BMA_AI_Change_Log::record()`, as the example does. The customer can then undo it with the `undo-change` tool, and it shows in `list-changes`.
+
+The change log can restore posts, post meta, term meta, terms, options, and database rows. A tool that doesn't log its changes can't be undone. Logging is up to you.
+
+## Where your tools appear
+
+- In the tool list your agent receives, like any other tool.
+- In the `get-started` tool, under a **From** heading with your plugin's name.
+- In **Blockli → Tools → AI Tools** in WordPress, in the Group column.
+
+<Note>
+  Some agents keep their own copy of the tool list from when you connected. If a tool you added or removed doesn't show up, refresh or reconnect the connector in your agent.
+</Note>
+
+See [What agents can do](/ai/tools) for the built-in tools.

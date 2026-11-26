@@ -59,7 +59,8 @@
               "ai/connect",
               "ai/tools",
               "ai/builds",
-              "ai/push"
+              "ai/push",
+              "ai/custom-tools"
             ]
           },
           {

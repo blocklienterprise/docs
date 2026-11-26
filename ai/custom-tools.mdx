@@ -156,7 +156,7 @@ Your class extends `BMA_AI_Tool`. These are the methods you write:
 | `label()` | A short name for people. |
 | `description()` | Written for the AI agent: what the tool does and when to use it. |
 | `input_properties()` and `required()` | The tool's input, as JSON Schema properties and a list of the required ones. |
-| `annotations()` | Three hints: `readonly`, `destructive`, and `idempotent`. Agents and clients use them to decide when to ask for approval. Set `destructive` only for tools that remove something. |
+| `annotations()` | Three hints: `readonly`, `destructive`, and `idempotent`. Agents and clients use them to decide when to ask for approval. Set `destructive` for tools that remove something or do something that can't be taken back, such as activating accounts or sending a message. |
 | `run( array $input )` | Does the work. Return an array, or `BMA_AI_Tool::error( $code, $message )` when something is wrong. |
 
 The built-in tools that change things take a `preview: true` input and show what would change before they do it. Do the same in your tools, so the agent can show the customer a plan first.

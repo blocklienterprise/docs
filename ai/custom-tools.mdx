@@ -156,7 +156,7 @@ Your class extends `BMA_AI_Tool`. These are the methods you write:
 | `label()` | A short name for people. |
 | `description()` | Written for the AI agent: what the tool does and when to use it. |
 | `input_properties()` and `required()` | The tool's input, as JSON Schema properties and a list of the required ones. |
-| `annotations()` | Three hints: `readonly`, `destructive`, and `idempotent`. Agents and clients use them to decide when to ask for approval. Set `destructive` for tools that remove something or do something that can't be taken back, such as activating accounts or sending a message. |
+| `annotations()` | Three hints: `readonly`, `destructive`, and `idempotent`, each `true` or `false`. A tool that gives text or numbers instead is rejected. Agents and clients use them to decide when to ask for approval. Set `destructive` for tools that remove something or do something that can't be taken back, such as activating accounts or sending a message. |
 | `run( array $input )` | Does the work. Return an array, or `BMA_AI_Tool::error( $code, $message )` when something is wrong. |
 
 The built-in tools that change things take a `preview: true` input and show what would change before they do it. Do the same in your tools, so the agent can show the customer a plan first.
@@ -179,23 +179,21 @@ The change log can restore posts, post meta, term meta, terms, options, and data
 
 ## Where your tools appear
 
-With [the compact tool list](/ai/tools#how-your-agent-finds-tools), which is on by default, agents find your tools when they need them:
+Agents [find your tools when they need them](/ai/tools#how-your-agent-finds-tools):
 
 - `discover-tools` lists your plugin as a category, named **From** followed by your plugin's name. The category's description is made from your tools' labels, so write labels that say what each tool does.
 - Opening that category returns your tools, their inputs, and which run tool to use.
 - The run tool comes from `annotations()`. Destructive tools run with `run-confirmed-tool`, other tools that change things with `run-change-tool`, and read-only tools with `run-read-tool`.
 - `get-started` lists your category.
 
-If the compact tool list is switched off, your tools are in the tool list your agent receives, and `get-started` lists them under your category.
-
-In both cases, **Blockli → Tools → AI Tools** in WordPress shows your tools, with your category in the Group column.
+**Blockli → Tools → AI Tools** in WordPress shows your tools, with your category in the Group column.
 
 <Note>
-  With the compact tool list, adding or removing a tool needs no refresh. With the full list, some agents, including ChatGPT, keep their own copy: refresh the connector's tools in your agent after a change.
+  Adding or removing a tool needs no refresh, because the tools your agent starts with don't change. An agent connected before this change needs one refresh.
 </Note>
 
 <Note>
-  The compact tool list arrives with a coming Blockli plugin update. Until you have it, your tools are listed in full.
+  This arrives with a coming Blockli plugin update. Until you have it, your tools are in the full tool list your agent receives, and some agents, including ChatGPT, need a refresh after you add or remove one.
 </Note>
 
 See [What agents can do](/ai/tools) for the built-in tools.

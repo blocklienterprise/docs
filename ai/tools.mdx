@@ -4,7 +4,27 @@ sidebarTitle: "What Agents Can Do"
 description: "Every tool the Blockli AI App Builder gives your agent, by area."
 ---
 
-Your agent sees these tools once it's connected. Tool names start with `blockli-app-` in most agents, for example `blockli-app-get-started`. You don't need to name tools yourself: describe what you want and the agent picks them.
+Your agent can use these tools once it's connected. Tool names start with `blockli-app-` in most agents, for example `blockli-app-get-started`. You don't need to name tools yourself: describe what you want and the agent picks them.
+
+## How your agent finds tools
+
+With the compact tool list, your agent starts with five tools and looks up the others when it needs them:
+
+| Tool | What it does |
+| --- | --- |
+| `get-started` | Learns about your site and app, and the kinds of tools available. |
+| `discover-tools` | Lists the tool categories, then the tools in one category. |
+| `run-read-tool` | Runs a tool that only looks things up. |
+| `run-change-tool` | Runs a tool that changes something. |
+| `run-confirmed-tool` | Runs a tool that needs your approval, such as removing something or sending a push notification. |
+
+Because these five stay the same, new tools can be used without refreshing your agent.
+
+The compact tool list is on by default. To list every tool to your agent instead, switch off **Use a compact tool list** in **Blockli → Tools → AI Tools**. After switching it on or off, refresh the tools once in each connected agent.
+
+<Note>
+  The compact tool list arrives with a coming Blockli plugin update. If you don't see the setting, your agent lists every tool.
+</Note>
 
 Tools marked **two-step** first show what will happen and return a confirmation. The agent only goes ahead after you agree.
 

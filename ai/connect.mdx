@@ -111,7 +111,7 @@ Ask your agent:
 ```text
 Call get-started and tell me in plain words: what my site and app have,
 which supporting plugins are active, how many app pages there are,
-and which tools you can use right now.
+and which kinds of tools you can use right now.
 ```
 
 It should describe your site, your app pages, and the active plugins.
@@ -123,7 +123,8 @@ It should describe your site, your app pages, and the active plugins.
 | "The Blockli AI tools are turned off" | The main switch is off. | Turn on **Allow AI agents to use the Blockli tools** in **Blockli → Tools → AI Tools**. |
 | "Only site admins can use the Blockli AI tools" | The account isn't an administrator. | Use an administrator's application password, or sign in as an administrator on the **Allow** page. |
 | Cursor shows "An unexpected error occurred" | The agent has an old copy of the tool list. | Switch **blockli-app** off and on in Cursor's MCP settings, then try again. |
-| New tools don't appear after a plugin update | The agent cached the old tool list. | Turn the server off and on in your agent, or restart it. |
+| New tools don't appear after a plugin update | The agent cached the old tool list. This happens when [the compact tool list](/ai/tools#how-your-agent-finds-tools) is off or not available yet. | Refresh the connector's tools in your agent, turn the server off and on, or restart it. |
+| Tools stop working as expected after switching the compact tool list on or off | The agent still has the earlier tool list. | Refresh the connector's tools in your agent once, then start a new chat. |
 | ChatGPT or Claude.ai can't connect | The site isn't on https, or a security plugin blocks the sign-in pages. | Use https. Make sure `/wp-json/blockli/oauth/` and `/.well-known/oauth-authorization-server` are reachable. |
 | "Application passwords are turned off" on the AI Tools page | The site isn't on https, or a security plugin disables them. | Use https, or allow application passwords in your security plugin. |
 

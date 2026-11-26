@@ -166,6 +166,7 @@ The built-in tools that change things take a `preview: true` input and show what
 - **Admins only.** Every tool runs only for site administrators, whatever your class says.
 - **Unique names.** A slug that matches a built-in tool, or another plugin's tool, is rejected. Put a prefix on your slugs, like `acme-order-lookup`, to stay clear of tools added later.
 - **A complete tool.** It needs a valid slug, a label, and a description.
+- **Reserved names.** `discover-tools`, `run-read-tool`, `run-change-tool`, and `run-confirmed-tool` belong to Blockli.
 - **One bad tool doesn't break the rest.** A tool that fails while Blockli is listing or registering it is skipped, and the other tools carry on. A tool that throws an error while running gives the agent a generic error message.
 
 Skipped tools are written to the PHP error log as `[Blockli AI] Skipped tool ...` with the reason. If your tool doesn't appear, look there first.
@@ -178,12 +179,23 @@ The change log can restore posts, post meta, term meta, terms, options, and data
 
 ## Where your tools appear
 
-- In the tool list your agent receives, like any other tool.
-- In the `get-started` tool, under a **From** heading with your plugin's name.
-- In **Blockli → Tools → AI Tools** in WordPress, in the Group column.
+With [the compact tool list](/ai/tools#how-your-agent-finds-tools), which is on by default, agents find your tools when they need them:
+
+- `discover-tools` lists your plugin as a category, named **From** followed by your plugin's name. The category's description is made from your tools' labels, so write labels that say what each tool does.
+- Opening that category returns your tools, their inputs, and which run tool to use.
+- The run tool comes from `annotations()`. Destructive tools run with `run-confirmed-tool`, other tools that change things with `run-change-tool`, and read-only tools with `run-read-tool`.
+- `get-started` lists your category.
+
+If the compact tool list is switched off, your tools are in the tool list your agent receives, and `get-started` lists them under your category.
+
+In both cases, **Blockli → Tools → AI Tools** in WordPress shows your tools, with your category in the Group column.
 
 <Note>
-  Some agents keep their own copy of the tool list from when you connected. If a tool you added or removed doesn't show up, refresh or reconnect the connector in your agent.
+  With the compact tool list, adding or removing a tool needs no refresh. With the full list, some agents, including ChatGPT, keep their own copy: refresh the connector's tools in your agent after a change.
+</Note>
+
+<Note>
+  The compact tool list arrives with a coming Blockli plugin update. Until you have it, your tools are listed in full.
 </Note>
 
 See [What agents can do](/ai/tools) for the built-in tools.
